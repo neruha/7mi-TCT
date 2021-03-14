@@ -1,0 +1,11 @@
+name: 7mi_TCT
+version: 1.0
+main: me.clockclap.tct.NanamiTct
+api-version: 1.12
+prefix: 7mi-TCT
+authors: [ClockClap, ShoboSuke, jack_basukeraihu]
+
+commands:
+  abouttct:
+    description: "7mi-TCTの情報を知ることができます。"
+

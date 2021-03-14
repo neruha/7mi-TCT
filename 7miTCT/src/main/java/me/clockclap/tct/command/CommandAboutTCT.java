@@ -15,11 +15,8 @@ public class CommandAboutTCT implements CommandExecutor {
             return true;
         }
         sender.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.GRAY + "7mi TCT バージョン: 1.2");
-        sender.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.GRAY + "7mi TCT 作者: \n"
-                + ChatColor.GREEN + "By " + ChatColor.YELLOW + "ClockClap\n"
-                + ChatColor.GREEN + "Original by " + ChatColor.YELLOW + "ShoboSuke & jack_basukeraihu\n");
-        sender.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.RED + "" + ChatColor.ITALIC + "オリジナルのTrouble in Crafter Townのデコンパイル、ソースコードの使用は\n"
-                + "一切していません。");
+        sender.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.GRAY + "7mi TCT 作者: " + ChatColor.YELLOW + "ClockClap");
+        sender.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.RED + "" + ChatColor.ITALIC + "Trouble in Crafter Townのデコンパイル、ソースコードの使用は一切していません。");
         sender.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.GRAY + "GitHubにあるソースコードは直接変更しないでください。");
         return true;
     }

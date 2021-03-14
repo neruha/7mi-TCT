@@ -25,15 +25,16 @@ public class Reference {
 
     //チャット全般
     public static final String TCT_CHAT_SEPARATOR = ChatColor.RED + "-------------------------------------";
+    public static final String TCT_CHAT_PLEASE_WAIT = ChatColor.RED + "運営がゲームを開始するまで、しばらくお待ちください";
     //入退室
     public static final String TCT_CHAT_JOIN_MESSAGE_0 = ChatColor.LIGHT_PURPLE + "=-=-7mi TCT-=-=";
     public static final String TCT_CHAT_JOIN_MESSAGE_1 = ChatColor.RED + " " + " " + " " + "by ClockClap";
-    public static final String TCT_CHAT_JOIN_MESSAGE_2 = ChatColor.RED + " " + " " + " " + "Original by ShoboSuke & jack_basukeraihu";
     public static final String TCT_CHAT_JOIN_MESSAGE = ChatColor.GREEN + "[+] " + ChatColor.GRAY + "%PLAYER%";
     public static final String TCT_CHAT_QUIT_MESSAGE = ChatColor.RED + "[-] " + ChatColor.GRAY + "%PLAYER%";
     //ゲーム開始
     public static final String TCT_CHAT_GAME_STARTED = ChatColor.RED + "ゲームが開始されました";
     public static final String TCT_CHAT_GAME_ALREADY_STARTED = ChatColor.RED + "既にゲームが開始されているため、観戦モードになります";
+    public static final String TCT_CHAT_PLEASE_START = ChatColor.RED + "ゲームを開始するには、/start または /startloc と入力します";
     public static final String TCT_CHAT_READY_END = ChatColor.RED + "準備時間が終了しました...";
     //ゲームルール
     public static final String TCT_CHAT_GAME_PLAYERS = ChatColor.LIGHT_PURPLE + "今回のプレイ人数は" + ChatColor.GREEN + "%COUNT%人" + ChatColor.LIGHT_PURPLE + "です";
@@ -135,9 +136,12 @@ public class Reference {
     public static final String TCT_UI_GAME_STARTING_IN = "ゲーム開始まで... %SECOND%秒";
 
     //ゲームステータス
-    public static final String TCT_STATUS_PLAYING = "ゲーム実行中";
-    public static final String TCT_STATUS_END_PROCESSING = "終了処理中";
-    public static final String TCT_STATUS_WAITING = "待機中";
-    public static final String TCT_STATUS_READY = "準備時間";
+    public static final String TCT_STATE_PLAYING = "ゲーム実行中";
+    public static final String TCT_STATE_END_PROCESSING = "終了処理中";
+    public static final String TCT_STATE_WAITING = "待機中";
+    public static final String TCT_STATE_READY = "準備時間";
+    public static final String TCT_GAME_STATE = ChatColor.GRAY + "Game State >>> %STATE%";
+    public static final String TCT_CHAT_STATE_PLAYING = "Gaming";
+    public static final String TCT_CHAT_STATE_WAITING = "Waiting";
 
 }

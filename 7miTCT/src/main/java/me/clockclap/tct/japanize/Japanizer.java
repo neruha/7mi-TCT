@@ -6,15 +6,13 @@ import java.io.UnsupportedEncodingException;
 
 public class Japanizer {
 
-    public static String japanize(String msg) throws UnsupportedEncodingException {
-
+    public static String japanize(String input) throws UnsupportedEncodingException {
+        String msg = input;
         String result = "";
         byte[] buf = msg.getBytes("SJIS");
         if(msg.length() == buf.length && !msg.startsWith("#")) {
             if(msg.startsWith("!")) {
-                StringBuilder sb = new StringBuilder(msg);
-                sb.substring(1);
-                msg = sb.toString();
+                msg.substring(1);
             }
             String beforeconvert = msg;
             beforeconvert = beforeconvert.replaceAll("&0", "§0");
@@ -76,21 +74,19 @@ public class Japanizer {
             //result = result + " " + TextColor.DARK_GRAY + "(" + TextColor.GRAY + beforeconvert + TextColor.DARK_GRAY + ")";
             result = Reference.JAPANIZE_FORMAT.replaceAll("%MESSAGE%", beforeconvert).replaceAll("%JAPANIZE%", result);
         } else {
-            StringBuilder sb = new StringBuilder(msg);
-            if(sb.indexOf("#") == 0) {
-                if(sb.indexOf("!") == 1) {
-                    sb.substring(2);
+            if(msg.indexOf("#") == 0) {
+                if(msg.indexOf("!") == 1) {
+                    msg.substring(2);
                 } else {
-                    sb.substring(1);
+                    msg.substring(1);
                 }
-            } else if(sb.indexOf("!") == 0) {
-                if(sb.indexOf("#") == 1) {
-                    sb.substring(2);
+            } else if(msg.indexOf("!") == 0) {
+                if(msg.indexOf("#") == 1) {
+                    msg.substring(2);
                 } else {
-                    sb.substring(1);
+                    msg.substring(1);
                 }
             }
-            msg = sb.toString();
             msg = msg.replaceAll("&0", "§0");
             msg = msg.replaceAll("&1", "§1");
             msg = msg.replaceAll("&2", "§2");

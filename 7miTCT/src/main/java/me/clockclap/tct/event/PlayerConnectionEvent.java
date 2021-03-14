@@ -13,9 +13,9 @@ public class PlayerConnectionEvent implements Listener {
     public void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         e.setJoinMessage(Reference.TCT_CHAT_JOIN_MESSAGE.replaceAll("%PLAYER%",p.getDisplayName()));
-        p.sendMessage(Reference.TCT_CHAT_JOIN_MESSAGE_0);
-        p.sendMessage(Reference.TCT_CHAT_JOIN_MESSAGE_1);
-        p.sendMessage(Reference.TCT_CHAT_JOIN_MESSAGE_2);
+        p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_JOIN_MESSAGE_0);
+        p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_JOIN_MESSAGE_1);
+        p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_JOIN_MESSAGE_2);
     }
 
     @EventHandler

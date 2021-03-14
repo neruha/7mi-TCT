@@ -4,8 +4,10 @@ import org.bukkit.ChatColor;
 
 public class Reference {
 
+    //プラグイン設定
     public static final String TCT_CHATPREFIX = ChatColor.DARK_RED + "[7mi TCT]" + ChatColor.RESET;
     public static final String TCT_SIDEBAR_TITLE = ChatColor.DARK_RED + "[Trouble in Crafter Town]";
+
 
     //チャットフォーマット
     public static final String JAPANIZE_FORMAT = ChatColor.RESET + "%JAPANIZE%" + ChatColor.RESET + " " + ChatColor.DARK_GRAY + "(" + ChatColor.GRAY + "%MESSAGE%" + ChatColor.DARK_GRAY + ")";
@@ -27,8 +29,8 @@ public class Reference {
     public static final String TCT_CHAT_JOIN_MESSAGE_0 = ChatColor.LIGHT_PURPLE + "=-=-7mi TCT-=-=";
     public static final String TCT_CHAT_JOIN_MESSAGE_1 = ChatColor.RED + " " + " " + " " + "by ClockClap";
     public static final String TCT_CHAT_JOIN_MESSAGE_2 = ChatColor.RED + " " + " " + " " + "Original by ShoboSuke & jack_basukeraihu";
-    public static final String TCT_CHAT_JOIN_MESSAGE = ChatColor.GREEN + "[+]" + ChatColor.GRAY + "%PLAYER%";
-    public static final String TCT_CHAT_QUIT_MESSAGE = ChatColor.RED + "[-]" + ChatColor.GRAY + "%PLAYER%";
+    public static final String TCT_CHAT_JOIN_MESSAGE = ChatColor.GREEN + "[+] " + ChatColor.GRAY + "%PLAYER%";
+    public static final String TCT_CHAT_QUIT_MESSAGE = ChatColor.RED + "[-] " + ChatColor.GRAY + "%PLAYER%";
     //ゲーム開始
     public static final String TCT_CHAT_GAME_STARTED = ChatColor.RED + "ゲームが開始されました";
     public static final String TCT_CHAT_GAME_ALREADY_STARTED = ChatColor.RED + "既にゲームが開始されているため、観戦モードになります";

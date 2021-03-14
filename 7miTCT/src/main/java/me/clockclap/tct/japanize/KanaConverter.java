@@ -3,6 +3,8 @@ package me.clockclap.tct.japanize;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedMap;
 import org.apache.commons.lang3.StringUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.Map;
 
@@ -18,6 +20,29 @@ public class KanaConverter {
 
     static {
         ImmutableSortedMap.Builder<String, String> builder = ImmutableSortedMap.reverseOrder();
+
+        // プレイヤー名
+        for(Player p : Bukkit.getOnlinePlayers()) {
+            builder.put(p.getDisplayName(), p.getDisplayName());
+        }
+
+        // 単語
+        builder.put("kyoujin", "狂人");
+        builder.put("kyoujinn", "狂人");
+        builder.put("kyouzin", "狂人");
+        builder.put("kyouzinn", "狂人");
+        builder.put("youko", "妖狐");
+        builder.put("jinrou", "人狼");
+        builder.put("jinnrou", "人狼");
+        builder.put("zinrou", "人狼");
+        builder.put("zinnrou", "人狼");
+        builder.put("tantei", "探偵");
+        builder.put("tanntei", "探偵");
+        builder.put("murabito", "村人");
+        builder.put("kuro", "黒");
+        builder.put("siro", "白");
+        builder.put("isya", "医者");
+        builder.put("isha", "医者");
 
         // ひらがな
         builder.put("a", "あ");
@@ -354,6 +379,8 @@ public class KanaConverter {
         builder.put("%COLOR_CHR3050819923%", "§o");
         builder.put("%COLOR_CHR4175912001%", "§k");
         builder.put("%COLOR_CHRESET%", "§r");
+
+
 
         MAP = builder.build();
 

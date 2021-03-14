@@ -1,6 +1,8 @@
 package me.clockclap.tct.japanize;
 
 import me.clockclap.tct.api.Reference;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.io.UnsupportedEncodingException;
 
@@ -12,7 +14,7 @@ public class Japanizer {
         byte[] buf = msg.getBytes("SJIS");
         if(msg.length() == buf.length && !msg.startsWith("#")) {
             if(msg.startsWith("!")) {
-                msg.substring(1);
+                msg = msg.substring(1);
             }
             String beforeconvert = msg;
             beforeconvert = beforeconvert.replaceAll("&0", "§0");
@@ -76,15 +78,15 @@ public class Japanizer {
         } else {
             if(msg.indexOf("#") == 0) {
                 if(msg.indexOf("!") == 1) {
-                    msg.substring(2);
+                    msg = msg.substring(2);
                 } else {
-                    msg.substring(1);
+                    msg = msg.substring(1);
                 }
             } else if(msg.indexOf("!") == 0) {
                 if(msg.indexOf("#") == 1) {
-                    msg.substring(2);
+                    msg = msg.substring(2);
                 } else {
-                    msg.substring(1);
+                    msg = msg.substring(1);
                 }
             }
             msg = msg.replaceAll("&0", "§0");

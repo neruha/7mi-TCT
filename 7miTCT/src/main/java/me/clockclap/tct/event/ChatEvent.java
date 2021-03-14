@@ -17,7 +17,14 @@ public class ChatEvent implements Listener {
     public void onChat(AsyncPlayerChatEvent e) throws UnsupportedEncodingException {
         Player p = e.getPlayer();
         e.setCancelled(true);
-        String result = Japanizer.japanize(e.getMessage());
+        String result;
+        if(e.getMessage().equalsIgnoreCase(".e?")) {
+            result = Reference.JAPANIZE_FORMAT.replaceAll("%MESSAGE%", "e?").replaceAll("%JAPANIZE%", "え？");
+        } else if(e.getMessage().equalsIgnoreCase(".e")) {
+            result = Reference.JAPANIZE_FORMAT.replaceAll("%MESSAGE%", "e").replaceAll("%JAPANIZE%", "え");
+        } else {
+            result = Japanizer.japanize(e.getMessage());
+        }
         Bukkit.getServer().broadcastMessage(Reference.TCT_CHAT_FORMAT.replaceAll("%ROLE%", Reference.TCT_CHAT_ROLE_SPEC_P).replaceAll("%PLAYER%", p.getDisplayName()).replaceAll("%MESSAGE%", result));
     }
 

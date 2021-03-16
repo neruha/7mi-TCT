@@ -1,6 +1,9 @@
 package me.clockclap.tct.event;
 
+import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
+import me.clockclap.tct.game.role.GameRole;
+import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.japanize.Japanizer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -13,10 +16,15 @@ import java.io.UnsupportedEncodingException;
 
 public class ChatEvent implements Listener {
 
+    private NanamiTct plugin;
+
+    public ChatEvent(NanamiTct plugin) {
+        this.plugin = plugin;
+    }
+
     @EventHandler
     public void onChat(AsyncPlayerChatEvent e) throws UnsupportedEncodingException {
         Player p = e.getPlayer();
-        e.setCancelled(true);
         String result;
         if(e.getMessage().equalsIgnoreCase(".e?")) {
             result = Reference.JAPANIZE_FORMAT.replaceAll("%MESSAGE%", "e?").replaceAll("%JAPANIZE%", "え？");
@@ -25,7 +33,16 @@ public class ChatEvent implements Listener {
         } else {
             result = Japanizer.japanize(e.getMessage());
         }
-        Bukkit.getServer().broadcastMessage(Reference.TCT_CHAT_FORMAT.replaceAll("%ROLE%", Reference.TCT_CHAT_ROLE_SPEC_P).replaceAll("%PLAYER%", p.getDisplayName()).replaceAll("%MESSAGE%", result));
+        String role_chatprefix;
+
+        GameRole role = plugin.getGameReference().PLAYERDATA.get(p.getName()).getRole();
+        if(role == GameRoles.SPEC) {
+            role_chatprefix = Reference.TCT_CHAT_ROLE_SPEC_P;
+        } else {
+            role_chatprefix = Reference.TCT_CHAT_ROLE_CO_NONE_P;
+        }
+        Bukkit.getServer().broadcastMessage(Reference.TCT_CHAT_FORMAT.replaceAll("%ROLE%", role_chatprefix).replaceAll("%PLAYER%", p.getDisplayName()).replaceAll("%MESSAGE%", result));
+        e.setCancelled(true);
     }
 
 }

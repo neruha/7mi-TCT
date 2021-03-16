@@ -8,4 +8,14 @@ authors: [ClockClap, ShoboSuke, jack_basukeraihu]
 commands:
   abouttct:
     description: "7mi-TCTの情報を知ることができます。"
+  gmc:
+    description: "自身のゲームモードをクリエイティブモードに変更します。"
+  gms:
+    description: "自身のゲームモードをサバイバルモードに変更します。"
+  gmsall:
+    description: "全員のゲームモードをサバイバルモードに変更します。"
+
+
+
+
 

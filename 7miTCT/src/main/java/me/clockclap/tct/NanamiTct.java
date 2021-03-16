@@ -2,11 +2,17 @@ package me.clockclap.tct;
 
 import me.clockclap.tct.api.Utilities;
 import me.clockclap.tct.command.CommandAboutTCT;
+import me.clockclap.tct.command.CommandGameModeCreative;
+import me.clockclap.tct.command.CommandGameModeSurvival;
+import me.clockclap.tct.command.CommandGameModeSurvivalAll;
 import me.clockclap.tct.event.ChatEvent;
 import me.clockclap.tct.event.PlayerConnectionEvent;
 import me.clockclap.tct.event.ProtectWorld;
 import me.clockclap.tct.game.GameReference;
+import me.clockclap.tct.game.data.TctPlayerData;
+import me.clockclap.tct.game.role.GameRoles;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -30,12 +36,19 @@ public final class NanamiTct extends JavaPlugin {
 
         //Register Events
         pm.registerEvents(new PlayerConnectionEvent(this), this);
-        pm.registerEvents(new ChatEvent(), this);
+        pm.registerEvents(new ChatEvent(this), this);
         pm.registerEvents(new ProtectWorld(), this);
 
         //Add Commands
         utilities.addCommand("abouttct", new CommandAboutTCT());
+        utilities.addCommand("gmc", new CommandGameModeCreative());
+        utilities.addCommand("gms", new CommandGameModeSurvival());
+        utilities.addCommand("gmsall", new CommandGameModeSurvivalAll());
 
+        //Initialize player data
+        for(Player p : Bukkit.getOnlinePlayers()) {
+            getGameReference().PLAYERDATA.put(p.getName(), new TctPlayerData(GameRoles.SPEC, p.getName()));
+        }
     }
 
     public GameReference getGameReference() {

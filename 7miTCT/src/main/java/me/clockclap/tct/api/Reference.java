@@ -25,7 +25,17 @@ public class Reference {
 
     //チャット全般
     public static final String TCT_CHAT_SEPARATOR = ChatColor.RED + "-------------------------------------";
-    public static final String TCT_CHAT_PLEASE_WAIT = ChatColor.RED + "運営がゲームを開始するまで、しばらくお待ちください";
+    //システム
+    public static final String TCT_CHAT_ERROR_PERMISSION = ChatColor.RED + "このコマンドを実行するための権限がありません";
+    public static final String TCT_CHAT_PLAYER_ONLY = ChatColor.RED + "このコマンドはプレイヤーのみ実行できます";
+    public static final String TCT_CHAT_PROCESS_CHANGE_GAMEMODE = ChatColor.GREEN + "%PLAYER%のゲームモードを%GAMEMODE%に変更しました。";
+    public static final String TCT_CHAT_SYSTEM_EVERYONE = "全員";
+    public static final String TCT_CHAT_SYSTEM_YOU = "あなた";
+    //ゲームモード
+    public static final String TCT_GAMEMODE_CREATIVE = "クリエイティブ";
+    public static final String TCT_GAMEMODE_SURVIVAL = "サバイバル";
+    public static final String TCT_GAMEMODE_ADVENTURE = "アドベンチャー";
+    public static final String TCT_GAMEMODE_SPECTATOR = "スペクテイター";
     //入退室
     public static final String TCT_CHAT_JOIN_MESSAGE_0 = ChatColor.LIGHT_PURPLE + "=-=-7mi TCT-=-=";
     public static final String TCT_CHAT_JOIN_MESSAGE_1 = ChatColor.RED + " " + " " + " " + "by ClockClap";
@@ -34,7 +44,8 @@ public class Reference {
     //ゲーム開始
     public static final String TCT_CHAT_GAME_STARTED = ChatColor.RED + "ゲームが開始されました";
     public static final String TCT_CHAT_GAME_ALREADY_STARTED = ChatColor.RED + "既にゲームが開始されているため、観戦モードになります";
-    public static final String TCT_CHAT_PLEASE_START = ChatColor.RED + "ゲームを開始するには、/start または /startloc と入力します";
+    public static final String TCT_CHAT_PLEASE_START = ChatColor.RED + "/startまたは/startlocでゲームを開始してください";
+    public static final String TCT_CHAT_PLEASE_WAIT = ChatColor.RED + "運営がゲームを開始するまで、しばらくお待ちください";
     public static final String TCT_CHAT_READY_END = ChatColor.RED + "準備時間が終了しました...";
     //ゲームルール
     public static final String TCT_CHAT_GAME_PLAYERS = ChatColor.LIGHT_PURPLE + "今回のプレイ人数は" + ChatColor.GREEN + "%COUNT%人" + ChatColor.LIGHT_PURPLE + "です";
@@ -65,6 +76,12 @@ public class Reference {
     public static final String TCT_CHAT_ROLE_DESCRIPTION_FANATIC = ChatColor.LIGHT_PURPLE + "村人の邪魔をしましょう、ただし人狼はあなたの事を知っていますがあなたは誰が人狼か分かりません";
     public static final String TCT_CHAT_ROLE_YOU_ARE_WOLF = ChatColor.RED + "あなたの役職は人狼です";
     public static final String TCT_CHAT_ROLE_DESCRIPTION_WOLF = ChatColor.LIGHT_PURPLE + "人狼アイテムを的確に購入し、村人にばれないように殲滅をしていきましょう";
+    public static final String TCT_CHAT_ROLE_YOU_ARE_VILLAGER = ChatColor.GREEN + "あなたの役職は村人です";
+    public static final String TCT_CHAT_ROLE_DESCRIPTION_VILLAGER = ChatColor.LIGHT_PURPLE + "";
+    public static final String TCT_CHAT_ROLE_YOU_ARE_DETECTIVE = ChatColor.AQUA + "あなたの役職は人狼です";
+    public static final String TCT_CHAT_ROLE_DESCRIPTION_DETECTIVE = ChatColor.LIGHT_PURPLE + "";
+    public static final String TCT_CHAT_ROLE_YOU_ARE_FOX = ChatColor.GOLD + "あなたの役職は妖狐です";
+    public static final String TCT_CHAT_ROLE_DESCRIPTION_FOX = ChatColor.LIGHT_PURPLE + "";
 
     //全般
     public static final String TCT_SECOND = "秒";
@@ -121,6 +138,12 @@ public class Reference {
     public static final String TCT_ROLE_IMMORALIST = "背徳者";
     public static final String TCT_ROLE_MEDIUM = "霊媒師";
     public static final String TCT_ROLE_HUNTER = "狩人";
+
+    //陣営名
+    public static final String TCT_TEAM_SPEC = "スペクテイター";
+    public static final String TCT_TEAM_VILLAGERS = "村人陣営";
+    public static final String TCT_TEAM_WOLVES = "人狼陣営";
+    public static final String TCT_TEAM_FOXES = "妖狐";
 
     //サイドバー (UI)
     public static final String TCT_UI_GAME_STATUS = "ステータス";

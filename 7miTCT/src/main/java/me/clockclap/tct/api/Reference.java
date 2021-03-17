@@ -31,13 +31,14 @@ public class Reference {
     public static final String TCT_CHAT_PROCESS_CHANGE_GAMEMODE = ChatColor.GREEN + "%PLAYER%のゲームモードを%GAMEMODE%に変更しました。";
     public static final String TCT_CHAT_SYSTEM_EVERYONE = "全員";
     public static final String TCT_CHAT_SYSTEM_YOU = "あなた";
+    public static final String TCT_CHAT_SYSTEM_RELOAD_COMPLETE = ChatColor.YELLOW + "コンフィグをリロードしました。";
     //ゲームモード
     public static final String TCT_GAMEMODE_CREATIVE = "クリエイティブ";
     public static final String TCT_GAMEMODE_SURVIVAL = "サバイバル";
     public static final String TCT_GAMEMODE_ADVENTURE = "アドベンチャー";
     public static final String TCT_GAMEMODE_SPECTATOR = "スペクテイター";
     //入退室
-    public static final String TCT_CHAT_JOIN_MESSAGE_0 = ChatColor.LIGHT_PURPLE + "=-=-7mi TCT-=-=";
+    public static final String TCT_CHAT_JOIN_MESSAGE_0 = ChatColor.LIGHT_PURPLE + "=-=-7mi TCT v%VERSION%-=-=";
     public static final String TCT_CHAT_JOIN_MESSAGE_1 = ChatColor.RED + " " + " " + " " + "by ClockClap";
     public static final String TCT_CHAT_JOIN_MESSAGE = ChatColor.GREEN + "[+] " + ChatColor.GRAY + "%PLAYER%";
     public static final String TCT_CHAT_QUIT_MESSAGE = ChatColor.RED + "[-] " + ChatColor.GRAY + "%PLAYER%";

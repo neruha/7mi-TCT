@@ -1,5 +1,5 @@
 name: 7mi_TCT
-version: 1.0
+version: ${version}
 main: me.clockclap.tct.NanamiTct
 api-version: 1.12
 prefix: 7mi-TCT
@@ -14,6 +14,8 @@ commands:
     description: "自身のゲームモードをサバイバルモードに変更します。"
   gmsall:
     description: "全員のゲームモードをサバイバルモードに変更します。"
+  tctreload:
+    description: "コンフィグをリロードします。"
 
 
 

@@ -24,20 +24,20 @@ public class PlayerConnectionEvent implements Listener {
     public void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         PlayerData data = new TctPlayerData(GameRoles.SPEC, p.getName());
-        plugin.getGameReference().PLAYERDATA.put(p.getName(), data);
+        plugin.getGame().getReference().PLAYERDATA.put(p.getName(), data);
         e.setJoinMessage(Reference.TCT_CHAT_JOIN_MESSAGE.replaceAll("%PLAYER%",p.getDisplayName()));
-        p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_JOIN_MESSAGE_0);
+        p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_JOIN_MESSAGE_0.replaceAll("%VERSION%", plugin.getDescription().getVersion()));
         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_JOIN_MESSAGE_1);
         String gameState = "";
         String message = "";
-        if(plugin.getGameReference().getGameState() == GameState.WAITING) {
+        if(plugin.getGame().getReference().getGameState() == GameState.WAITING) {
             gameState = "Waiting";
             if(p.isOp()) {
                 message = Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_PLEASE_START;
             } else {
                 message = Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_PLEASE_WAIT;
             }
-        } else if(plugin.getGameReference().getGameState() == GameState.GAMING) {
+        } else if(plugin.getGame().getReference().getGameState() == GameState.GAMING) {
             gameState = "Gaming";
             message = Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_GAME_ALREADY_STARTED;
         } else {
@@ -52,10 +52,10 @@ public class PlayerConnectionEvent implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
         Player p = e.getPlayer();
-        if(plugin.getGameReference().getGameState() == GameState.GAMING) {
+        if(plugin.getGame().getReference().getGameState() == GameState.GAMING) {
 
         }
-        plugin.getGameReference().PLAYERDATA.remove(p.getName());
+        plugin.getGame().getReference().PLAYERDATA.remove(p.getName());
         e.setQuitMessage(Reference.TCT_CHAT_QUIT_MESSAGE.replaceAll("%PLAYER%",p.getDisplayName()));
     }
 

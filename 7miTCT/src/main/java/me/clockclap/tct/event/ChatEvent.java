@@ -35,7 +35,7 @@ public class ChatEvent implements Listener {
         }
         String role_chatprefix;
 
-        GameRole role = plugin.getGameReference().PLAYERDATA.get(p.getName()).getRole();
+        GameRole role = plugin.getGame().getReference().PLAYERDATA.get(p.getName()).getRole();
         if(role == GameRoles.SPEC) {
             role_chatprefix = Reference.TCT_CHAT_ROLE_SPEC_P;
         } else {

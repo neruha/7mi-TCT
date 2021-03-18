@@ -2,6 +2,7 @@ package me.clockclap.tct.game.data;
 
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
+import org.bukkit.boss.BossBar;
 
 public class TctPlayerData implements PlayerData {
 
@@ -39,4 +40,5 @@ public class TctPlayerData implements PlayerData {
     public void setCO(GameRole role) {
         this.co = role;
     }
+
 }

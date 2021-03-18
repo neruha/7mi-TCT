@@ -3,7 +3,9 @@ package me.clockclap.tct.command;
 import com.google.common.base.Charsets;
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
-import org.bukkit.ChatColor;
+import me.clockclap.tct.game.GameState;
+import me.clockclap.tct.game.role.GameRoles;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,13 +17,12 @@ import org.bukkit.entity.Player;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 
-public class CommandTctReload implements CommandExecutor {
+public class CommandStopGame implements CommandExecutor {
 
     private NanamiTct plugin;
 
-    public CommandTctReload(NanamiTct plugin) {
+    public CommandStopGame(NanamiTct plugin) {
         this.plugin = plugin;
     }
 
@@ -47,31 +48,29 @@ public class CommandTctReload implements CommandExecutor {
                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_PERMISSION);
                 return true;
             }
-            reload();
-            p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_SYSTEM_RELOAD_COMPLETE);
+            if(plugin.getGame().getReference().getGameState() == GameState.GAMING || plugin.getGame().getReference().getGameState() == GameState.STARTING) {
+                process();
+                return true;
+            }
+            p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_GAME_NOT_STARTED);
             return true;
         }
-        reload();
-        sender.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_SYSTEM_RELOAD_COMPLETE);
+        if(plugin.getGame().getReference().getGameState() == GameState.GAMING || plugin.getGame().getReference().getGameState() == GameState.STARTING) {
+            process();
+            return true;
+        }
+        sender.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_GAME_NOT_STARTED);
         return true;
     }
 
-    private void reload() {
-        FileConfiguration newConfig = YamlConfiguration.loadConfiguration(plugin.getTctConfig().getConfigFile());
-
-        final InputStream defConfigStream = plugin.getResource("config.yml");
-        if (defConfigStream == null) {
-            return;
+    private void process() {
+        if(plugin.getGame().getReference().getGameState() == GameState.STARTING) {
+            plugin.getGame().getPreTimer().cancel();
+        } else if(plugin.getGame().getReference().getGameState() == GameState.GAMING) {
+            plugin.getGame().getTimer().cancel();
         }
-
-        newConfig.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream, Charsets.UTF_8)));
-        try {
-            plugin.getTctConfig().getConfig().load(plugin.getTctConfig().getConfigFile());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InvalidConfigurationException e) {
-            e.printStackTrace();
-        }
+        plugin.getGame().stop(GameRoles.NONE);
+        Bukkit.getServer().broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_SYSTEM_STOPPED_GAME);
     }
 
 }

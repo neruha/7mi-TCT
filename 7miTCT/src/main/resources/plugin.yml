@@ -16,6 +16,12 @@ commands:
     description: "全員のゲームモードをサバイバルモードに変更します。"
   tctreload:
     description: "コンフィグをリロードします。"
+  barrier:
+    description: "バリアブロックを入手します。"
+  start:
+    description: "ゲームを開始します。"
+  stopgame:
+    description: "ゲームを強制終了させます。"
 
 
 

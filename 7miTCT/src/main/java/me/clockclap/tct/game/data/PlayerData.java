@@ -1,6 +1,7 @@
 package me.clockclap.tct.game.data;
 
 import me.clockclap.tct.game.role.GameRole;
+import org.bukkit.boss.BossBar;
 
 public interface PlayerData {
 

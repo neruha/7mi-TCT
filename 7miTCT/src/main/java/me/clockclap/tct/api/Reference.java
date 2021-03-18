@@ -8,6 +8,11 @@ public class Reference {
     public static final String TCT_CHATPREFIX = ChatColor.DARK_RED + "[7mi TCT]" + ChatColor.RESET;
     public static final String TCT_SIDEBAR_TITLE = ChatColor.DARK_RED + "[Trouble in Crafter Town]";
 
+    //ボスバー
+    public static final String TCT_BOSSBAR_FORMAT_WAITING = ChatColor.RED + "待機中 - 運営がゲームを開始するまでお待ちください";
+    public static final String TCT_BOSSBAR_FORMAT_GAMING = ChatColor.AQUA + "ゲーム中 - 残り%SECOND%秒";
+    public static final String TCT_BOSSBAR_FORMAT_STARTING = ChatColor.GOLD + "準備時間 - 残り%SECOND%秒";
+    public static final String TCT_BOSSBAR_FORMAT_ENDING = ChatColor.RED + "終了しています...";
 
     //チャットフォーマット
     public static final String JAPANIZE_FORMAT = ChatColor.RESET + "%JAPANIZE%" + ChatColor.RESET + " " + ChatColor.DARK_GRAY + "(" + ChatColor.GRAY + "%MESSAGE%" + ChatColor.DARK_GRAY + ")";
@@ -27,11 +32,14 @@ public class Reference {
     public static final String TCT_CHAT_SEPARATOR = ChatColor.RED + "-------------------------------------";
     //システム
     public static final String TCT_CHAT_ERROR_PERMISSION = ChatColor.RED + "このコマンドを実行するための権限がありません";
+    public static final String TCT_CHAT_ERROR_GAME_NOT_STARTED = ChatColor.RED + "ゲームがまだ開始されていません";
+    public static final String TCT_CHAT_SYSTEM_STOPPED_GAME = ChatColor.RED + "ゲームが管理者によって強制終了されました";
     public static final String TCT_CHAT_PLAYER_ONLY = ChatColor.RED + "このコマンドはプレイヤーのみ実行できます";
     public static final String TCT_CHAT_PROCESS_CHANGE_GAMEMODE = ChatColor.GREEN + "%PLAYER%のゲームモードを%GAMEMODE%に変更しました。";
     public static final String TCT_CHAT_SYSTEM_EVERYONE = "全員";
     public static final String TCT_CHAT_SYSTEM_YOU = "あなた";
     public static final String TCT_CHAT_SYSTEM_RELOAD_COMPLETE = ChatColor.YELLOW + "コンフィグをリロードしました。";
+    public static final String TCT_CHAT_SYSTEM_GAVE_BARRIER = ChatColor.YELLOW + "%PLAYER%はバリアブロックを入手しました。";
     //ゲームモード
     public static final String TCT_GAMEMODE_CREATIVE = "クリエイティブ";
     public static final String TCT_GAMEMODE_SURVIVAL = "サバイバル";
@@ -53,7 +61,6 @@ public class Reference {
     public static final String TCT_CHAT_GAME_ROLE_SORTING = ChatColor.LIGHT_PURPLE + "役職振り分け";
     //キル
     public static final String TCT_CHAT_YOU_ARE_KILLED_BY = ChatColor.RED + "あなたは" + ChatColor.GOLD + "%PLAYER%" + ChatColor.RED + "に殺害されました";
-    public static final String TCT_CHAT_AUTO_RESPAWING = ChatColor.RESET + "自動リスポーンしています...";
     public static final String TCT_CHAT_YOU_ARE_SPECTATOR_MODE = ChatColor.GREEN + "死亡してしまったため、観戦モードになります";
     //発見
     public static final String TCT_CHAT_CADAVER_FOUND = ChatColor.RED + "" + ChatColor.BOLD + "%PLAYER%さんが無惨な姿で発見されました";
@@ -64,8 +71,10 @@ public class Reference {
     public static final String TCT_CHAT_FOX_IS = ChatColor.LIGHT_PURPLE + "妖狐は" + ChatColor.GOLD + "[%PLAYER%]" + ChatColor.LIGHT_PURPLE + "です！";
     //勝敗
     public static final String TCT_CHAT_VILLAGERS_VICTORY_FOR_TIMEOUT = ChatColor.GREEN + "時間切れにより、村人側の勝利です";
+    public static final String TCT_CHAT_VILLAGERS_VICTORY = ChatColor.GREEN + "人狼陣営は全滅し、妖狐も死亡しました";
     public static final String TCT_CHAT_WOLVES_VICTORY = ChatColor.RED + "村人陣営は全滅し、妖狐も死亡しました";
     public static final String TCT_CHAT_FOX_VICTORY = ChatColor.GOLD + "人狼陣営は全滅し、妖狐が生き残りました";
+    public static final String TCT_CHAT_NO_VICTORY = ChatColor.GRAY + "運営によって強制終了されたため、引き分けになります";
     //ゲーム終了
     public static final String TCT_CHAT_GAMEEND_ROLE_RESULT = ChatColor.GREEN + "=-=-プレイヤーの役職結果-=-=";
     public static final String TCT_CHAT_GAMEEND_YOU_ARE_KILLED_BY = ChatColor.RED + "あなたは" + ChatColor.GOLD + "%PLAYER%" + ChatColor.RED + "に殺害されました " + ChatColor.GREEN + "(%ROLE%)";
@@ -78,11 +87,11 @@ public class Reference {
     public static final String TCT_CHAT_ROLE_YOU_ARE_WOLF = ChatColor.RED + "あなたの役職は人狼です";
     public static final String TCT_CHAT_ROLE_DESCRIPTION_WOLF = ChatColor.LIGHT_PURPLE + "人狼アイテムを的確に購入し、村人にばれないように殲滅をしていきましょう";
     public static final String TCT_CHAT_ROLE_YOU_ARE_VILLAGER = ChatColor.GREEN + "あなたの役職は村人です";
-    public static final String TCT_CHAT_ROLE_DESCRIPTION_VILLAGER = ChatColor.LIGHT_PURPLE + "";
-    public static final String TCT_CHAT_ROLE_YOU_ARE_DETECTIVE = ChatColor.AQUA + "あなたの役職は人狼です";
+    public static final String TCT_CHAT_ROLE_DESCRIPTION_VILLAGER = ChatColor.LIGHT_PURPLE + "紛れ込んだ人狼を見つけ出し倒しましょう、自分が人狼だと思われないように行動しましょう";
+    public static final String TCT_CHAT_ROLE_YOU_ARE_DETECTIVE = ChatColor.AQUA + "あなたの役職は探偵です";
     public static final String TCT_CHAT_ROLE_DESCRIPTION_DETECTIVE = ChatColor.LIGHT_PURPLE + "";
     public static final String TCT_CHAT_ROLE_YOU_ARE_FOX = ChatColor.GOLD + "あなたの役職は妖狐です";
-    public static final String TCT_CHAT_ROLE_DESCRIPTION_FOX = ChatColor.LIGHT_PURPLE + "";
+    public static final String TCT_CHAT_ROLE_DESCRIPTION_FOX = ChatColor.LIGHT_PURPLE + "一定時間毎に誰かにダメージを与えないと、正体がばれてしまいます";
 
     //全般
     public static final String TCT_SECOND = "秒";
@@ -99,7 +108,9 @@ public class Reference {
     public static final String TCT_TITLE_MAIN_WOLVES_VICTORY = ChatColor.RED + "人狼陣営が勝利しました";
     public static final String TCT_TITLE_SUB_WOLVES_VICTORY = ChatColor.GRAY + "村人陣営全滅による人狼側の勝利";
     public static final String TCT_TITLE_MAIN_FOX_VICTORY = ChatColor.GOLD + "妖狐が勝利しました";
-    public static final String TCT_TITLE_SUB_FOX_VICTORY = ChatColor.GREEN + "人狼陣営全滅時に生き残っていた妖狐の勝利";
+    public static final String TCT_TITLE_SUB_FOX_VICTORY = ChatColor.GRAY + "人狼陣営全滅時に生き残っていた妖狐の勝利";
+    public static final String TCT_TITLE_MAIN_NO_VICTORY = ChatColor.DARK_GRAY + "引き分け";
+    public static final String TCT_TITLE_SUB_NO_VICTORY = ChatColor.GRAY + "ゲームが強制終了されました";
 
     //役職 CO
     public static final String TCT_CHAT_CO = ChatColor.AQUA + "%PLAYER%が%CO%をしました";
@@ -164,7 +175,7 @@ public class Reference {
     public static final String TCT_STATE_END_PROCESSING = "終了処理中";
     public static final String TCT_STATE_WAITING = "待機中";
     public static final String TCT_STATE_READY = "準備時間";
-    public static final String TCT_GAME_STATE = ChatColor.GRAY + "Game State >>> %STATE%";
+    public static final String TCT_GAME_STATE = ChatColor.GRAY + "GameState >>> %STATE%";
     public static final String TCT_CHAT_STATE_PLAYING = "Gaming";
     public static final String TCT_CHAT_STATE_WAITING = "Waiting";
 

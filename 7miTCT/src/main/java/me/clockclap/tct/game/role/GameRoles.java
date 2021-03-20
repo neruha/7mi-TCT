@@ -1,8 +1,6 @@
 package me.clockclap.tct.game.role;
 
-import me.clockclap.tct.game.role.roles.RoleNone;
-import me.clockclap.tct.game.role.roles.RoleSpectator;
-import me.clockclap.tct.game.role.roles.RoleVillager;
+import me.clockclap.tct.game.role.roles.*;
 
 public class GameRoles {
 
@@ -11,5 +9,10 @@ public class GameRoles {
     public static final GameRole SPEC = new RoleSpectator();
 
     public static final GameRole VILLAGER = new RoleVillager();
+    public static final GameRole HEALER = new RoleHealer();
+    public static final GameRole DETECTIVE = new RoleDetective();
+    public static final GameRole WOLF = new RoleWolf();
+    public static final GameRole FANATIC = new RoleFanatic();
+    public static final GameRole FOX = new RoleFox();
 
 }

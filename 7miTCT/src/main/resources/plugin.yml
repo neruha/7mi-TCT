@@ -22,6 +22,9 @@ commands:
     description: "ゲームを開始します。"
   stopgame:
     description: "ゲームを強制終了させます。"
+  item:
+    aliases: ["i"]
+    description: "アイテムを入手します。"
 
 
 

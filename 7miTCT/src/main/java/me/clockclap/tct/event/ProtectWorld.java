@@ -24,7 +24,9 @@ public class ProtectWorld implements Listener {
             e.setCancelled(true);
         }
         if(plugin.getGame().getReference().getGameState() == GameState.GAMING) {
-            if (plugin.getGame().getReference().PLAYERDATA.get(p.getName()).getRole() != GameRoles.SPEC || plugin.getGame().getReference().PLAYERDATA.get(p.getName()).getRole() != GameRoles.NONE) {
+            if (plugin.getGame().getReference().PLAYERDATA.get(p.getName()).getRole() != GameRoles.SPEC ||
+                    plugin.getGame().getReference().PLAYERDATA.get(p.getName()).getRole() != GameRoles.NONE ||
+                    plugin.getGame().getReference().PLAYERDATA.get(p.getName()).isSpectator()) {
                 e.setCancelled(true);
             }
         }

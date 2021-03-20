@@ -11,8 +11,12 @@ public interface PlayerData {
 
     public String getName();
 
+    public boolean isSpectator();
+
     public void setRole(GameRole role);
 
     public void setCO(GameRole role);
+
+    public void setSpectator(boolean bool);
 
 }

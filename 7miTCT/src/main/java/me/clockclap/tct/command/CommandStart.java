@@ -3,6 +3,8 @@ package me.clockclap.tct.command;
 import com.google.common.base.Charsets;
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
+import me.clockclap.tct.game.Game;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -45,9 +47,14 @@ public class CommandStart implements CommandExecutor {
                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_PERMISSION);
                 return true;
             }
-            plugin.getGame().preStart(p.getLocation());
+            boolean success = plugin.getGame().preStart(p.getLocation());
+            if(success == false) {
+                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_PLAYERS_NEEDED);
+                p.playSound(p.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 1.5F, 0.5F);
+            }
             return true;
         }
+        sender.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_PLAYER_ONLY);
         return true;
     }
 

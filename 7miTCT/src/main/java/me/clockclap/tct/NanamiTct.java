@@ -62,6 +62,7 @@ public final class NanamiTct extends JavaPlugin {
         utilities.addCommand("barrier", new CommandBarrier(this));
         utilities.addCommand("start", new CommandStart(this));
         utilities.addCommand("stopgame", new CommandStopGame(this));
+        utilities.addCommand("item", new CommandItem(this));
 
         //Register boss bar
         BossBar bar = Bukkit.getServer().createBossBar(Reference.TCT_BOSSBAR_FORMAT_WAITING, BarColor.RED, BarStyle.SOLID);

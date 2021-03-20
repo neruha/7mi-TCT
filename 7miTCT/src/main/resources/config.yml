@@ -21,17 +21,17 @@ roles:
 #
 # 0にするとその役職は無効になります。
 # また、-1にすると、人数に合わせて変動します。
-# 数値1..数値2 と入力すると最小値が数値1で最大値が数値2になります。
+# 数値1..数値2 と入力すると最小値が数値1で最大値が数値2になります。(村人のみ)
 #
 # コマンドでは /setrolecount <役職名> <数値>
-# または /setrolecount <役職名> <最小値> <最大値>
+# または /setrolecount villagers <最小値> <最大値>
 # 例1 /setrolecount detectives 2
 # 例2 /setrolecount villagers 3 -1
 # (上記のコマンドが実行できるのは、adminで設定したプレイヤーのみです)
 #
 # よくわからなかったら触らないでコマンドで操作した方がいいです。(その方が楽)
   count:
-    villagers: 1..-1
+    villagers: 1:-1
     healer: 1
     detectives: 1
     wolves: 1
@@ -39,7 +39,7 @@ roles:
     foxes: 1
 # 例
 # count:
-#   villagers: 1..-1
+#   villagers: 1:-1
 #   healer: 1
 #   detectives: 1
 #   wolves: 1
@@ -81,6 +81,9 @@ countdown:
   addcount:
     #デフォルト: 8以上12以下
     kill: 20 #キルしたときに増える時間 (秒)
+
+#デフォルト: 20秒
+quickchat-cooldown: 20 #クールダウン (秒)
 
 player:
 # プレイヤーの名前を指定した名前に置き換えることができます。

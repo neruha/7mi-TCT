@@ -33,13 +33,15 @@ public class Reference {
     //システム
     public static final String TCT_CHAT_ERROR_PERMISSION = ChatColor.RED + "このコマンドを実行するための権限がありません";
     public static final String TCT_CHAT_ERROR_GAME_NOT_STARTED = ChatColor.RED + "ゲームがまだ開始されていません";
-    public static final String TCT_CHAT_SYSTEM_STOPPED_GAME = ChatColor.RED + "ゲームが管理者によって強制終了されました";
+    public static final String TCT_CHAT_ERROR_PLAYERS_NEEDED = ChatColor.RED + "人数が揃っていないため、ゲームを開始できません";
     public static final String TCT_CHAT_PLAYER_ONLY = ChatColor.RED + "このコマンドはプレイヤーのみ実行できます";
     public static final String TCT_CHAT_PROCESS_CHANGE_GAMEMODE = ChatColor.GREEN + "%PLAYER%のゲームモードを%GAMEMODE%に変更しました。";
+    public static final String TCT_CHAT_SYSTEM_STOPPED_GAME = ChatColor.RED + "ゲームが管理者によって強制終了されました";
     public static final String TCT_CHAT_SYSTEM_EVERYONE = "全員";
     public static final String TCT_CHAT_SYSTEM_YOU = "あなた";
     public static final String TCT_CHAT_SYSTEM_RELOAD_COMPLETE = ChatColor.YELLOW + "コンフィグをリロードしました。";
     public static final String TCT_CHAT_SYSTEM_GAVE_BARRIER = ChatColor.YELLOW + "%PLAYER%はバリアブロックを入手しました。";
+    public static final String TCT_CHAT_SYSTEM_GAVE_ITEM = ChatColor.YELLOW + "あなたは%ITEM%を入手しました。";
     //ゲームモード
     public static final String TCT_GAMEMODE_CREATIVE = "クリエイティブ";
     public static final String TCT_GAMEMODE_SURVIVAL = "サバイバル";

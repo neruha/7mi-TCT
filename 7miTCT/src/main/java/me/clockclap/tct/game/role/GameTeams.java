@@ -1,8 +1,6 @@
 package me.clockclap.tct.game.role;
 
-import me.clockclap.tct.game.role.teams.TeamNone;
-import me.clockclap.tct.game.role.teams.TeamSpectator;
-import me.clockclap.tct.game.role.teams.TeamVillager;
+import me.clockclap.tct.game.role.teams.*;
 
 public class GameTeams {
 
@@ -11,5 +9,7 @@ public class GameTeams {
     public static final GameTeam SPEC = new TeamSpectator();
 
     public static final GameTeam VILLAGERS = new TeamVillager();
+    public static final GameTeam WOLVES = new TeamWolves();
+    public static final GameTeam FOXES = new TeamFoxes();
 
 }

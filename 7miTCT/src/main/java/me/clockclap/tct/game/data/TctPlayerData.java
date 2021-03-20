@@ -9,11 +9,13 @@ public class TctPlayerData implements PlayerData {
     private GameRole role;
     private GameRole co;
     private String name;
+    private boolean spec;
 
     public TctPlayerData(GameRole role, String name) {
         this.role = role;
         this.name = name;
         this.co = GameRoles.NONE;
+        this.spec = true;
     }
 
     @Override
@@ -32,6 +34,11 @@ public class TctPlayerData implements PlayerData {
     }
 
     @Override
+    public boolean isSpectator() {
+        return this.spec;
+    }
+
+    @Override
     public void setRole(GameRole role) {
         this.role = role;
     }
@@ -39,6 +46,11 @@ public class TctPlayerData implements PlayerData {
     @Override
     public void setCO(GameRole role) {
         this.co = role;
+    }
+
+    @Override
+    public void setSpectator(boolean bool) {
+        this.spec = bool;
     }
 
 }

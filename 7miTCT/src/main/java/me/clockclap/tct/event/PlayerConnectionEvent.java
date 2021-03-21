@@ -29,6 +29,7 @@ public class PlayerConnectionEvent implements Listener {
         Player p = e.getPlayer();
         plugin.getGame().getBar().addPlayer(p);
         PlayerData data = new TctPlayerData(plugin, GameRoles.SPEC, p.getName());
+        data.setSpectator(true);
         plugin.getGame().getReference().PLAYERDATA.put(p.getName(), data);
         e.setJoinMessage(Reference.TCT_CHAT_JOIN_MESSAGE.replaceAll("%PLAYER%",p.getDisplayName()));
         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_JOIN_MESSAGE_0.replaceAll("%VERSION%", plugin.getDescription().getVersion()));

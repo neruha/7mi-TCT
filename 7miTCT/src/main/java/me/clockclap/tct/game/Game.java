@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
+import javax.management.relation.Role;
 import java.sql.Ref;
 import java.util.Collection;
 import java.util.Random;
@@ -273,7 +274,9 @@ public class Game {
                 int role = rand.nextInt(5) + 1;
                 if (role == GameRoles.HEALER.getIndex()) {
                     if(getRoleCount().getHealersCount() < healersMax) {
+                        int coin = plugin.getTctConfig().getConfig().getInt("roles.coin.healers", 0);
                         data.setRole(GameRoles.HEALER);
+                        data.setCoin(coin);
                         getRoleCount().setHealersCount(getRoleCount().getHealersCount() + 1);
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_HEALER);
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_DESCRIPTION_HEALER);
@@ -283,7 +286,9 @@ public class Game {
                 }
                 if (role == GameRoles.DETECTIVE.getIndex()) {
                     if(getRoleCount().getDetectivesCount() < detectivesMax) {
+                        int coin = plugin.getTctConfig().getConfig().getInt("roles.coin.detectives", 2);
                         data.setRole(GameRoles.DETECTIVE);
+                        data.setCoin(coin);
                         getRoleCount().setDetectivesCount(getRoleCount().getDetectivesCount() + 1);
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_DETECTIVE);
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_DESCRIPTION_DETECTIVE);
@@ -293,7 +298,9 @@ public class Game {
                 }
                 if (role == GameRoles.WOLF.getIndex()) {
                     if(getRoleCount().getWolvesCount() < wolvesMax) {
+                        int coin = plugin.getTctConfig().getConfig().getInt("roles.coin.wolves", 2);
                         data.setRole(GameRoles.WOLF);
+                        data.setCoin(coin);
                         getRoleCount().setWolvesCount(getRoleCount().getWolvesCount() + 1);
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_WOLF);
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_DESCRIPTION_WOLF);
@@ -303,7 +310,9 @@ public class Game {
                 }
                 if (role == GameRoles.FANATIC.getIndex()) {
                     if(getRoleCount().getFanaticsCount() < fanaticsMax) {
+                        int coin = plugin.getTctConfig().getConfig().getInt("roles.coin.fanatics", 0);
                         data.setRole(GameRoles.FANATIC);
+                        data.setCoin(coin);
                         getRoleCount().setFanaticsCount(getRoleCount().getFanaticsCount() + 1);
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_FANATIC);
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_DESCRIPTION_FANATIC);
@@ -313,7 +322,9 @@ public class Game {
                 }
                 if (role == GameRoles.FOX.getIndex()) {
                     if(getRoleCount().getFoxesCount() < foxesMax) {
+                        int coin = plugin.getTctConfig().getConfig().getInt("roles.coin.foxes", 0);
                         data.setRole(GameRoles.FOX);
+                        data.setCoin(coin);
                         getRoleCount().setFoxesCount(getRoleCount().getFoxesCount() + 1);
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_FOX);
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_DESCRIPTION_FOX);
@@ -401,7 +412,18 @@ public class Game {
         getReference().setGameState(GameState.WAITING);
         getBar().setTitle(Reference.TCT_BOSSBAR_FORMAT_WAITING);
         for(Player p : Bukkit.getOnlinePlayers()) {
+            PlayerData data = getReference().PLAYERDATA.get(p.getName());
             p.setFoodLevel(20);
+            data.setRole(GameRoles.SPEC);
+            data.setSpectator(true);
+            RoleCount count = new RoleCount(this);
+            count.setVillagersCount(0);
+            count.setHealersCount(0);
+            count.setDetectivesCount(0);
+            count.setWolvesCount(0);
+            count.setFanaticsCount(0);
+            count.setFoxesCount(0);
+            setRoleCount(count);
         }
         if(winners == GameRoles.NONE) {
             for(Player p : Bukkit.getOnlinePlayers()) {

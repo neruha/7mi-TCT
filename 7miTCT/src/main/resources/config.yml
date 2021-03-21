@@ -26,14 +26,14 @@ roles:
 #
 # よくわからなかったら触らないでコマンドで操作した方がいいです。(その方が楽)
   count:
-    healer: 1
+    healers: 1
     detectives: 1
     wolves: 1
     fanatics: 1
     foxes: 1
 # 例
 # count:
-#   healer: 1
+#   healers: 1
 #   detectives: 1
 #   wolves: 1
 #   fanatics: 1
@@ -66,17 +66,39 @@ roles:
 # 人数が5人以下の場合、
 # 開始不可
 
+
+#ゲーム開始時に所持しているコイン枚数
+#
+#デフォルト
+# coin:
+#   villagers: 0
+#   healers: 0
+#   detectives: 2
+#   wolves: 2
+#   fanatics: 0
+#   foxes: 0
+  coin:
+    villagers: 0
+    healers: 0
+    detectives: 2
+    wolves: 2
+    fanatics: 0
+    foxes: 0
+
 countdown:
   #デフォルト: 10秒
   prestart: 10 #準備時間 (秒)
-  #デフォルト: 240秒
-  game: 240 #ゲーム残り時間 (秒)
+  #デフォルト: 210秒
+  game: 210 #ゲーム残り時間 (秒)
   addcount:
     #デフォルト: 8以上12以下
     kill: 20 #キルしたときに増える時間 (秒)
 
 #デフォルト: 20秒
-quickchat-cooldown: 20 #クールダウン (秒)
+quickchat-cooldown: 20 #クイックチャットのクールタイム (秒)
+
+#デフォルト: 180秒後
+first-coin-time: 180 #コインが配られる時間 (秒後)
 
 player:
 # プレイヤーの名前を指定した名前に置き換えることができます。

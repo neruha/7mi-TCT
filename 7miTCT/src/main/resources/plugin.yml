@@ -20,6 +20,8 @@ commands:
     description: "バリアブロックを入手します。"
   start:
     description: "ゲームを開始します。"
+  startloc:
+    description: "ゲームを指定した場所から開始します。"
   stopgame:
     description: "ゲームを強制終了させます。"
   item:

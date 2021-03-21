@@ -15,7 +15,11 @@ public interface PlayerData {
 
     public int getQuickChatCooldown();
 
+    public int getCoin();
+
     public void startQCCCountdown();
+
+    public void setCoin(int coin);
 
     public void setRole(GameRole role);
 

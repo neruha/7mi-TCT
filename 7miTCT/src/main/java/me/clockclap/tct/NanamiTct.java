@@ -7,6 +7,7 @@ import me.clockclap.tct.command.*;
 import me.clockclap.tct.event.*;
 import me.clockclap.tct.game.Game;
 import me.clockclap.tct.game.GameReference;
+import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.data.TctPlayerData;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomItems;
@@ -48,7 +49,6 @@ public final class NanamiTct extends JavaPlugin {
         // Register Events
         pm.registerEvents(new PlayerConnectionEvent(this), this);
         pm.registerEvents(new ChatEvent(this), this);
-        pm.registerEvents(new ProtectWorld(this), this);
         pm.registerEvents(new CancelHunger(this), this);
         pm.registerEvents(new ItemEvent(this), this);
         pm.registerEvents(new BlockEvent(this), this);
@@ -61,6 +61,7 @@ public final class NanamiTct extends JavaPlugin {
         utilities.addCommand("tctreload", new CommandTctReload(this));
         utilities.addCommand("barrier", new CommandBarrier(this));
         utilities.addCommand("start", new CommandStart(this));
+        utilities.addCommand("startloc", new CommandStartLoc(this));
         utilities.addCommand("stopgame", new CommandStopGame(this));
         utilities.addCommand("item", new CommandItem(this));
 
@@ -76,7 +77,9 @@ public final class NanamiTct extends JavaPlugin {
         // Initialize player data
         if(Bukkit.getOnlinePlayers().size() > 0) {
             for (Player p : Bukkit.getOnlinePlayers()) {
-                getGame().getReference().PLAYERDATA.put(p.getName(), new TctPlayerData(this, GameRoles.SPEC, p.getName()));
+                PlayerData data = new TctPlayerData(this, GameRoles.SPEC, p.getName());
+                data.setSpectator(true);
+                getGame().getReference().PLAYERDATA.put(p.getName(), data);
                 bar.addPlayer(p);
             }
         }

@@ -4,14 +4,12 @@ import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.api.TctConfiguration;
 import me.clockclap.tct.api.Utilities;
 import me.clockclap.tct.command.*;
-import me.clockclap.tct.event.CancelHunger;
-import me.clockclap.tct.event.ChatEvent;
-import me.clockclap.tct.event.PlayerConnectionEvent;
-import me.clockclap.tct.event.ProtectWorld;
+import me.clockclap.tct.event.*;
 import me.clockclap.tct.game.Game;
 import me.clockclap.tct.game.GameReference;
 import me.clockclap.tct.game.data.TctPlayerData;
 import me.clockclap.tct.game.role.GameRoles;
+import me.clockclap.tct.item.CustomItems;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -47,13 +45,15 @@ public final class NanamiTct extends JavaPlugin {
         getLogger().info("Starting up...");
         PluginManager pm = Bukkit.getServer().getPluginManager();
 
-        //Register Events
+        // Register Events
         pm.registerEvents(new PlayerConnectionEvent(this), this);
         pm.registerEvents(new ChatEvent(this), this);
         pm.registerEvents(new ProtectWorld(this), this);
         pm.registerEvents(new CancelHunger(this), this);
+        pm.registerEvents(new ItemEvent(this), this);
+        pm.registerEvents(new BlockEvent(this), this);
 
-        //Add Commands
+        // Add Commands
         utilities.addCommand("abouttct", new CommandAboutTCT(this));
         utilities.addCommand("gmc", new CommandGameModeCreative());
         utilities.addCommand("gms", new CommandGameModeSurvival());
@@ -64,16 +64,19 @@ public final class NanamiTct extends JavaPlugin {
         utilities.addCommand("stopgame", new CommandStopGame(this));
         utilities.addCommand("item", new CommandItem(this));
 
-        //Register boss bar
+        // Register items
+        CustomItems.register();
+
+        // Register boss bar
         BossBar bar = Bukkit.getServer().createBossBar(Reference.TCT_BOSSBAR_FORMAT_WAITING, BarColor.RED, BarStyle.SOLID);
         bar.setVisible(true);
         bar.setProgress(1.0);
         this.game.setBar(bar);
 
-        //Initialize player data
+        // Initialize player data
         if(Bukkit.getOnlinePlayers().size() > 0) {
             for (Player p : Bukkit.getOnlinePlayers()) {
-                getGame().getReference().PLAYERDATA.put(p.getName(), new TctPlayerData(GameRoles.SPEC, p.getName()));
+                getGame().getReference().PLAYERDATA.put(p.getName(), new TctPlayerData(this, GameRoles.SPEC, p.getName()));
                 bar.addPlayer(p);
             }
         }
@@ -93,7 +96,10 @@ public final class NanamiTct extends JavaPlugin {
         // Plugin shutdown logic
         getLogger().info("Shutting down...");
 
-        //Unregister boss bar
+        // Unregister items
+        CustomItems.unregister();
+
+        // Unregister boss bar
         getGame().getBar().removeAll();
     }
 }

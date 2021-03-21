@@ -24,6 +24,10 @@ public interface CustomItem {
 
     public boolean isDefault();
 
+    public boolean isAttackable();
+
+    public void setAttackable(boolean value);
+
     public void setItemStack(ItemStack item);
 
     public void setMaterial(Material material);

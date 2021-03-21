@@ -13,10 +13,16 @@ public interface PlayerData {
 
     public boolean isSpectator();
 
+    public int getQuickChatCooldown();
+
+    public void startQCCCountdown();
+
     public void setRole(GameRole role);
 
     public void setCO(GameRole role);
 
     public void setSpectator(boolean bool);
+
+    public void setQuickChatCooldown(int second);
 
 }

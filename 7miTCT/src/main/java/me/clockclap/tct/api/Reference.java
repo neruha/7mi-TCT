@@ -27,6 +27,7 @@ public class Reference {
     public static final String TCT_QUICK_CHAT_1 = "%PLAYER%さんは村人だと思います";
     public static final String TCT_QUICK_CHAT_2 = "%PLAYER%さんは怪しいと思います";
     public static final String TCT_QUICK_CHAT_3 = "%PLAYER%さんは人狼です!!!";
+    public static final String TCT_QUICK_CHAT_CURRENTLY_COOLDOWN = ChatColor.RED + "クールダウン中なので使用できません";
 
     //チャット全般
     public static final String TCT_CHAT_SEPARATOR = ChatColor.RED + "-------------------------------------";

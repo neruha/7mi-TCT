@@ -1,21 +1,28 @@
 package me.clockclap.tct.game.data;
 
+import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import org.bukkit.boss.BossBar;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class TctPlayerData implements PlayerData {
+
+    private NanamiTct plugin;
 
     private GameRole role;
     private GameRole co;
     private String name;
     private boolean spec;
+    private int quickchatcooldown;
 
-    public TctPlayerData(GameRole role, String name) {
+    public TctPlayerData(NanamiTct plugin, GameRole role, String name) {
+        this.plugin = plugin;
         this.role = role;
         this.name = name;
         this.co = GameRoles.NONE;
         this.spec = true;
+        this.quickchatcooldown = 0;
     }
 
     @Override
@@ -39,6 +46,27 @@ public class TctPlayerData implements PlayerData {
     }
 
     @Override
+    public int getQuickChatCooldown() {
+        return this.quickchatcooldown;
+    }
+
+    @Override
+    public void startQCCCountdown() {
+        int defaultSec = plugin.getTctConfig().getConfig().getInt("quickchat-cooldown", 20) + 1;
+        setQuickChatCooldown(defaultSec);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if(getQuickChatCooldown() > 0) {
+                    setQuickChatCooldown(getQuickChatCooldown() - 1);
+                } else {
+                    this.cancel();
+                }
+            }
+        }.runTaskTimer(plugin, 0L, 20L);
+    }
+
+    @Override
     public void setRole(GameRole role) {
         this.role = role;
     }
@@ -51,6 +79,11 @@ public class TctPlayerData implements PlayerData {
     @Override
     public void setSpectator(boolean bool) {
         this.spec = bool;
+    }
+
+    @Override
+    public void setQuickChatCooldown(int second) {
+        this.quickchatcooldown = second;
     }
 
 }

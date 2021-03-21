@@ -20,6 +20,7 @@ public class TctItemWoodSword implements CustomWeaponItem {
     private String displayName;
     private String title;
     private String description;
+    private boolean attackable;
 
     private final GameRole role;
     private final boolean isdefault;
@@ -35,6 +36,7 @@ public class TctItemWoodSword implements CustomWeaponItem {
         this.description = ChatColor.AQUA + "TCT Item";
         this.role = GameRoles.VILLAGER;
         this.damage = 4F;
+        this.attackable = true;
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.WHITE + displayName);
@@ -99,6 +101,16 @@ public class TctItemWoodSword implements CustomWeaponItem {
     @Override
     public boolean isDefault() {
         return this.isdefault;
+    }
+
+    @Override
+    public boolean isAttackable() {
+        return this.attackable;
+    }
+
+    @Override
+    public void setAttackable(boolean value) {
+        this.attackable = value;
     }
 
     @Override

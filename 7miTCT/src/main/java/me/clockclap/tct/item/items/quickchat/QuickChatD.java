@@ -21,6 +21,7 @@ public class QuickChatD implements CustomSpecialItem {
     private String displayName;
     private String title;
     private String description;
+    private boolean attackable;
 
     private final GameRole role;
     private final boolean isdefault;
@@ -35,6 +36,7 @@ public class QuickChatD implements CustomSpecialItem {
         this.title = Reference.TCT_QUICK_CHAT_TITLE_3;
         this.description = ChatColor.GREEN + "Quick Chat";
         this.role = GameRoles.VILLAGER;
+        this.attackable = false;
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.WHITE + title);
@@ -47,7 +49,7 @@ public class QuickChatD implements CustomSpecialItem {
     }
 
     @Override
-    public void onAttackPlayer(Player source, Player target) {
+    public void onAttackPlayerWithCooldown(Player source, Player target) {
         source.chat(Reference.TCT_QUICK_CHAT_3.replaceAll("%PLAYER%", target.getDisplayName()));
     }
 
@@ -94,6 +96,16 @@ public class QuickChatD implements CustomSpecialItem {
     @Override
     public boolean isDefault() {
         return this.isdefault;
+    }
+
+    @Override
+    public boolean isAttackable() {
+        return this.attackable;
+    }
+
+    @Override
+    public void setAttackable(boolean value) {
+        this.attackable = value;
     }
 
     @Override

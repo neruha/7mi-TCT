@@ -7,6 +7,8 @@ import me.clockclap.tct.game.data.TctPlayerData;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.game.role.RoleCount;
+import me.clockclap.tct.item.CustomItems;
+import net.minecraft.server.v1_12_R1.CommandReplaceItem;
 import net.minecraft.server.v1_12_R1.MathHelper;
 import org.bukkit.*;
 import org.bukkit.boss.BossBar;
@@ -146,6 +148,7 @@ public class Game {
                     sec[0] = sec[0] - 1;
                     int j = sec[0];
                     getBar().setTitle(Reference.TCT_BOSSBAR_FORMAT_STARTING.replaceAll("%SECOND%", String.valueOf(j)));
+                    getBar().setProgress((1.0 / plugin.getTctConfig().getConfig().getInt("countdown.prestart", 10)) * j);
                     if (j <= 5 && j > 0) {
                         for (Player p : Bukkit.getOnlinePlayers()) {
                             p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.5F, 1F);
@@ -322,6 +325,19 @@ public class Game {
         }
     }
 
+    public void giveItem() {
+        for(Player p : Bukkit.getOnlinePlayers()) {
+            PlayerData data = getReference().PLAYERDATA.get(p.getName());
+            if(!data.isSpectator()) {
+                p.getInventory().clear();
+                p.getInventory().setItem(5, CustomItems.QUICKCHAT_A.getItemStack());
+                p.getInventory().setItem(6, CustomItems.QUICKCHAT_B.getItemStack());
+                p.getInventory().setItem(7, CustomItems.QUICKCHAT_C.getItemStack());
+                p.getInventory().setItem(8, CustomItems.QUICKCHAT_D.getItemStack());
+            }
+        }
+    }
+
     public void start(Location loc) {
         getReference().setGameState(GameState.GAMING);
         Bukkit.getServer().broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_READY_END);
@@ -333,6 +349,7 @@ public class Game {
             if(p.getGameMode() == GameMode.CREATIVE || p.getGameMode() == GameMode.SPECTATOR) {
                 playersCount--;
                 getReference().PLAYERDATA.get(p.getName()).setRole(GameRoles.SPEC);
+                getReference().PLAYERDATA.get(p.getName()).setSpectator(true);
             } else {
                 p.setGameMode(GameMode.SURVIVAL);
                 getReference().PLAYERDATA.get(p.getName()).setRole(GameRoles.VILLAGER);
@@ -344,12 +361,14 @@ public class Game {
             for(Player p : Bukkit.getOnlinePlayers()) {
                 p.playSound(p.getLocation(), Sound.BLOCK_DISPENSER_FAIL, 1.5F, 1F);
                 getReference().PLAYERDATA.get(p.getName()).setRole(GameRoles.SPEC);
+                getReference().PLAYERDATA.get(p.getName()).setSpectator(true);
             }
             getReference().setGameState(GameState.WAITING);
             getBar().setTitle(Reference.TCT_BOSSBAR_FORMAT_WAITING);
             return;
         }
         giveRole(playersCount);
+        giveItem();
         for(Player p : Bukkit.getOnlinePlayers()) {
             PlayerData data = getReference().PLAYERDATA.get(p.getName());
             if(data.getRole() == GameRoles.VILLAGER) {

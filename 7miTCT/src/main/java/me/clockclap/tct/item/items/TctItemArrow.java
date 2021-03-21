@@ -19,6 +19,7 @@ public class TctItemArrow implements CustomItem {
     private String displayName;
     private String title;
     private String description;
+    private boolean attackable;
 
     private final GameRole role;
     private final boolean isdefault;
@@ -33,6 +34,7 @@ public class TctItemArrow implements CustomItem {
         this.title = "Arrow";
         this.description = ChatColor.AQUA + "TCT Item";
         this.role = GameRoles.VILLAGER;
+        this.attackable = true;
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.WHITE + displayName);
@@ -87,6 +89,16 @@ public class TctItemArrow implements CustomItem {
     @Override
     public boolean isDefault() {
         return this.isdefault;
+    }
+
+    @Override
+    public boolean isAttackable() {
+        return this.attackable;
+    }
+
+    @Override
+    public void setAttackable(boolean value) {
+        this.attackable = value;
     }
 
     @Override

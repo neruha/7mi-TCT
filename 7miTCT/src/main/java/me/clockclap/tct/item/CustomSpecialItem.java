@@ -10,6 +10,8 @@ public interface CustomSpecialItem extends CustomItem {
 
     public default void onAttackPlayer(Player source, Player target) { }
 
+    public default void onAttackPlayerWithCooldown(Player source, Player target) { }
+
     public default void onSneak(Player player) { }
 
 }

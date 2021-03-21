@@ -24,9 +24,9 @@ public interface CustomBlock {
 
     public boolean isDefault();
 
-    public default boolean canPlace() { return true; }
+    public boolean isPlaceable();
 
-    public default boolean canBreak() { return true; }
+    public boolean isBreakable();
 
     public default void onPlace(BlockPlaceEvent e) { }
 

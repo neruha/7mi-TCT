@@ -2,6 +2,8 @@ package me.clockclap.tct.item;
 
 import me.clockclap.tct.game.role.GameRole;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
 public interface CustomItem {
@@ -25,6 +27,8 @@ public interface CustomItem {
     public boolean isDefault();
 
     public boolean isAttackable();
+
+    public default void onDamage(EntityDamageEvent.DamageCause damageCause, Player player) { }
 
     public void setAttackable(boolean value);
 

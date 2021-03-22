@@ -24,6 +24,12 @@ public class ItemEvent implements Listener {
 
     @EventHandler
     public void playerAttack(EntityDamageByEntityEvent e) {
+        if(e.getDamager() instanceof Player) {
+            Player p = (Player) e.getDamager();
+            if(plugin.getGame().getReference().PLAYERDATA.get(p.getName()).isSpectator()) {
+                e.setCancelled(true);
+            }
+        }
         if (e.getEntity() instanceof Player && e.getDamager() instanceof Player) {
             Player p = (Player) e.getEntity();
             Player q = (Player) e.getDamager();
@@ -50,22 +56,29 @@ public class ItemEvent implements Listener {
         }
     }
 
+    private boolean clickable = true;
+
     @EventHandler
     public void playerInteract(PlayerInteractEvent e) {
-        if(e.getPlayer().getInventory().getItemInMainHand().getType() != Material.AIR) {
-            ItemStack i = e.getPlayer().getInventory().getItemInMainHand();
-            if(i.hasItemMeta()) {
-                for (CustomSpecialItem item : CustomItems.specialItems) {
-                    if (i.getItemMeta().getDisplayName().equalsIgnoreCase(item.getItemStack().getItemMeta().getDisplayName())) {
-                        if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                            item.onRightClick(e.getPlayer());
-                        }
-                        if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK) {
-                            item.onLeftClick(e.getPlayer());
+        if(clickable) {
+            clickable = false;
+            if (e.getPlayer().getInventory().getItemInMainHand().getType() != Material.AIR) {
+                ItemStack i = e.getPlayer().getInventory().getItemInMainHand();
+                if (i.hasItemMeta()) {
+                    for (CustomSpecialItem item : CustomItems.specialItems) {
+                        if (i.getItemMeta().getDisplayName().equalsIgnoreCase(item.getItemStack().getItemMeta().getDisplayName())) {
+                            if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                                item.onRightClick(e.getPlayer());
+                            }
+                            if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK) {
+                                item.onLeftClick(e.getPlayer());
+                            }
                         }
                     }
                 }
             }
+        } else {
+            clickable = true;
         }
     }
 

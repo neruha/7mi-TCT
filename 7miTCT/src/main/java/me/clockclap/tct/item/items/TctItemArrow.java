@@ -3,6 +3,7 @@ package me.clockclap.tct.item.items;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomItem;
+import me.clockclap.tct.item.ItemIndex;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -26,7 +27,7 @@ public class TctItemArrow implements CustomItem {
     private final int index;
 
     public TctItemArrow() {
-        this.index = 2;
+        this.index = ItemIndex.DEFAULT_ITEM_SLOT_2;
         this.isdefault = true;
         this.material = Material.ARROW;
         this.name = "ARROW";

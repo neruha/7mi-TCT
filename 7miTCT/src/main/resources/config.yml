@@ -97,6 +97,9 @@ countdown:
 #デフォルト: 20秒
 quickchat-cooldown: 20 #クイックチャットのクールタイム (秒)
 
+#デフォルト: 20秒
+heal-station-cooldown: 20 #回復ステーションのクールタイム (秒)
+
 #デフォルト: 180秒後
 first-coin-time: 180 #コインが配られる時間 (秒後)
 

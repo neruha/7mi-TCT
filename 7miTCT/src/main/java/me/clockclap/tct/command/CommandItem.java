@@ -47,16 +47,7 @@ public class CommandItem implements TabExecutor {
                 return true;
             }
             if(args.length >= 1) {
-                List<CustomItem> items = new ArrayList<>();
-                items.add(CustomItems.WOOD_SWORD);
-                items.add(CustomItems.BOW);
-                items.add(CustomItems.ARROW);
-                items.add(CustomItems.LOGBOOK);
-                items.add(CustomItems.QUICKCHAT_A);
-                items.add(CustomItems.QUICKCHAT_B);
-                items.add(CustomItems.QUICKCHAT_C);
-                items.add(CustomItems.QUICKCHAT_D);
-                for(CustomItem i : items) {
+                for(CustomItem i : CustomItems.allItems) {
                     if(i.getName().equalsIgnoreCase(args[0])) {
                         process(p, i.getItemStack());
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_SYSTEM_GAVE_ITEM.replaceAll("%ITEM%", i.getName()));

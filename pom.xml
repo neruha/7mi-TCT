@@ -14,9 +14,17 @@
     <url>https://github.com/ClockClap/7mi-TCT</url>
 
     <modules>
-        <module>7miTCT-Plugin</module>
-        <module>7miTCT-API</module>
+        <module>7miTCT</module>
     </modules>
+
+    <profiles>
+        <profile>
+            <id>Impl</id>
+            <modules>
+                <module>7miTCT</module>
+            </modules>
+        </profile>
+    </profiles>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

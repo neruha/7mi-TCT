@@ -4,9 +4,13 @@ import org.bukkit.entity.Player;
 
 public interface CustomWeaponItem extends CustomItem {
 
-    public float getDamage();
+    public float getAttackDamage();
 
-    public void setDamage(float value);
+    public float getAttackSpeed();
+
+    public void setAttackDamage(float value);
+
+    public void setAttackSpeed(float value);
 
     public default void onAttack(Player attacker, Player target) { }
 

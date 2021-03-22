@@ -1,6 +1,7 @@
 package me.clockclap.tct.game.data;
 
 import me.clockclap.tct.NanamiTct;
+import me.clockclap.tct.api.PlayerWatcher;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import org.bukkit.boss.BossBar;
@@ -16,6 +17,7 @@ public class TctPlayerData implements PlayerData {
     private boolean spec;
     private int quickchatcooldown;
     private int coin;
+    private PlayerWatcher watcher;
 
     public TctPlayerData(NanamiTct plugin, GameRole role, String name) {
         this.plugin = plugin;
@@ -58,6 +60,11 @@ public class TctPlayerData implements PlayerData {
     }
 
     @Override
+    public PlayerWatcher getWatcher() {
+        return this.watcher;
+    }
+
+    @Override
     public void startQCCCountdown() {
         int defaultSec = plugin.getTctConfig().getConfig().getInt("quickchat-cooldown", 20) + 1;
         setQuickChatCooldown(defaultSec);
@@ -96,6 +103,11 @@ public class TctPlayerData implements PlayerData {
     @Override
     public void setQuickChatCooldown(int second) {
         this.quickchatcooldown = second;
+    }
+
+    @Override
+    public void setWatcher(PlayerWatcher watcher) {
+        this.watcher = watcher;
     }
 
 }

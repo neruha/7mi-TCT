@@ -1,6 +1,7 @@
 package me.clockclap.tct.event;
 
 import me.clockclap.tct.NanamiTct;
+import me.clockclap.tct.api.PlayerWatcher;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.game.GameState;
 import me.clockclap.tct.game.data.PlayerData;

@@ -52,6 +52,7 @@ public final class NanamiTct extends JavaPlugin {
         pm.registerEvents(new CancelHunger(this), this);
         pm.registerEvents(new ItemEvent(this), this);
         pm.registerEvents(new BlockEvent(this), this);
+        pm.registerEvents(new DamageEvent(this), this);
 
         // Add Commands
         utilities.addCommand("abouttct", new CommandAboutTCT(this));
@@ -80,6 +81,7 @@ public final class NanamiTct extends JavaPlugin {
                 PlayerData data = new TctPlayerData(this, GameRoles.SPEC, p.getName());
                 data.setSpectator(true);
                 getGame().getReference().PLAYERDATA.put(p.getName(), data);
+                p.setFoodLevel(20);
                 bar.addPlayer(p);
             }
         }

@@ -4,6 +4,7 @@ import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomSpecialItem;
+import me.clockclap.tct.item.ItemIndex;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -28,7 +29,7 @@ public class QuickChatD implements CustomSpecialItem {
     private final int index;
 
     public QuickChatD() {
-        this.index = 7;
+        this.index = ItemIndex.DEFAULT_ITEM_SLOT_8;
         this.isdefault = true;
         this.material = Material.DIAMOND_HOE;
         this.name = "QUICKCHAT_D";

@@ -1,28 +1,25 @@
 package me.clockclap.tct.event;
 
 import me.clockclap.tct.NanamiTct;
-import me.clockclap.tct.game.GameState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 
-public class CancelHunger implements Listener {
+public class DamageEvent implements Listener {
 
     private NanamiTct plugin;
 
-    public CancelHunger(NanamiTct plugin) {
+    public DamageEvent(NanamiTct plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler
-    public void onHunger(FoodLevelChangeEvent e) {
+    public void onDamage(EntityDamageEvent e) {
         if(e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
             if(plugin.getGame().getReference().PLAYERDATA.get(p.getName()).isSpectator()) {
-                e.setFoodLevel(20);
-            } else {
-                e.setFoodLevel(1);
+                e.setCancelled(true);
             }
         }
     }

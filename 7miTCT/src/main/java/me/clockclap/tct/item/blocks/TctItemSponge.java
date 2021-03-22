@@ -1,19 +1,18 @@
-package me.clockclap.tct.item.items;
+package me.clockclap.tct.item.blocks;
 
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
-import me.clockclap.tct.item.CustomItem;
+import me.clockclap.tct.item.CustomBlock;
 import me.clockclap.tct.item.ItemIndex;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TctLogBook implements CustomItem {
+public class TctItemSponge implements CustomBlock {
 
     private ItemStack item;
     private Material material;
@@ -21,46 +20,39 @@ public class TctLogBook implements CustomItem {
     private String displayName;
     private String title;
     private String description;
-    private BookMeta book;
+    private GameRole role;
+    private boolean isdefault;
+    private boolean placeable;
+    private boolean breakable;
     private boolean attackable;
 
-    private final GameRole role;
-    private final boolean isdefault;
     private final int index;
 
-    public TctLogBook() {
-        this.index = ItemIndex.DEFAULT_ITEM_SLOT_3;
-        this.isdefault = true;
-        this.material = Material.WRITTEN_BOOK;
-        this.name = "LOG_BOOK";
-        this.displayName = "Tct Logs";
-        this.title = "Tct Logs";
-        this.description = ChatColor.AQUA + "TCT Item";
-        this.role = GameRoles.VILLAGER;
+    public TctItemSponge() {
+        this.index = ItemIndex.DETECTIVES_SHOP_ITEM_SLOT_1;
+        this.material = Material.SPONGE;
+        this.name = "SPONGE";
+        this.displayName = "Sponge";
+        this.title = "Sponge";
+        this.description = ChatColor.BLUE + "Detective Item";
+        this.role = GameRoles.DETECTIVE;
+        this.isdefault = false;
+        this.placeable = false;
+        this.breakable = false;
         this.attackable = true;
         ItemStack item = new ItemStack(material);
-        BookMeta meta = (BookMeta) item.getItemMeta();
+        ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.WHITE + displayName);
         List<String> lore = new ArrayList<>();
         lore.add(description);
         meta.setLore(lore);
-        meta.setTitle(ChatColor.WHITE + title);
-        this.book = meta;
-        item.setItemMeta(book);
+        item.setItemMeta(meta);
         this.item = item;
     }
 
     @Override
     public int getIndex() {
         return this.index;
-    }
-
-    public BookMeta getBook() {
-        return this.book;
-    }
-
-    public void setBook(BookMeta book) {
-        this.book = book;
     }
 
     @Override
@@ -94,11 +86,6 @@ public class TctLogBook implements CustomItem {
     }
 
     @Override
-    public GameRole getRole() {
-        return this.role;
-    }
-
-    @Override
     public boolean isDefault() {
         return this.isdefault;
     }
@@ -111,6 +98,21 @@ public class TctLogBook implements CustomItem {
     @Override
     public void setAttackable(boolean value) {
         this.attackable = value;
+    }
+
+    @Override
+    public boolean isPlaceable() {
+        return this.placeable;
+    }
+
+    @Override
+    public boolean isBreakable() {
+        return this.breakable;
+    }
+
+    @Override
+    public GameRole getRole() {
+        return this.role;
     }
 
     @Override
@@ -142,5 +144,4 @@ public class TctLogBook implements CustomItem {
     public void setDescription(String description) {
         this.description = description;
     }
-
 }

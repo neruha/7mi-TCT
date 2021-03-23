@@ -12,20 +12,17 @@ admin: [""]
 roles:
 ## それぞれの役職の人数を変更します。
 #
-# 医者 - healer
+# 村人 - villagers
+# 医者 - healers
 # 探偵 - detectives
 # 人狼 - wolves
 # 狂人 - fanatics
 # 妖狐 - foxes
 #
+# 村人の場合は設定した値は最小値になります
 # 0にするとその役職は無効になります。
-#
-# コマンドでは /setrolecount <役職名> <数値>
-# 例1 /setrolecount detectives 2
-# (上記のコマンドが実行できるのは、adminで設定したプレイヤーのみです)
-#
-# よくわからなかったら触らないでコマンドで操作した方がいいです。(その方が楽)
   count:
+    villagers: 1
     healers: 1
     detectives: 1
     wolves: 1
@@ -33,6 +30,7 @@ roles:
     foxes: 1
 # 例
 # count:
+#   villagers: 1
 #   healers: 1
 #   detectives: 1
 #   wolves: 1
@@ -83,7 +81,7 @@ roles:
     detectives: 2
     wolves: 2
     fanatics: 0
-    foxes: 0
+    foxes: 1
 
 countdown:
   #デフォルト: 10秒
@@ -91,7 +89,7 @@ countdown:
   #デフォルト: 210秒
   game: 210 #ゲーム残り時間 (秒)
   addcount:
-    #デフォルト: 8以上12以下
+    #デフォルト: 20秒
     kill: 20 #キルしたときに増える時間 (秒)
 
 #デフォルト: 20秒
@@ -102,7 +100,3 @@ heal-station-cooldown: 20 #回復ステーションのクールタイム (秒)
 
 #デフォルト: 180秒後
 first-coin-time: 180 #コインが配られる時間 (秒後)
-
-player:
-# プレイヤーの名前を指定した名前に置き換えることができます。
-  name-replace:

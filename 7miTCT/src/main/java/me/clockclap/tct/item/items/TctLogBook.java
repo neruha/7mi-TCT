@@ -44,7 +44,7 @@ public class TctLogBook implements CustomItem {
         List<String> lore = new ArrayList<>();
         lore.add(description);
         meta.setLore(lore);
-        meta.setTitle(ChatColor.WHITE + title);
+        meta.setTitle(title);
         this.book = meta;
         item.setItemMeta(book);
         this.item = item;

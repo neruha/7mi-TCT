@@ -20,7 +20,7 @@ public class CustomItems {
     public static List<CustomSpecialItem> specialItems = new ArrayList<>();
     public static List<CustomWeaponItem> weaponItems = new ArrayList<>();
     public static List<CustomItem> generalItems = new ArrayList<>();
-    public static List<CustomItem> logItems = new ArrayList<>();
+    public static TctLogBook logItem;
 
     public static List<CustomBlock> generalBlocks = new ArrayList<>();
 
@@ -31,7 +31,9 @@ public class CustomItems {
     public static final CustomItem BOW = new TctItemBow();
     public static final CustomItem ARROW = new TctItemArrow();
 
-    public static final CustomItem LOGBOOK = new TctLogBook();
+    public static final TctLogBook LOGBOOK = new TctLogBook();
+
+    public static final CustomSpecialItem HEALER_SWORD = new TctItemHealerSword();
 
     public static final CustomSpecialItem QUICKCHAT_A = new QuickChatA();
     public static final CustomSpecialItem QUICKCHAT_B = new QuickChatB();
@@ -56,9 +58,9 @@ public class CustomItems {
         allItems.add(item);
     }
 
-    public static void registerLogItem(CustomItem item) {
-        logItems.add(item);
-        allItems.add(item);
+    public static void registerLogItem(TctLogBook book) {
+        logItem = book;
+        allItems.add(book);
     }
 
     public static void registerBlock(CustomBlock block) {
@@ -74,6 +76,7 @@ public class CustomItems {
 
         registerItem(WOOD_SWORD);
         registerItem(STONE_SWORD);
+        registerItem(HEALER_SWORD);
 
         registerItem(BOW);
         registerItem(ARROW);
@@ -87,7 +90,7 @@ public class CustomItems {
     public static void unregister() {
         generalItems = new ArrayList<>();
         weaponItems = new ArrayList<>();
-        logItems = new ArrayList<>();
+        logItem = null;
         specialItems = new ArrayList<>();
 
         generalBlocks = new ArrayList<>();

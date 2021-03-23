@@ -3,16 +3,25 @@ package me.clockclap.tct.event;
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.game.data.PlayerData;
+import me.clockclap.tct.item.CustomItem;
 import me.clockclap.tct.item.CustomItems;
 import me.clockclap.tct.item.CustomSpecialItem;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class ItemEvent implements Listener {
 
@@ -42,6 +51,9 @@ public class ItemEvent implements Listener {
                                 e.setCancelled(true);
                             }
                             item.onAttackPlayer(q, p);
+                            if(!item.isQuickChatItem()) {
+                                return;
+                            }
                             PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(q.getName());
                             if (data.getQuickChatCooldown() <= 0) {
                                 item.onAttackPlayerWithCooldown(q, p);

@@ -42,7 +42,6 @@ public final class NanamiTct extends JavaPlugin {
             e.printStackTrace();
         }
 
-        plugin = this;
         getLogger().info("Starting up...");
         PluginManager pm = Bukkit.getServer().getPluginManager();
 
@@ -68,6 +67,9 @@ public final class NanamiTct extends JavaPlugin {
 
         // Register items
         CustomItems.register();
+
+        // Initialize TCT log
+        game.getLog().initialize();
 
         // Register boss bar
         BossBar bar = Bukkit.getServer().createBossBar(Reference.TCT_BOSSBAR_FORMAT_WAITING, BarColor.RED, BarStyle.SOLID);

@@ -45,6 +45,8 @@ public class Reference {
     public static final String TCT_CHAT_SYSTEM_RELOAD_COMPLETE = ChatColor.YELLOW + "コンフィグをリロードしました。";
     public static final String TCT_CHAT_SYSTEM_GAVE_BARRIER = ChatColor.YELLOW + "%PLAYER%はバリアブロックを入手しました。";
     public static final String TCT_CHAT_SYSTEM_GAVE_ITEM = ChatColor.YELLOW + "あなたは%ITEM%を入手しました。";
+    public static final String TCT_CHAT_SYSTEM_SET_ROLE_COUNT_SUCCESS = ChatColor.GREEN + "ロール数の変更に成功しました。";
+    public static final String TCT_CHAT_ERROR_SET_ROLE_COUNT_FAIL = ChatColor.RED + "ロール数の変更に失敗しました。";
     //ゲームモード
     public static final String TCT_GAMEMODE_CREATIVE = "クリエイティブ";
     public static final String TCT_GAMEMODE_SURVIVAL = "サバイバル";

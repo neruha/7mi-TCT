@@ -23,6 +23,7 @@ public class QuickChatB implements CustomSpecialItem {
     private String title;
     private String description;
     private boolean attackable;
+    private boolean quickchat;
 
     private final GameRole role;
     private final boolean isdefault;
@@ -38,6 +39,7 @@ public class QuickChatB implements CustomSpecialItem {
         this.description = ChatColor.GREEN + "Quick Chat";
         this.role = GameRoles.VILLAGER;
         this.attackable = false;
+        this.quickchat = true;
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.WHITE + title);
@@ -47,6 +49,11 @@ public class QuickChatB implements CustomSpecialItem {
         meta.setUnbreakable(true);
         item.setItemMeta(meta);
         this.item = item;
+    }
+
+    @Override
+    public boolean isQuickChatItem() {
+        return this.quickchat;
     }
 
     @Override

@@ -28,13 +28,7 @@ public class ChatEvent implements Listener {
     public void onChat(AsyncPlayerChatEvent e) throws UnsupportedEncodingException {
         Player p = e.getPlayer();
         String result;
-        if(e.getMessage().equalsIgnoreCase(".e?")) {
-            result = Reference.JAPANIZE_FORMAT.replaceAll("%MESSAGE%", "e?").replaceAll("%JAPANIZE%", "え？");
-        } else if(e.getMessage().equalsIgnoreCase(".e")) {
-            result = Reference.JAPANIZE_FORMAT.replaceAll("%MESSAGE%", "e").replaceAll("%JAPANIZE%", "え");
-        } else {
-            result = Japanizer.japanize(e.getMessage());
-        }
+        result = Japanizer.japanize(e.getMessage());
         String role_chatprefix;
 
         GameRole role = plugin.getGame().getReference().PLAYERDATA.get(p.getName()).getRole();

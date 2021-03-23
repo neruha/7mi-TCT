@@ -66,7 +66,7 @@ public class TctItemHealStation implements CustomBlock {
     }
 
     private void heal(Player p) {
-        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20, 4));
+        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 40, 3));
         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_HEAL_STATION_USED);
     }
 

@@ -18,6 +18,7 @@ public class TctPlayerData implements PlayerData {
     private int quickchatcooldown;
     private int coin;
     private PlayerWatcher watcher;
+    private PlayerData killer;
 
     public TctPlayerData(NanamiTct plugin, GameRole role, String name) {
         this.plugin = plugin;
@@ -65,6 +66,11 @@ public class TctPlayerData implements PlayerData {
     }
 
     @Override
+    public PlayerData getKilledBy() {
+        return this.killer;
+    }
+
+    @Override
     public void startQCCCountdown() {
         int defaultSec = plugin.getTctConfig().getConfig().getInt("quickchat-cooldown", 20) + 1;
         setQuickChatCooldown(defaultSec);
@@ -108,6 +114,11 @@ public class TctPlayerData implements PlayerData {
     @Override
     public void setWatcher(PlayerWatcher watcher) {
         this.watcher = watcher;
+    }
+
+    @Override
+    public void setKilledBy(PlayerData killer) {
+        this.killer = killer;
     }
 
 }

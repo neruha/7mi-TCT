@@ -8,18 +8,23 @@ import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.game.role.RoleCount;
 import me.clockclap.tct.item.CustomItems;
+import me.clockclap.tct.item.TctLog;
 import net.minecraft.server.v1_12_R1.CommandReplaceItem;
 import net.minecraft.server.v1_12_R1.MathHelper;
 import org.bukkit.*;
 import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.objects.Reference2FloatArrayMap;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import javax.management.relation.Role;
+import javax.security.auth.Refreshable;
 import java.sql.Ref;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 import java.util.prefs.InvalidPreferencesFormatException;
 
@@ -34,6 +39,8 @@ public class Game {
     private BukkitTask preTimer;
     private RoleCount roleCount;
     private int neededPlayers;
+    private TctLog log;
+    private Location loc;
 
     public Game(NanamiTct plugin) {
         this.plugin = plugin;
@@ -42,6 +49,7 @@ public class Game {
         this.realRemainingSeconds = 0;
         this.roleCount = new RoleCount(this);
         this.neededPlayers = 0;
+        this.log = new TctLog(this);
     }
 
     public boolean preStart(Location loc) {
@@ -140,6 +148,10 @@ public class Game {
         }
         if(success == true) {
             getReference().setGameState(GameState.STARTING);
+            this.loc = loc;
+            for(Player p : Bukkit.getOnlinePlayers()) {
+                p.teleport(loc);
+            }
             final int[] sec = {plugin.getTctConfig().getConfig().getInt("countdown.prestart", 10) + 1};
             getBar().setTitle(Reference.TCT_BOSSBAR_FORMAT_STARTING.replaceAll("%SECOND%", String.valueOf(sec[0])));
             Bukkit.getServer().broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_GAME_STARTED);
@@ -173,7 +185,7 @@ public class Game {
 
     private void giveRole(int playersCount) {
         FileConfiguration config = plugin.getTctConfig().getConfig();
-        String villagersCount = /*config.getString("roles.count.villagers", "1:-1")*/ "1:-1";
+        String villagersCount = config.getString("roles.count.villagers", "1:-1");
         String healersCount = config.getString("roles.count.healers", "1");
         String detectivesCount = config.getString("roles.count.detectives", "1");
         String wolvesCount = config.getString("roles.count.wolves", "1");
@@ -280,6 +292,10 @@ public class Game {
                         getRoleCount().setHealersCount(getRoleCount().getHealersCount() + 1);
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_HEALER);
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_DESCRIPTION_HEALER);
+                        p.getInventory().setItem(0, CustomItems.HEALER_SWORD.getItemStack());
+                        p.getInventory().setItem(1, CustomItems.WOOD_SWORD.getItemStack());
+                        p.getInventory().setItem(2, CustomItems.BOW.getItemStack());
+                        p.getInventory().setItem(3, CustomItems.ARROW.getItemStack());
                         p.setFoodLevel(1);
                     }
                     continue;
@@ -292,6 +308,9 @@ public class Game {
                         getRoleCount().setDetectivesCount(getRoleCount().getDetectivesCount() + 1);
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_DETECTIVE);
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_DESCRIPTION_DETECTIVE);
+                        p.getInventory().setItem(0, CustomItems.WOOD_SWORD.getItemStack());
+                        p.getInventory().setItem(1, CustomItems.BOW.getItemStack());
+                        p.getInventory().setItem(2, CustomItems.ARROW.getItemStack());
                         p.setFoodLevel(1);
                     }
                     continue;
@@ -304,6 +323,9 @@ public class Game {
                         getRoleCount().setWolvesCount(getRoleCount().getWolvesCount() + 1);
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_WOLF);
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_DESCRIPTION_WOLF);
+                        p.getInventory().setItem(0, CustomItems.WOOD_SWORD.getItemStack());
+                        p.getInventory().setItem(1, CustomItems.BOW.getItemStack());
+                        p.getInventory().setItem(2, CustomItems.ARROW.getItemStack());
                         p.setFoodLevel(1);
                     }
                     continue;
@@ -316,6 +338,9 @@ public class Game {
                         getRoleCount().setFanaticsCount(getRoleCount().getFanaticsCount() + 1);
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_FANATIC);
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_DESCRIPTION_FANATIC);
+                        p.getInventory().setItem(0, CustomItems.WOOD_SWORD.getItemStack());
+                        p.getInventory().setItem(1, CustomItems.BOW.getItemStack());
+                        p.getInventory().setItem(2, CustomItems.ARROW.getItemStack());
                         p.setFoodLevel(1);
                     }
                     continue;
@@ -328,6 +353,9 @@ public class Game {
                         getRoleCount().setFoxesCount(getRoleCount().getFoxesCount() + 1);
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_FOX);
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_DESCRIPTION_FOX);
+                        p.getInventory().setItem(0, CustomItems.WOOD_SWORD.getItemStack());
+                        p.getInventory().setItem(1, CustomItems.BOW.getItemStack());
+                        p.getInventory().setItem(2, CustomItems.ARROW.getItemStack());
                         p.setFoodLevel(1);
                     }
                     continue;
@@ -340,7 +368,7 @@ public class Game {
         for(Player p : Bukkit.getOnlinePlayers()) {
             PlayerData data = getReference().PLAYERDATA.get(p.getName());
             if(!data.isSpectator()) {
-                p.getInventory().clear();
+                p.getInventory().setItem(4, getLog().getItem());
                 p.getInventory().setItem(5, CustomItems.QUICKCHAT_A.getItemStack());
                 p.getInventory().setItem(6, CustomItems.QUICKCHAT_B.getItemStack());
                 p.getInventory().setItem(7, CustomItems.QUICKCHAT_C.getItemStack());
@@ -362,6 +390,7 @@ public class Game {
                 getReference().PLAYERDATA.get(p.getName()).setRole(GameRoles.SPEC);
                 getReference().PLAYERDATA.get(p.getName()).setSpectator(true);
             } else {
+                p.getInventory().clear();
                 p.setGameMode(GameMode.SURVIVAL);
                 getReference().PLAYERDATA.get(p.getName()).setRole(GameRoles.VILLAGER);
                 getReference().PLAYERDATA.get(p.getName()).setSpectator(false);
@@ -373,6 +402,17 @@ public class Game {
                 p.playSound(p.getLocation(), Sound.BLOCK_DISPENSER_FAIL, 1.5F, 1F);
                 getReference().PLAYERDATA.get(p.getName()).setRole(GameRoles.SPEC);
                 getReference().PLAYERDATA.get(p.getName()).setSpectator(true);
+                p.setFoodLevel(20);
+                RoleCount count = new RoleCount(this);
+                count.setVillagersCount(0);
+                count.setHealersCount(0);
+                count.setDetectivesCount(0);
+                count.setWolvesCount(0);
+                count.setFanaticsCount(0);
+                count.setFoxesCount(0);
+                setRoleCount(count);
+                p.getInventory().clear();
+                p.teleport(this.loc);
             }
             getReference().setGameState(GameState.WAITING);
             getBar().setTitle(Reference.TCT_BOSSBAR_FORMAT_WAITING);
@@ -389,6 +429,14 @@ public class Game {
                 p.setFoodLevel(1);
             }
         }
+        Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_GAME_PLAYERS.replaceAll("%COUNT%", String.valueOf(playersCount)));
+        Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_GAME_ROLE_SORTING + ": " + ChatColor.GOLD +
+                Reference.TCT_ROLE_VILLAGER + ": " + getRoleCount().getVillagersCount() + " / " +
+                Reference.TCT_ROLE_HEALER + ": " + getRoleCount().getHealersCount() + " / " +
+                Reference.TCT_ROLE_DETECTIVE + ": " + getRoleCount().getDetectivesCount() + " / " +
+                Reference.TCT_ROLE_WOLF + ": " + getRoleCount().getWolvesCount() + " / " +
+                Reference.TCT_ROLE_FANATIC + ": " + getRoleCount().getWolvesCount() + " / " +
+                Reference.TCT_ROLE_FOX + ": " + getRoleCount().getFoxesCount());
         getBar().setTitle(Reference.TCT_BOSSBAR_FORMAT_GAMING.replaceAll("%SECOND%", String.valueOf(sec)));
         BukkitTask timer = new BukkitRunnable() {
             @Override
@@ -409,8 +457,73 @@ public class Game {
     }
 
     public void stop(GameRole winners) {
+        boolean gaming = false;
+        if(getReference().getGameState() == GameState.GAMING) {
+            gaming = true;
+        }
         getReference().setGameState(GameState.WAITING);
+        getLog().initialize();
         getBar().setTitle(Reference.TCT_BOSSBAR_FORMAT_WAITING);
+        if(gaming) {
+            List<String> villagers = new ArrayList<>();
+            List<String> healers = new ArrayList<>();
+            List<String> detectives = new ArrayList<>();
+            List<String> wolves = new ArrayList<>();
+            List<String> fanatics = new ArrayList<>();
+            List<String> foxes = new ArrayList<>();
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                PlayerData data = getReference().PLAYERDATA.get(p.getName());
+                if (winners == GameRoles.NONE) {
+                    p.sendTitle(Reference.TCT_TITLE_MAIN_NO_VICTORY, Reference.TCT_TITLE_SUB_NO_VICTORY, 5, 20, 5);
+                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_NO_VICTORY);
+                }
+                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_GAMEEND_ROLE_RESULT);
+                if(data.getRole() != GameRoles.SPEC && data.getRole() != GameRoles.NONE) {
+                    if(data.getRole() == GameRoles.VILLAGER) {
+                        villagers.add(data.getName());
+                    }
+                    if(data.getRole() == GameRoles.HEALER) {
+                        healers.add(data.getName());
+                    }
+                    if(data.getRole() == GameRoles.DETECTIVE) {
+                        detectives.add(data.getName());
+                    }
+                    if(data.getRole() == GameRoles.WOLF) {
+                        wolves.add(data.getName());
+                    }
+                    if(data.getRole() == GameRoles.FANATIC) {
+                        fanatics.add(data.getName());
+                    }
+                    if(data.getRole() == GameRoles.FOX) {
+                        foxes.add(data.getName());
+                    }
+                }
+            }
+            if(villagers.size() > 0) {
+                String str = String.join(", ", villagers);
+                Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.GREEN + Reference.TCT_ROLE_VILLAGER + ": [" + str + "]");
+            }
+            if(healers.size() > 0) {
+                String str = String.join(", ", healers);
+                Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.LIGHT_PURPLE + Reference.TCT_ROLE_HEALER + ": [" + str + "]");
+            }
+            if(detectives.size() > 0) {
+                String str = String.join(", ", detectives);
+                Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_ROLE_DETECTIVE + ": [" + str + "]");
+            }
+            if(wolves.size() > 0) {
+                String str = String.join(", ", wolves);
+                Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.RED + Reference.TCT_ROLE_WOLF + ": [" + str + "]");
+            }
+            if(fanatics.size() > 0) {
+                String str = String.join(", ", fanatics);
+                Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.RED + Reference.TCT_ROLE_FANATIC + ": [" + str + "]");
+            }
+            if(foxes.size() > 0) {
+                String str = String.join(", ", foxes);
+                Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.GOLD + Reference.TCT_ROLE_FOX + ": [" + str + "]");
+            }
+        }
         for(Player p : Bukkit.getOnlinePlayers()) {
             PlayerData data = getReference().PLAYERDATA.get(p.getName());
             p.setFoodLevel(20);
@@ -424,14 +537,9 @@ public class Game {
             count.setFanaticsCount(0);
             count.setFoxesCount(0);
             setRoleCount(count);
+            p.getInventory().clear();
+            p.teleport(this.loc);
         }
-        if(winners == GameRoles.NONE) {
-            for(Player p : Bukkit.getOnlinePlayers()) {
-                p.sendTitle(Reference.TCT_TITLE_MAIN_NO_VICTORY, Reference.TCT_TITLE_SUB_NO_VICTORY, 5, 20, 5);
-                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_NO_VICTORY);
-            }
-        }
-        Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_GAMEEND_ROLE_RESULT);
     }
 
     public NanamiTct getPlugin() {
@@ -439,6 +547,22 @@ public class Game {
     }
 
     public BossBar getBar() { return this.bar; }
+
+    public TctLog getLog() {
+        return this.log;
+    }
+
+    public void setLog(TctLog log) {
+        this.log = log;
+    }
+
+    public Location getLocation() {
+        return this.loc;
+    }
+
+    public void setLocation(Location loc) {
+        this.loc = loc;
+    }
 
     public int getRemainingSeconds() {
         return this.remainingSeconds;

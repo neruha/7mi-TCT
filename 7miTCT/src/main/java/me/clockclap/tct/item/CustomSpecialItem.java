@@ -4,6 +4,8 @@ import org.bukkit.entity.Player;
 
 public interface CustomSpecialItem extends CustomItem {
 
+    public boolean isQuickChatItem();
+
     public default void onRightClick(Player player) { }
 
     public default void onLeftClick(Player player) { }

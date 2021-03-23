@@ -1,20 +1,25 @@
-package me.clockclap.tct.item.items.quickchat;
+package me.clockclap.tct.item.items;
 
-import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomSpecialItem;
+import me.clockclap.tct.item.CustomWeaponItem;
 import me.clockclap.tct.item.ItemIndex;
+import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuickChatA implements CustomSpecialItem {
+public class TctItemHealerSword implements CustomSpecialItem {
 
     private ItemStack item;
     private Material material;
@@ -29,26 +34,49 @@ public class QuickChatA implements CustomSpecialItem {
     private final boolean isdefault;
     private final int index;
 
-    public QuickChatA() {
-        this.index = ItemIndex.DEFAULT_ITEM_SLOT_5;
-        this.isdefault = true;
-        this.material = Material.WOOD_HOE;
-        this.name = "QUICKCHAT_A";
-        this.displayName = Reference.TCT_QUICK_CHAT_TITLE_0;
-        this.title = Reference.TCT_QUICK_CHAT_TITLE_0;
-        this.description = ChatColor.GREEN + "Quick Chat";
-        this.role = GameRoles.VILLAGER;
+    public TctItemHealerSword() {
+        this.index = ItemIndex.DEFAULT_ITEM_SLOT_HEALER;
+        this.isdefault = false;
+        this.material = Material.IRON_SWORD;
+        this.name = "HEALER_SWORD";
+        this.displayName = "Healer Sword";
+        this.title = "Healer Sword";
+        this.description = ChatColor.LIGHT_PURPLE + "Healer Item";
+        this.role = GameRoles.HEALER;
         this.attackable = false;
-        this.quickchat = true;
+        this.quickchat = false;
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.WHITE + title);
+        meta.setDisplayName(ChatColor.WHITE + displayName);
         List<String> lore = new ArrayList<>();
         lore.add(description);
         meta.setLore(lore);
         meta.setUnbreakable(true);
         item.setItemMeta(meta);
-        this.item = item;
+        net.minecraft.server.v1_12_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
+        NBTTagCompound compound = nmsStack.hasTag() ? nmsStack.getTag() : new NBTTagCompound();
+        NBTTagList modifiers = new NBTTagList();
+        NBTTagCompound speed = new NBTTagCompound();
+        NBTTagCompound damage = new NBTTagCompound();
+        speed.set("AttributeName", new NBTTagString("generic.attackSpeed"));
+        speed.set("Name", new NBTTagString("generic.attackSpeed"));
+        speed.set("Amount", new NBTTagFloat(0));
+        speed.set("Operation", new NBTTagInt(0));
+        speed.set("UUIDLeast", new NBTTagInt(894654));
+        speed.set("UUIDMost", new NBTTagInt(2872));
+        speed.set("Slot", new NBTTagString("mainhand"));
+        damage.set("AttributeName", new NBTTagString("generic.attackDamage"));
+        damage.set("Name", new NBTTagString("generic.attackDamage"));
+        damage.set("Amount", new NBTTagFloat(0));
+        damage.set("Operation", new NBTTagInt(0));
+        damage.set("UUIDLeast", new NBTTagInt(894654));
+        damage.set("UUIDMost", new NBTTagInt(2872));
+        damage.set("Slot", new NBTTagString("mainhand"));
+        modifiers.add(speed);
+        modifiers.add(damage);
+        compound.set("AttributeModifiers", modifiers);
+        nmsStack.setTag(compound);
+        this.item = CraftItemStack.asBukkitCopy(nmsStack);
     }
 
     @Override
@@ -57,9 +85,8 @@ public class QuickChatA implements CustomSpecialItem {
     }
 
     @Override
-    public void onAttackPlayerWithCooldown(Player source, Player target) {
-
-        source.chat(Reference.TCT_QUICK_CHAT_0.replaceAll("%PLAYER%", target.getDisplayName()));
+    public void onAttackPlayer(Player attacker, Player target) {
+        target.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20, 3));
     }
 
     @Override

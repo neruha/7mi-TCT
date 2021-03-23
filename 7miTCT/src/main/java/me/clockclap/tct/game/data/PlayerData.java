@@ -20,6 +20,8 @@ public interface PlayerData {
 
     public PlayerWatcher getWatcher();
 
+    public PlayerData getKilledBy();
+
     public void startQCCCountdown();
 
     public void setCoin(int coin);
@@ -33,5 +35,7 @@ public interface PlayerData {
     public void setQuickChatCooldown(int second);
 
     public void setWatcher(PlayerWatcher watcher);
+
+    public void setKilledBy(PlayerData killer);
 
 }

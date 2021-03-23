@@ -11,9 +11,14 @@ public class Japanizer {
     public static String japanize(String input) throws UnsupportedEncodingException {
         String msg = input;
         String result = "";
+        boolean ime = true;
         byte[] buf = msg.getBytes("SJIS");
         if(msg.length() == buf.length && !msg.startsWith("#")) {
             if(msg.startsWith("!")) {
+                msg = msg.substring(1);
+                ime = false;
+            }
+            if(msg.startsWith(".")) {
                 msg = msg.substring(1);
             }
             String beforeconvert = msg;
@@ -62,7 +67,9 @@ public class Japanizer {
             msg = msg.replaceAll("&k", "%COLOR_CHR4175912001%");
             msg = msg.replaceAll("&r", "%COLOR_CHRESET%");
             result = KanaConverter.conv(msg);
-            result = GoogleIME.convByGoogleIME(result);
+            if(ime) {
+                result = GoogleIME.convByGoogleIME(result);
+            }
             result = result.replaceAll("§０", "§0");
             result = result.replaceAll("§１", "§1");
             result = result.replaceAll("§２", "§2");

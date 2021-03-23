@@ -2,6 +2,7 @@ package me.clockclap.tct.item;
 
 public class ItemIndex {
 
+    public static final int DEFAULT_ITEM_SLOT_HEALER = -1;
     public static final int DEFAULT_ITEM_SLOT_0 = 0;
     public static final int DEFAULT_ITEM_SLOT_1 = 1;
     public static final int DEFAULT_ITEM_SLOT_2 = 2;

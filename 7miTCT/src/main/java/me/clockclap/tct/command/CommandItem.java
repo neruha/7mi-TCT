@@ -47,6 +47,11 @@ public class CommandItem implements TabExecutor {
                 return true;
             }
             if(args.length >= 1) {
+                if(args[0].equalsIgnoreCase("LOG_BOOK")) {
+                    p.getInventory().addItem(plugin.getGame().getLog().getItem());
+                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_SYSTEM_GAVE_ITEM.replaceAll("%ITEM%", "LOG_BOOK"));
+                    return true;
+                }
                 for(CustomItem i : CustomItems.allItems) {
                     if(i.getName().equalsIgnoreCase(args[0])) {
                         process(p, i.getItemStack());

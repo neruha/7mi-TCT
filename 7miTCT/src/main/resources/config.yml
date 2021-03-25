@@ -7,7 +7,7 @@
 # admin: ["Steve", "Alex"]
 #
 # オペレーターにadmin権限を与える場合はopと入力します。
-admin: [""]
+admin: ["op"]
 
 roles:
 ## それぞれの役職の人数を変更します。
@@ -97,6 +97,11 @@ quickchat-cooldown: 20 #クイックチャットのクールタイム (秒)
 
 #デフォルト: 20秒
 heal-station-cooldown: 20 #回復ステーションのクールタイム (秒)
+
+#デフォルト: 70秒
+fox-reveal-time-default: 70 #妖狐の正体がばれる時間 (秒)
+#デフォルト: 60秒
+fox-reveal-time: 60 #妖狐の正体がばれる時間 (秒)
 
 #デフォルト: 180秒後
 first-coin-time: 180 #コインが配られる時間 (秒後)

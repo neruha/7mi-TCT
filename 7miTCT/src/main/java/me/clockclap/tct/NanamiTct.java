@@ -1,5 +1,6 @@
 package me.clockclap.tct;
 
+import me.clockclap.tct.api.PlayerWatcher;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.api.TctConfiguration;
 import me.clockclap.tct.api.Utilities;
@@ -81,7 +82,10 @@ public final class NanamiTct extends JavaPlugin {
         if(Bukkit.getOnlinePlayers().size() > 0) {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 PlayerData data = new TctPlayerData(this, GameRoles.SPEC, p.getName());
+                PlayerWatcher watcher = new PlayerWatcher(plugin.getGame(), p);
                 data.setSpectator(true);
+                data.setWatcher(watcher);
+                data.getWatcher().startWatch();
                 getGame().getReference().PLAYERDATA.put(p.getName(), data);
                 p.setFoodLevel(20);
                 bar.addPlayer(p);

@@ -63,7 +63,7 @@ public class TctLog {
     public void addLine(String line) {
         List<String> list = log;
         Collections.reverse(list);
-        list.add(ChatColor.DARK_GREEN + "" + (list.size() + 1) + ": " + line);
+        list.add(ChatColor.DARK_GREEN + "" + (list.size() + 1) + ": " + ChatColor.BLACK + line);
         Collections.reverse(list);
         log = list;
     }

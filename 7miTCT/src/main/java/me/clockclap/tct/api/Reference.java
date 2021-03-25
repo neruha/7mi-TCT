@@ -18,6 +18,17 @@ public class Reference {
     public static final String JAPANIZE_FORMAT = ChatColor.RESET + "%JAPANIZE%" + ChatColor.RESET + " " + ChatColor.DARK_GRAY + "(" + ChatColor.GRAY + "%MESSAGE%" + ChatColor.DARK_GRAY + ")";
     public static final String TCT_CHAT_FORMAT = ChatColor.RESET + "%ROLE% %PLAYER%: " + ChatColor.RESET + "%MESSAGE%";
 
+    //ログブック
+    public static final String TCT_LOGBOOK_GAME_STARTED = ChatColor.GOLD + " " + " " + " " + "｜ ゲーム開始 ｜";
+    public static final String TCT_LOGBOOK_ROLES = ChatColor.DARK_GREEN + "=-=-登場役職-=-=";
+    public static final String TCT_LOGBOOK_FOUND_DEADBODY = ChatColor.DARK_RED + "死亡確認 ↑";
+    public static final String TCT_LOGBOOK_CO_VILLAGER = ChatColor.GREEN + "村人CO ↑";
+    public static final String TCT_LOGBOOK_CO_HEALER = ChatColor.LIGHT_PURPLE + "医者CO ↑";
+    public static final String TCT_LOGBOOK_CO_DETECTIVE = ChatColor.BLUE + "探偵CO ↑";
+    public static final String TCT_LOGBOOK_CO_WOLF = ChatColor.RED + "人狼CO ↑";
+    public static final String TCT_LOGBOOK_CO_FANATIC = ChatColor.DARK_PURPLE + "狂人CO ↑";
+    public static final String TCT_LOGBOOK_CO_FOX = ChatColor.GOLD + "妖狐CO ↑";
+
     //クイックチャット
     public static final String TCT_QUICK_CHAT_TITLE_0 = "○○さんと一緒にいます";
     public static final String TCT_QUICK_CHAT_TITLE_1 = "○○さんは村人だと思います";
@@ -45,8 +56,8 @@ public class Reference {
     public static final String TCT_CHAT_SYSTEM_RELOAD_COMPLETE = ChatColor.YELLOW + "コンフィグをリロードしました。";
     public static final String TCT_CHAT_SYSTEM_GAVE_BARRIER = ChatColor.YELLOW + "%PLAYER%はバリアブロックを入手しました。";
     public static final String TCT_CHAT_SYSTEM_GAVE_ITEM = ChatColor.YELLOW + "あなたは%ITEM%を入手しました。";
-    public static final String TCT_CHAT_SYSTEM_SET_ROLE_COUNT_SUCCESS = ChatColor.GREEN + "ロール数の変更に成功しました。";
-    public static final String TCT_CHAT_ERROR_SET_ROLE_COUNT_FAIL = ChatColor.RED + "ロール数の変更に失敗しました。";
+    public static final String TCT_CHAT_SYSTEM_SET_ROLE_COUNT_SUCCESS = ChatColor.GREEN + "役職数の変更に成功しました。";
+    public static final String TCT_CHAT_ERROR_SET_ROLE_COUNT_FAIL = ChatColor.RED + "役職数の変更に失敗しました。";
     //ゲームモード
     public static final String TCT_GAMEMODE_CREATIVE = "クリエイティブ";
     public static final String TCT_GAMEMODE_SURVIVAL = "サバイバル";
@@ -69,13 +80,14 @@ public class Reference {
     //キル
     public static final String TCT_CHAT_YOU_ARE_KILLED_BY = ChatColor.RED + "あなたは" + ChatColor.GOLD + "%PLAYER%" + ChatColor.RED + "に殺害されました";
     public static final String TCT_CHAT_YOU_ARE_SPECTATOR_MODE = ChatColor.GREEN + "死亡してしまったため、観戦モードになります";
-    //発見
-    public static final String TCT_CHAT_CADAVER_FOUND = ChatColor.RED + "" + ChatColor.BOLD + "%PLAYER%さんが無惨な姿で発見されました";
+    //死体
+    public static final String TCT_CHAT_DEADBODY_FOUND = ChatColor.RED + "" + ChatColor.BOLD + "%PLAYER%さんが無惨な姿で発見されました";
     public static final String TCT_CHAT_ALREADY_FOUND = ChatColor.GREEN + "この死体は既に発見されています";
     //その他
     public static final String TCT_CHAT_LANDMINE_PLACED = ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "地雷を設置しました、5秒後から効果が適応されます";
     public static final String TCT_CHAT_COIN_DISTRIBUTION = ChatColor.AQUA + "コインが配布されました /shopか/sでショップが開きます";
     public static final String TCT_CHAT_FOX_IS = ChatColor.LIGHT_PURPLE + "妖狐は" + ChatColor.GOLD + "[%PLAYER%]" + ChatColor.LIGHT_PURPLE + "です！";
+    public static final String TCT_CHAT_FOX_ATTACK_ANYONE = ChatColor.RED + "あと%SECOND%秒以内に誰かにダメージを与えないと正体がばれてしまいます";
     public static final String TCT_CHAT_HEAL_STATION_USED = ChatColor.GREEN + "回復ステーションを使用しました";
     //勝敗
     public static final String TCT_CHAT_VILLAGERS_VICTORY_FOR_TIMEOUT = ChatColor.GREEN + "時間切れにより、村人側の勝利です";
@@ -97,7 +109,7 @@ public class Reference {
     public static final String TCT_CHAT_ROLE_YOU_ARE_VILLAGER = ChatColor.GREEN + "あなたの役職は村人です";
     public static final String TCT_CHAT_ROLE_DESCRIPTION_VILLAGER = ChatColor.LIGHT_PURPLE + "紛れ込んだ人狼を見つけ出し倒しましょう、自分が人狼だと思われないように行動しましょう";
     public static final String TCT_CHAT_ROLE_YOU_ARE_DETECTIVE = ChatColor.AQUA + "あなたの役職は探偵です";
-    public static final String TCT_CHAT_ROLE_DESCRIPTION_DETECTIVE = ChatColor.LIGHT_PURPLE + "";
+    public static final String TCT_CHAT_ROLE_DESCRIPTION_DETECTIVE = ChatColor.LIGHT_PURPLE + "探偵アイテムを上手に使って村人を勝利に導きましょう";
     public static final String TCT_CHAT_ROLE_YOU_ARE_FOX = ChatColor.GOLD + "あなたの役職は妖狐です";
     public static final String TCT_CHAT_ROLE_DESCRIPTION_FOX = ChatColor.LIGHT_PURPLE + "一定時間毎に誰かにダメージを与えないと、正体がばれてしまいます";
 
@@ -110,9 +122,17 @@ public class Reference {
     public static final String TCT_TIME_AFTER_DEATH = "死後経過時間";
     public static final String TCT_CAUSE_OF_DEATH = "死因";
 
+    //死因
+    public static final String TCT_DEATHCAUSE_AIR = "不明";
+    public static final String TCT_DEATHCAUSE_KILL = "殺害";
+    public static final String TCT_DEATHCAUSE_TNT = "爆発";
+    public static final String TCT_DEATHCAUSE_FALL = "落下";
+    public static final String TCT_DEATHCAUSE_LOST_CONNECTION = "退室";
+
     //タイトル (UI)
     public static final String TCT_TITLE_MAIN_VILLAGERS_VICTORY = ChatColor.GREEN + "村人陣営が勝利しました";
     public static final String TCT_TITLE_SUB_VILLAGERS_VICTORY_FOR_TIMEOUT = ChatColor.GRAY + "時間切れによる村人側の勝利";
+    public static final String TCT_TITLE_SUB_VILLAGERS_VICTORY = ChatColor.GRAY + "人狼陣営全滅による村人側の勝利";
     public static final String TCT_TITLE_MAIN_WOLVES_VICTORY = ChatColor.RED + "人狼陣営が勝利しました";
     public static final String TCT_TITLE_SUB_WOLVES_VICTORY = ChatColor.GRAY + "村人陣営全滅による人狼側の勝利";
     public static final String TCT_TITLE_MAIN_FOX_VICTORY = ChatColor.GOLD + "妖狐が勝利しました";
@@ -166,17 +186,17 @@ public class Reference {
     public static final String TCT_TEAM_FOXES = "妖狐";
 
     //サイドバー (UI)
-    public static final String TCT_UI_GAME_STATUS = "ステータス";
-    public static final String TCT_UI_REMAINING_TIME = "推定残り時間";
-    public static final String TCT_UI_REMAINING_PLAYER = "残りの生存者";
-    public static final String TCT_UI_REAL_REMAINING_TIME = "残り時間実数";
-    public static final String TCT_UI_REAL_REMAINING_PLAYER = "残りの生存者実数";
-    public static final String TCT_UI_YOUR_ROLE = "あなたの役職";
-    public static final String TCT_UI_COIN_COUNT = "所持コイン枚数";
-    public static final String TCT_UI_SEPARATOR = ChatColor.RESET + "" + ChatColor.STRIKETHROUGH + " " + " " + " " + " " + " " + " " + " " + " " + " " + " "
-            + " " + " " + " " + " " + " " + " " + " " + " " + " " + " ";
-    public static final String TCT_UI_PLEASE_WAIT = "ゲーム開始までお待ちください";
-    public static final String TCT_UI_GAME_STARTING_IN = "ゲーム開始まで... %SECOND%秒";
+    public static final String TCT_UI_GAME_STATUS = ChatColor.GREEN + "ステータス";
+    public static final String TCT_UI_REMAINING_TIME = ChatColor.AQUA + "推定残り時間";
+    public static final String TCT_UI_REMAINING_PLAYER = ChatColor.AQUA + "残りの生存者";
+    public static final String TCT_UI_REAL_REMAINING_TIME = ChatColor.GOLD + "残り時間実数";
+    public static final String TCT_UI_REAL_REMAINING_PLAYER = ChatColor.GOLD + "残りの生存者実数";
+    public static final String TCT_UI_YOUR_ROLE = ChatColor.RED + "あなたの役職";
+    public static final String TCT_UI_COIN_COUNT = ChatColor.AQUA + "所持コイン枚数";
+    public static final String TCT_UI_SEPARATOR = ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + " " + " " + " " + " " + " " + " " + " " + " " + " " + " "
+            + " " + " " + " " + " " + " " + " " + " " + " " + " " + " " + " " + " " + " " + " " + " " + " " + " " + " " + " " + " " + " " + " " + " " + " ";
+    public static final String TCT_UI_PLEASE_WAIT = ChatColor.GREEN + "ゲーム開始までお待ちください";
+    public static final String TCT_UI_GAME_STARTING_IN = ChatColor.GREEN + "ゲーム開始まで... %SECOND%秒";
 
     //ゲームステータス
     public static final String TCT_STATE_PLAYING = "ゲーム実行中";

@@ -5,6 +5,7 @@ import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.game.GameState;
 import me.clockclap.tct.game.role.GameRoles;
+import me.clockclap.tct.game.role.GameTeams;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -69,8 +70,8 @@ public class CommandStopGame implements CommandExecutor {
         } else if(plugin.getGame().getReference().getGameState() == GameState.GAMING) {
             plugin.getGame().getTimer().cancel();
         }
-        plugin.getGame().stop(GameRoles.NONE);
-        Bukkit.getServer().broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_SYSTEM_STOPPED_GAME);
+        plugin.getGame().stop(GameTeams.NONE);
+        Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_SYSTEM_STOPPED_GAME);
     }
 
 }

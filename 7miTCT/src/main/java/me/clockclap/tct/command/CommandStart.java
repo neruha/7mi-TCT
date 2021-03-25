@@ -50,7 +50,7 @@ public class CommandStart implements CommandExecutor {
                 return true;
             }
             boolean success = plugin.getGame().preStart(p.getLocation());
-            if(success == false) {
+            if(!success) {
                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_PLAYERS_NEEDED);
             }
             return true;

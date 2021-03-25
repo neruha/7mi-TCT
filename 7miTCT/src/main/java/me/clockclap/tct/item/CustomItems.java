@@ -31,6 +31,8 @@ public class CustomItems {
     public static final CustomItem BOW = new TctItemBow();
     public static final CustomItem ARROW = new TctItemArrow();
 
+    public static final CustomItem SNOWBALL = new TctItemSnowball();
+
     public static final TctLogBook LOGBOOK = new TctLogBook();
 
     public static final CustomSpecialItem HEALER_SWORD = new TctItemHealerSword();
@@ -80,6 +82,7 @@ public class CustomItems {
 
         registerItem(BOW);
         registerItem(ARROW);
+        registerItem(SNOWBALL);
 
         registerLogItem(LOGBOOK);
 
@@ -94,6 +97,10 @@ public class CustomItems {
         specialItems = new ArrayList<>();
 
         generalBlocks = new ArrayList<>();
+        resetBlockData();
+    }
+
+    public static void resetBlockData() {
         for(CustomBlockData data : CustomBlockInfo.blockDataList) {
             data.getBlock().setType(Material.AIR);
         }

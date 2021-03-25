@@ -9,7 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class CustomBlockData {
+public class CustomBlockData implements CustomData {
 
     private BukkitRunnable timer;
     private int cooldown;

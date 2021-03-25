@@ -40,7 +40,21 @@ public class ChatEvent implements Listener {
                 visible = false;
             }
         } else {
-            role_chatprefix = Reference.TCT_CHAT_ROLE_CO_NONE_P;
+            if(co == GameRoles.VILLAGER) {
+                role_chatprefix = Reference.TCT_CHAT_ROLE_CO_VILLAGER_P;
+            } else if(co == GameRoles.HEALER) {
+                role_chatprefix = Reference.TCT_CHAT_ROLE_CO_HEALER_P;
+            } else if(co == GameRoles.DETECTIVE) {
+                role_chatprefix = Reference.TCT_CHAT_ROLE_CO_DETECTIVE_P;
+            } else if(co == GameRoles.WOLF) {
+                role_chatprefix = Reference.TCT_CHAT_ROLE_CO_WOLF_P;
+            } else if(co == GameRoles.FANATIC) {
+                role_chatprefix = Reference.TCT_CHAT_ROLE_CO_FANATIC_P;
+            } else if(co == GameRoles.FOX) {
+                role_chatprefix = Reference.TCT_CHAT_ROLE_CO_FOX_P;
+            } else {
+                role_chatprefix = Reference.TCT_CHAT_ROLE_CO_NONE_P;
+            }
         }
         if(visible) {
             Bukkit.getServer().broadcastMessage(Reference.TCT_CHAT_FORMAT.replaceAll("%ROLE%", role_chatprefix).replaceAll("%PLAYER%", p.getDisplayName()).replaceAll("%MESSAGE%", result));

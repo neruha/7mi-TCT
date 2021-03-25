@@ -59,7 +59,7 @@ public class CommandStartLoc implements CommandExecutor {
     private void process(CommandSender sender, String[] args) {
         Location loc;
         try {
-            loc = new Location(Bukkit.getServer().getWorld(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), 0, 0);
+            loc = new Location(Bukkit.getServer().getWorld(args[0]), Integer.parseInt(args[1]) + 0.5, Integer.parseInt(args[2]), Integer.parseInt(args[3]) + 0.5, 0, 0);
         } catch(NumberFormatException ex) {
             ex.printStackTrace();
             sender.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_NUM_ONLY);

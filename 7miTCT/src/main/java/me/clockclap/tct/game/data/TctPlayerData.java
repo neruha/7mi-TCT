@@ -2,27 +2,35 @@ package me.clockclap.tct.game.data;
 
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.PlayerWatcher;
+import me.clockclap.tct.game.death.DeadBody;
+import me.clockclap.tct.game.death.Killer;
+import me.clockclap.tct.game.death.TctDeathCause;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
-import org.bukkit.boss.BossBar;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.BlockIterator;
 
-public class TctPlayerData implements PlayerData {
+import java.util.UUID;
 
-    private NanamiTct plugin;
+public class TctPlayerData extends TctEntityData implements PlayerData {
 
-    private GameRole role;
     private GameRole co;
     private String name;
     private boolean spec;
     private int quickchatcooldown;
     private int coin;
     private PlayerWatcher watcher;
-    private PlayerData killer;
+    private Killer killer;
 
     public TctPlayerData(NanamiTct plugin, GameRole role, String name) {
-        this.plugin = plugin;
-        this.role = role;
+        super(plugin, Bukkit.getPlayer(name), role);
         this.name = name;
         this.co = GameRoles.NONE;
         this.spec = true;
@@ -32,12 +40,22 @@ public class TctPlayerData implements PlayerData {
 
     @Override
     public GameRole getRole() {
-        return this.role;
+        return super.role;
     }
 
     @Override
     public GameRole getCO() {
         return this.co;
+    }
+
+    @Override
+    public Entity getEntity() {
+        return Bukkit.getPlayer(this.name);
+    }
+
+    @Override
+    public UUID getUniqueId() {
+        return Bukkit.getPlayer(this.name).getUniqueId();
     }
 
     @Override
@@ -66,8 +84,28 @@ public class TctPlayerData implements PlayerData {
     }
 
     @Override
-    public PlayerData getKilledBy() {
+    public Killer getKilledBy() {
         return this.killer;
+    }
+
+    @Override
+    public Player getPlayer() {
+        return Bukkit.getPlayer(this.name);
+    }
+
+    @Override
+    public Block getTargetBlock(int range) {
+        Player p = getPlayer();
+        BlockIterator iter = new BlockIterator(p, range);
+        Block lastBlock = iter.next();
+        while (iter.hasNext()) {
+            lastBlock = iter.next();
+            if (lastBlock.getType() == Material.AIR) {
+                continue;
+            }
+            break;
+        }
+        return lastBlock;
     }
 
     @Override
@@ -93,7 +131,7 @@ public class TctPlayerData implements PlayerData {
 
     @Override
     public void setRole(GameRole role) {
-        this.role = role;
+        super.role = role;
     }
 
     @Override
@@ -117,8 +155,21 @@ public class TctPlayerData implements PlayerData {
     }
 
     @Override
-    public void setKilledBy(PlayerData killer) {
+    public void setKilledBy(Killer killer) {
         this.killer = killer;
+    }
+
+    @Override
+    public void kill(TctDeathCause cause) {
+        Location loc = this.getPlayer().getLocation();
+        Location blockLoc = new Location(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+        DeadBody deadBody = new DeadBody(plugin.getGame(), this, cause, blockLoc);
+        plugin.getGame().getReference().DEADBODIES.add(deadBody);
+        plugin.getGame().removeRemainingPlayers(this, true);
+        plugin.getGame().setRealRemainingSeconds(plugin.getGame().getRealRemainingSeconds() + plugin.getTctConfig().getConfig().getInt("countdown.addcount.kill", 20));
+        deadBody.process();
+        this.getPlayer().setGameMode(GameMode.SPECTATOR);
+        this.setSpectator(true);
     }
 
 }

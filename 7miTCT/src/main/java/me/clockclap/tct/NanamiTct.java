@@ -11,6 +11,7 @@ import me.clockclap.tct.game.GameReference;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.data.TctPlayerData;
 import me.clockclap.tct.game.role.GameRoles;
+import me.clockclap.tct.inventory.CustomInventory;
 import me.clockclap.tct.item.CustomItems;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
@@ -29,6 +30,7 @@ public final class NanamiTct extends JavaPlugin {
 
     private Game game;
     private TctConfiguration configuration;
+    private CustomInventory customInventory;
 
     @Override
     public void onEnable() {
@@ -53,6 +55,7 @@ public final class NanamiTct extends JavaPlugin {
         pm.registerEvents(new ItemEvent(this), this);
         pm.registerEvents(new BlockEvent(this), this);
         pm.registerEvents(new DamageEvent(this), this);
+        pm.registerEvents(new InventoryEvent(this), this);
 
         // Add Commands
         utilities.addCommand("abouttct", new CommandAboutTCT(this));
@@ -65,6 +68,7 @@ public final class NanamiTct extends JavaPlugin {
         utilities.addCommand("startloc", new CommandStartLoc(this));
         utilities.addCommand("stopgame", new CommandStopGame(this));
         utilities.addCommand("item", new CommandItem(this));
+        utilities.addCommand("shop", new CommandShop(this));
 
         // Register items
         CustomItems.register();
@@ -92,6 +96,9 @@ public final class NanamiTct extends JavaPlugin {
             }
         }
 
+        customInventory = new CustomInventory(game);
+        customInventory.initialize();
+
     }
 
     public Game getGame() {
@@ -100,6 +107,10 @@ public final class NanamiTct extends JavaPlugin {
 
     public TctConfiguration getTctConfig() {
         return this.configuration;
+    }
+
+    public CustomInventory getCustomInventory() {
+        return this.customInventory;
     }
 
     @Override

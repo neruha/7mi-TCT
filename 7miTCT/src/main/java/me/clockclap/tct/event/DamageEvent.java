@@ -11,8 +11,11 @@ import me.clockclap.tct.game.death.TctDeathCause;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.game.role.GameTeams;
+import me.clockclap.tct.item.CustomItems;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,6 +24,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +42,24 @@ public class DamageEvent implements Listener {
     public void onDamage(EntityDamageEvent e) {
         if(e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
-            if(plugin.getGame().getReference().PLAYERDATA.get(p.getName()).isSpectator()) {
+            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getName());
+            if(data.isSpectator()) {
                 e.setCancelled(true);
+                return;
+            }
+            for(ItemStack item : p.getInventory().getContents()) {
+                if(item == null) {
+                    continue;
+                }
+                if(item.hasItemMeta()) {
+                    if(item.getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.SPONGE.getItemStack().getItemMeta().getDisplayName())) {
+                        if(e.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION || e.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
+                            e.setCancelled(true);
+                            p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_CANCELLED_EXPLOSION);
+                            p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_DESTROY, 1.0F, 2.0F);
+                        }
+                    }
+                }
             }
         }
     }

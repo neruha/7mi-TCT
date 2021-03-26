@@ -17,6 +17,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockIterator;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class TctPlayerData extends TctEntityData implements PlayerData {
@@ -27,6 +29,7 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
     private int quickchatcooldown;
     private int coin;
     private PlayerWatcher watcher;
+    private List<String> boughtItem = new ArrayList<>();
     private Killer killer;
 
     public TctPlayerData(NanamiTct plugin, GameRole role, String name) {
@@ -109,6 +112,31 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
     }
 
     @Override
+    public List<String> getBoughtItem() {
+        return this.boughtItem;
+    }
+
+    @Override
+    public void setBoughtItem(List<String> list) {
+        this.boughtItem = list;
+    }
+
+    @Override
+    public void resetBoughtItem() {
+        this.boughtItem = new ArrayList<>();
+    }
+
+    @Override
+    public void addBoughtItem(String item) {
+        this.boughtItem.add(item);
+    }
+
+    @Override
+    public void removeBoughtItem(String item) {
+        this.boughtItem.remove(item);
+    }
+
+    @Override
     public void startQCCCountdown() {
         int defaultSec = plugin.getTctConfig().getConfig().getInt("quickchat-cooldown", 20) + 1;
         setQuickChatCooldown(defaultSec);
@@ -166,7 +194,9 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
         DeadBody deadBody = new DeadBody(plugin.getGame(), this, cause, blockLoc);
         plugin.getGame().getReference().DEADBODIES.add(deadBody);
         plugin.getGame().removeRemainingPlayers(this, true);
-        plugin.getGame().setRealRemainingSeconds(plugin.getGame().getRealRemainingSeconds() + plugin.getTctConfig().getConfig().getInt("countdown.addcount.kill", 20));
+        if(cause == TctDeathCause.KILL) {
+            plugin.getGame().setRealRemainingSeconds(plugin.getGame().getRealRemainingSeconds() + plugin.getTctConfig().getConfig().getInt("countdown.addcount.kill", 20));
+        }
         deadBody.process();
         this.getPlayer().setGameMode(GameMode.SPECTATOR);
         this.setSpectator(true);

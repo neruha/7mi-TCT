@@ -9,6 +9,8 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public interface PlayerData extends EntityData {
 
     public GameRole getCO();
@@ -26,6 +28,16 @@ public interface PlayerData extends EntityData {
     public Player getPlayer();
 
     public Block getTargetBlock(int range);
+
+    public List<String> getBoughtItem();
+
+    public void setBoughtItem(List<String> list);
+
+    public void resetBoughtItem();
+
+    public void addBoughtItem(String item);
+
+    public void removeBoughtItem(String item);
 
     public void startQCCCountdown();
 

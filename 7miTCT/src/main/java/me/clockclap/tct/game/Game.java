@@ -164,6 +164,8 @@ public class Game {
             getReference().setGameState(GameState.STARTING);
             this.loc = loc;
             for(Player p : Bukkit.getOnlinePlayers()) {
+                PlayerData data = getReference().PLAYERDATA.get(p.getName());
+                data.resetBoughtItem();
                 p.setGameMode(GameMode.SURVIVAL);
                 p.setMaxHealth(20.0D);
                 p.setHealth(20.0D);
@@ -200,7 +202,6 @@ public class Game {
                 }
             }.runTaskTimer(plugin, 0L, 20L);
             setPreTimer(timer);
-            /**/
             return true;
         }
         return false;
@@ -520,14 +521,14 @@ public class Game {
 
         // Update Log Book
         getLog().addLine(Reference.TCT_LOGBOOK_GAME_STARTED);
-        getLog().addLine("");
+        getLog().addLine(Reference.TCT_LOGBOOK_ROLES);
         getLog().addLine(" " + " " + Reference.TCT_ROLE_FOX + ": " + ChatColor.GREEN + getRoleCount().getFoxesCount());
         getLog().addLine(" " + " " + Reference.TCT_ROLE_FANATIC + ": " + ChatColor.GREEN + getRoleCount().getFanaticsCount());
         getLog().addLine(" " + " " + Reference.TCT_ROLE_WOLF + ": " + ChatColor.GREEN + getRoleCount().getWolvesCount());
         getLog().addLine(" " + " " + Reference.TCT_ROLE_DETECTIVE + ": " + ChatColor.GREEN + getRoleCount().getDetectivesCount());
         getLog().addLine(" " + " " + Reference.TCT_ROLE_HEALER + ": " + ChatColor.GREEN + getRoleCount().getHealersCount());
         getLog().addLine(" " + " " + Reference.TCT_ROLE_VILLAGER + ": " + ChatColor.GREEN + getRoleCount().getVillagersCount());
-        getLog().addLine("");
+        getLog().addLine(Reference.TCT_LOGBOOK_SEPARATOR);
         getLog().update();
 
         getBar().setTitle(Reference.TCT_BOSSBAR_FORMAT_GAMING.replaceAll("%SECOND%", String.valueOf(sec)));
@@ -570,6 +571,7 @@ public class Game {
         if(gaming) {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 PlayerData data = getReference().PLAYERDATA.get(p.getName());
+                data.resetBoughtItem();
                 if(data.getRole() == GameRoles.FOX && !data.isSpectator()) {
                     if(data.getWatcher() != null) {
                         data.getWatcher().cancelCountFox();
@@ -643,6 +645,7 @@ public class Game {
             p.setHealth(20.0D);
             data.setRole(GameRoles.SPEC);
             data.setSpectator(true);
+            data.setCoin(0);
             RoleCount count = new RoleCount(this);
             count.setVillagersCount(0);
             count.setHealersCount(0);

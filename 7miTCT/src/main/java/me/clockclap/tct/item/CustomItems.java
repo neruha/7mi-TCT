@@ -30,6 +30,7 @@ public class CustomItems {
     public static final CustomWeaponItem STONE_SWORD = new TctItemStoneSword();
     public static final CustomItem BOW = new TctItemBow();
     public static final CustomItem ARROW = new TctItemArrow();
+    public static final CustomItem STRONG_BOW = new TctItemStrongBow();
 
     public static final CustomItem SNOWBALL = new TctItemSnowball();
 
@@ -82,6 +83,8 @@ public class CustomItems {
 
         registerItem(BOW);
         registerItem(ARROW);
+        registerItem(STRONG_BOW);
+
         registerItem(SNOWBALL);
 
         registerLogItem(LOGBOOK);

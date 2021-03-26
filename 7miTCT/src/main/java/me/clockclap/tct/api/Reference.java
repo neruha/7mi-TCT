@@ -21,6 +21,7 @@ public class Reference {
     //ログブック
     public static final String TCT_LOGBOOK_GAME_STARTED = ChatColor.GOLD + " " + " " + " " + "｜ ゲーム開始 ｜";
     public static final String TCT_LOGBOOK_ROLES = ChatColor.DARK_GREEN + "=-=-登場役職-=-=";
+    public static final String TCT_LOGBOOK_SEPARATOR = ChatColor.DARK_GREEN + "=-=-=-=-=-=-=-=";
     public static final String TCT_LOGBOOK_FOUND_DEADBODY = ChatColor.DARK_RED + "死亡確認 ↑";
     public static final String TCT_LOGBOOK_CO_VILLAGER = ChatColor.GREEN + "村人CO ↑";
     public static final String TCT_LOGBOOK_CO_HEALER = ChatColor.LIGHT_PURPLE + "医者CO ↑";
@@ -86,9 +87,15 @@ public class Reference {
     //その他
     public static final String TCT_CHAT_LANDMINE_PLACED = ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "地雷を設置しました、5秒後から効果が適応されます";
     public static final String TCT_CHAT_COIN_DISTRIBUTION = ChatColor.AQUA + "コインが配布されました /shopか/sでショップが開きます";
+    public static final String TCT_CHAT_YOUR_COIN = ChatColor.AQUA + "あなたの所持コイン枚数は%COUNT%枚です";
+    public static final String TCT_CHAT_NOT_ENOUGH_COINS = ChatColor.RED + "コインが足りません";
+    public static final String TCT_CHAT_BOUGHT_ITEM = ChatColor.AQUA + "%ITEM%を購入しました";
+    public static final String TCT_CHAT_ALREADY_BOUGHT = ChatColor.RED + "既に購入されています";
     public static final String TCT_CHAT_FOX_IS = ChatColor.LIGHT_PURPLE + "妖狐は" + ChatColor.GOLD + "[%PLAYER%]" + ChatColor.LIGHT_PURPLE + "です！";
     public static final String TCT_CHAT_FOX_ATTACK_ANYONE = ChatColor.RED + "あと%SECOND%秒以内に誰かにダメージを与えないと正体がばれてしまいます";
     public static final String TCT_CHAT_HEAL_STATION_USED = ChatColor.GREEN + "回復ステーションを使用しました";
+    public static final String TCT_CHAT_CANNOT_USE = ChatColor.RED + "このコマンドを使えない役職です";
+    public static final String TCT_CHAT_CANCELLED_EXPLOSION = ChatColor.LIGHT_PURPLE + "爆発ダメージを無効化しました";
     //勝敗
     public static final String TCT_CHAT_VILLAGERS_VICTORY_FOR_TIMEOUT = ChatColor.GREEN + "時間切れにより、村人側の勝利です";
     public static final String TCT_CHAT_VILLAGERS_VICTORY = ChatColor.GREEN + "人狼陣営は全滅し、妖狐も死亡しました";
@@ -139,6 +146,11 @@ public class Reference {
     public static final String TCT_TITLE_SUB_FOX_VICTORY = ChatColor.GRAY + "人狼陣営全滅時に生き残っていた妖狐の勝利";
     public static final String TCT_TITLE_MAIN_NO_VICTORY = ChatColor.DARK_GRAY + "引き分け";
     public static final String TCT_TITLE_SUB_NO_VICTORY = ChatColor.GRAY + "ゲームが強制終了されました";
+
+    //インベントリメニュー (GUI)
+    public static final String TCT_GUI_TITLE_GENERAL_SHOP = "村人ショップ";
+    public static final String TCT_GUI_TITLE_DETECTIVE_SHOP = "探偵ショップ";
+    public static final String TCT_GUI_TITLE_WOLF_SHOP = "人狼ショップ";
 
     //役職 CO
     public static final String TCT_CHAT_CO = ChatColor.AQUA + "%PLAYER%が%CO%をしました";

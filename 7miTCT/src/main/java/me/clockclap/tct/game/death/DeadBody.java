@@ -77,7 +77,9 @@ public class DeadBody {
             sign.setLine(2, "死体");
             sign.setLine(3, "");
             sign.update();
-            getGame().setRemainingSeconds(getGame().getRemainingSeconds() + getGame().getPlugin().getTctConfig().getConfig().getInt("countdown.addcount.kill", 20));
+            if(getCause() == TctDeathCause.KILL) {
+                getGame().setRemainingSeconds(getGame().getRemainingSeconds() + getGame().getPlugin().getTctConfig().getConfig().getInt("countdown.addcount.kill", 20));
+            }
             for(PlayerData data : getGame().getRemainingPlayers(false)) {
                 if(data.getName().equalsIgnoreCase(this.getName())) {
                     getGame().removeRemainingPlayers(data, false);

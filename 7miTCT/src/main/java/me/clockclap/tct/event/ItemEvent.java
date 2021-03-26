@@ -147,9 +147,11 @@ public class ItemEvent implements Listener {
         Projectile projectile = e.getEntity();
         if(projectile instanceof Snowball) {
             Location loc = projectile.getLocation();
-            loc.getWorld().createExplosion(loc.getX(), loc.getY(), loc.getZ(), 5.4F, false, false);
-            plugin.getGame().getReference().PROJECTILEDATA.get(projectile).cancelTimer();
-            plugin.getGame().getReference().PROJECTILEDATA.remove(projectile);
+            if(loc != null) {
+                loc.getWorld().createExplosion(loc.getX(), loc.getY(), loc.getZ(), 5.4F, false, false);
+                plugin.getGame().getReference().PROJECTILEDATA.get(projectile).cancelTimer();
+                plugin.getGame().getReference().PROJECTILEDATA.remove(projectile);
+            }
         }
     }
 

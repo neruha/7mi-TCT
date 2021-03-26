@@ -27,6 +27,9 @@ commands:
   item:
     aliases: ["i"]
     description: "アイテムを入手します。"
+  shop:
+    aliases: ["s"]
+    description: "アイテムを購入できます。"
 
 
 

@@ -31,6 +31,22 @@ public interface PlayerData extends EntityData {
 
     public List<String> getBoughtItem();
 
+    public int getTogether();
+
+    public int getVillager();
+
+    public int getSuspicious();
+
+    public int getWolf();
+
+    public void setTogether(int value);
+
+    public void setVillager(int value);
+
+    public void setSuspicious(int value);
+
+    public void setWolf(int value);
+
     public void setBoughtItem(List<String> list);
 
     public void resetBoughtItem();

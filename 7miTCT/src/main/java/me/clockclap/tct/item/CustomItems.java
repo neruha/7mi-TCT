@@ -4,6 +4,7 @@ import me.clockclap.tct.game.data.CustomBlockData;
 import me.clockclap.tct.item.blocks.TctItemHealStation;
 import me.clockclap.tct.item.blocks.TctItemSponge;
 import me.clockclap.tct.item.items.*;
+import me.clockclap.tct.item.items.co.*;
 import me.clockclap.tct.item.items.quickchat.QuickChatA;
 import me.clockclap.tct.item.items.quickchat.QuickChatB;
 import me.clockclap.tct.item.items.quickchat.QuickChatC;
@@ -15,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CustomItems {
+public final class CustomItems {
 
     public static List<CustomSpecialItem> specialItems = new ArrayList<>();
     public static List<CustomWeaponItem> weaponItems = new ArrayList<>();
@@ -33,6 +34,14 @@ public class CustomItems {
     public static final CustomItem STRONG_BOW = new TctItemStrongBow();
 
     public static final CustomItem SNOWBALL = new TctItemSnowball();
+
+    public static final CustomItem CO_VILLAGER = new TctItemCoVillager();
+    public static final CustomItem CO_DETECTIVE = new TctItemCoDetective();
+    public static final CustomItem CO_HEALER = new TctItemCoHealer();
+    public static final CustomItem CO_WOLF = new TctItemCoWolf();
+    public static final CustomItem CO_FANATIC = new TctItemCoFanatic();
+    public static final CustomItem CO_FOX = new TctItemCoFox();
+    public static final CustomItem CO_IMMORAL = new TctItemCoImmoral();
 
     public static final TctLogBook LOGBOOK = new TctLogBook();
 
@@ -86,6 +95,14 @@ public class CustomItems {
         registerItem(STRONG_BOW);
 
         registerItem(SNOWBALL);
+
+        registerItem(CO_VILLAGER);
+        registerItem(CO_DETECTIVE);
+        registerItem(CO_HEALER);
+        registerItem(CO_WOLF);
+        registerItem(CO_FANATIC);
+        registerItem(CO_FOX);
+        registerItem(CO_IMMORAL);
 
         registerLogItem(LOGBOOK);
 

@@ -31,6 +31,10 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
     private PlayerWatcher watcher;
     private List<String> boughtItem = new ArrayList<>();
     private Killer killer;
+    private int together;
+    private int villager;
+    private int sus;
+    private int wolf;
 
     public TctPlayerData(NanamiTct plugin, GameRole role, String name) {
         super(plugin, Bukkit.getPlayer(name), role);
@@ -39,6 +43,10 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
         this.spec = true;
         this.quickchatcooldown = 0;
         this.coin = 0;
+        together = 0;
+        villager = 0;
+        sus = 0;
+        wolf = 0;
     }
 
     @Override
@@ -114,6 +122,46 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
     @Override
     public List<String> getBoughtItem() {
         return this.boughtItem;
+    }
+
+    @Override
+    public int getTogether() {
+        return together;
+    }
+
+    @Override
+    public int getVillager() {
+        return villager;
+    }
+
+    @Override
+    public int getSuspicious() {
+        return sus;
+    }
+
+    @Override
+    public int getWolf() {
+        return wolf;
+    }
+
+    @Override
+    public void setTogether(int value) {
+        this.together = value;
+    }
+
+    @Override
+    public void setVillager(int value) {
+        this.villager = value;
+    }
+
+    @Override
+    public void setSuspicious(int value) {
+        this.sus = value;
+    }
+
+    @Override
+    public void setWolf(int value) {
+        this.wolf = value;
     }
 
     @Override

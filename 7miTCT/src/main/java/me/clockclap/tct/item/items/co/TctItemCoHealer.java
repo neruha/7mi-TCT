@@ -1,22 +1,20 @@
-package me.clockclap.tct.item.items.quickchat;
+package me.clockclap.tct.item.items.co;
 
-import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
-import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
-import me.clockclap.tct.item.CustomSpecialItem;
+import me.clockclap.tct.item.CustomItem;
 import me.clockclap.tct.item.ItemIndex;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuickChatC implements CustomSpecialItem {
+public class TctItemCoHealer implements CustomItem {
 
     private ItemStack item;
     private Material material;
@@ -25,44 +23,30 @@ public class QuickChatC implements CustomSpecialItem {
     private String title;
     private String description;
     private boolean attackable;
-    private boolean quickchat;
 
     private final GameRole role;
     private final boolean isdefault;
     private final int index;
 
-    public QuickChatC() {
-        this.index = ItemIndex.DEFAULT_ITEM_SLOT_7;
+    public TctItemCoHealer() {
+        this.index = ItemIndex.CO_ITEM_SLOT_2;
         this.isdefault = true;
-        this.material = Material.IRON_HOE;
-        this.name = "QUICKCHAT_C";
-        this.displayName = Reference.TCT_QUICK_CHAT_TITLE_2;
-        this.title = Reference.TCT_QUICK_CHAT_TITLE_2;
-        this.description = ChatColor.GREEN + "Quick Chat";
+        this.material = Material.LEATHER_HELMET;
+        this.name = "CO_HEALER";
+        this.displayName = Reference.TCT_CHAT_ROLE_CO_HEALER;
+        this.title = Reference.TCT_CHAT_ROLE_CO_HEALER;
+        this.description = ChatColor.AQUA + "TCT Item";
         this.role = GameRoles.VILLAGER;
-        this.attackable = false;
-        this.quickchat = true;
+        this.attackable = true;
         ItemStack item = new ItemStack(material);
-        ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.WHITE + title);
+        LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
+        meta.setDisplayName(displayName);
         List<String> lore = new ArrayList<>();
         lore.add(description);
         meta.setLore(lore);
-        meta.setUnbreakable(true);
+        meta.setColor(Color.FUCHSIA);
         item.setItemMeta(meta);
         this.item = item;
-    }
-
-    @Override
-    public boolean isQuickChatItem() {
-        return this.quickchat;
-    }
-
-    @Override
-    public void onAttackPlayerWithCooldown(Player source, Player target) {
-        PlayerData data = NanamiTct.plugin.getGame().getReference().PLAYERDATA.get(target.getName());
-        data.setSuspicious(data.getSuspicious() + 1);
-        source.chat(Reference.TCT_QUICK_CHAT_2.replaceAll("%PLAYER%", target.getDisplayName()));
     }
 
     @Override

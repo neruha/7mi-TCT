@@ -4,6 +4,7 @@ import me.clockclap.tct.api.PlayerWatcher;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.api.TctConfiguration;
 import me.clockclap.tct.api.Utilities;
+import me.clockclap.tct.api.event.ArmorListener;
 import me.clockclap.tct.command.*;
 import me.clockclap.tct.event.*;
 import me.clockclap.tct.game.Game;
@@ -56,6 +57,7 @@ public final class NanamiTct extends JavaPlugin {
         pm.registerEvents(new BlockEvent(this), this);
         pm.registerEvents(new DamageEvent(this), this);
         pm.registerEvents(new InventoryEvent(this), this);
+        pm.registerEvents(new ArmorListener(Reference.TCT_BLOCKED), this);
 
         // Add Commands
         utilities.addCommand("abouttct", new CommandAboutTCT(this));

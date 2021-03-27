@@ -11,6 +11,7 @@ public class RoleCount {
     private int wolvesCount;
     private int fanaticsCount;
     private int foxesCount;
+    private int immoralCount;
 
     public RoleCount(Game game) {
         this.game = game;
@@ -20,6 +21,7 @@ public class RoleCount {
         wolvesCount = 0;
         fanaticsCount = 0;
         foxesCount = 0;
+        immoralCount = 0;
     }
 
     public int getVillagersCount() {
@@ -40,6 +42,9 @@ public class RoleCount {
     public int getFoxesCount() {
         return this.foxesCount;
     }
+    public int getImmoralCount() {
+        return this.immoralCount;
+    }
 
     public void setVillagersCount(int value) {
         this.villagersCount = value;
@@ -58,6 +63,9 @@ public class RoleCount {
     }
     public void setFoxesCount(int value) {
         this.foxesCount = value;
+    }
+    public void setImmoralCount(int value) {
+        this.immoralCount = value;
     }
 
 }

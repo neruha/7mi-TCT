@@ -209,8 +209,17 @@ public class PlayerWatcher {
                         }
                     }
                     if(getCountFox() == 0) {
-                        Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_FOX_IS.replaceAll("%PLAYER%", getPlayer().getName()));
-                        setCountFox(-1);
+                        Game game = NanamiTct.plugin.getGame();
+                        String str = String.join(", ", game.foxes);
+                        Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_FOX_IS.replaceAll("%PLAYER%", str));
+                        for(String name : game.foxes) {
+                            if(game.getReference().PLAYERDATA.containsKey(name)) {
+                                PlayerData data = game.getReference().PLAYERDATA.get(name);
+                                if(data.getWatcher() != null) {
+                                    data.getWatcher().setCountFox(-1);
+                                }
+                            }
+                        }
                     }
                     if(getCountFox() == -1) {
                         Firework fw = (Firework) getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), EntityType.FIREWORK);

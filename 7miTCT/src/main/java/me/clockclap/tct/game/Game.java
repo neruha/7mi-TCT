@@ -2,32 +2,23 @@ package me.clockclap.tct.game;
 
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
-import me.clockclap.tct.game.data.CustomData;
 import me.clockclap.tct.game.data.PlayerData;
-import me.clockclap.tct.game.data.TctPlayerData;
 import me.clockclap.tct.game.death.DeadBody;
 import me.clockclap.tct.game.death.Killer;
 import me.clockclap.tct.game.role.*;
 import me.clockclap.tct.item.CustomItems;
 import me.clockclap.tct.item.TctLog;
-import net.minecraft.server.v1_12_R1.CommandReplaceItem;
-import net.minecraft.server.v1_12_R1.MathHelper;
 import org.bukkit.*;
 import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.objects.Reference2FloatArrayMap;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import javax.management.relation.Role;
-import javax.security.auth.Refreshable;
-import java.sql.Ref;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
-import java.util.prefs.InvalidPreferencesFormatException;
 
 public class Game {
 
@@ -46,12 +37,13 @@ public class Game {
     private List<PlayerData> realRemainingPlayers = new ArrayList<>();
     private boolean timeOut = false;
     private int startingIn = 0;
-    private List<String> villagers = new ArrayList<>();
-    private List<String> healers = new ArrayList<>();
-    private List<String> detectives = new ArrayList<>();
-    private List<String> wolves = new ArrayList<>();
-    private List<String> fanatics = new ArrayList<>();
-    private List<String> foxes = new ArrayList<>();
+    public List<String> villagers = new ArrayList<>();
+    public List<String> healers = new ArrayList<>();
+    public List<String> detectives = new ArrayList<>();
+    public List<String> wolves = new ArrayList<>();
+    public List<String> fanatics = new ArrayList<>();
+    public List<String> foxes = new ArrayList<>();
+    public List<String> immoral = new ArrayList<>();
 
     public Game(NanamiTct plugin) {
         this.plugin = plugin;
@@ -74,6 +66,7 @@ public class Game {
         String wolvesCount = config.getString("roles.count.wolves", "1");
         String fanaticsCount = config.getString("roles.count.fanatics", "1");
         String foxesCount = config.getString("roles.count.foxes", "1");
+        String immoralCount = config.getString("roles.count.immoral", "1");
         int villagersMin = 1;
         int villagersMax = -1;
         int healersMin = 1;
@@ -86,6 +79,8 @@ public class Game {
         int fanaticsMax = 1;
         int foxesMin = 1;
         int foxesMax = 1;
+        int immoralMin = 1;
+        int immoralMax = 1;
         if(villagersCount.contains(":")) {
             String[] count = villagersCount.split(":", 0);
             String min_ = count[0];
@@ -154,7 +149,18 @@ public class Game {
             foxesMax = num;
             foxesMin = num;
         }
-        int resultCount = villagersMin + healersMin + detectivesMin + wolvesMin + fanaticsMin + foxesMin;
+        if(immoralCount.contains(":")) {
+            String[] count = immoralCount.split(":");
+            int min = Integer.parseInt(count[0]);
+            int max = Integer.parseInt(count[1]);
+            immoralMin = min;
+            immoralMax = max;
+        } else {
+            int num = Integer.parseInt(immoralCount);
+            immoralMax = num;
+            immoralMin = num;
+        }
+        int resultCount = villagersMin + healersMin + detectivesMin + wolvesMin + fanaticsMin + foxesMin + immoralMin;
         neededPlayers = resultCount;
         if(resultCount > Bukkit.getOnlinePlayers().size()) {
             return false;
@@ -166,6 +172,10 @@ public class Game {
             for(Player p : Bukkit.getOnlinePlayers()) {
                 PlayerData data = getReference().PLAYERDATA.get(p.getName());
                 data.resetBoughtItem();
+                data.setTogether(0);
+                data.setVillager(0);
+                data.setSuspicious(0);
+                data.setWolf(0);
                 p.setGameMode(GameMode.SURVIVAL);
                 p.setMaxHealth(20.0D);
                 p.setHealth(20.0D);
@@ -215,6 +225,7 @@ public class Game {
         String wolvesCount = config.getString("roles.count.wolves", "1");
         String fanaticsCount = config.getString("roles.count.fanatics", "1");
         String foxesCount = config.getString("roles.count.foxes", "1");
+        String immoralCount = config.getString("roles.count.immoral", "1");
         int villagersMin = 1;
         int villagersMax = -1;
         int healersMin = 1;
@@ -227,6 +238,8 @@ public class Game {
         int fanaticsMax = 1;
         int foxesMin = 1;
         int foxesMax = 1;
+        int immoralMin = 1;
+        int immoralMax = 1;
         if(villagersCount.contains(":")) {
             String[] count = villagersCount.split(":", 0);
             String min_ = count[0];
@@ -295,7 +308,18 @@ public class Game {
             foxesMax = num;
             foxesMin = num;
         }
-        int resultCount = villagersMin + healersMin + detectivesMin + wolvesMin + fanaticsMin + foxesMin;
+        if(immoralCount.contains(":")) {
+            String[] count = immoralCount.split(":");
+            int min = Integer.parseInt(count[0]);
+            int max = Integer.parseInt(count[1]);
+            immoralMin = min;
+            immoralMax = max;
+        } else {
+            int num = Integer.parseInt(immoralCount);
+            immoralMax = num;
+            immoralMin = num;
+        }
+        int resultCount = villagersMin + healersMin + detectivesMin + wolvesMin + fanaticsMin + foxesMin + immoralMin;
         if(playersCount >= resultCount) {
             Collection<? extends Player> players = Bukkit.getOnlinePlayers();
             for(Player p : Bukkit.getOnlinePlayers()) {
@@ -312,24 +336,25 @@ public class Game {
                 wolves = new ArrayList<>();
                 fanatics = new ArrayList<>();
                 foxes = new ArrayList<>();
+                immoral = new ArrayList<>();
+                getRoleCount().setVillagersCount(0);
+                getRoleCount().setHealersCount(0);
+                getRoleCount().setDetectivesCount(0);
+                getRoleCount().setWolvesCount(0);
+                getRoleCount().setFanaticsCount(0);
+                getRoleCount().setFoxesCount(0);
+                getRoleCount().setImmoralCount(0);
                 for (Player p : players) {
                     int remaining = playersCount;
                     PlayerData data = getReference().PLAYERDATA.get(p.getName());
                     Random rand = new Random();
-                    int role = rand.nextInt(5) + 1;
+                    int role = rand.nextInt(6) + 1;
                     if (role == GameRoles.HEALER.getIndex()) {
                         if (getRoleCount().getHealersCount() < healersMax) {
                             int coin = plugin.getTctConfig().getConfig().getInt("roles.coin.healers", 0);
                             data.setRole(GameRoles.HEALER);
                             data.setCoin(coin);
                             getRoleCount().setHealersCount(getRoleCount().getHealersCount() + 1);
-                            p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_HEALER);
-                            p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_DESCRIPTION_HEALER);
-                            p.getInventory().setItem(0, CustomItems.HEALER_SWORD.getItemStack());
-                            p.getInventory().setItem(1, CustomItems.WOOD_SWORD.getItemStack());
-                            p.getInventory().setItem(2, CustomItems.BOW.getItemStack());
-                            p.getInventory().setItem(3, CustomItems.ARROW.getItemStack());
-                            p.setFoodLevel(1);
                             healers.add(p.getName());
                         }
                         continue;
@@ -340,12 +365,6 @@ public class Game {
                             data.setRole(GameRoles.DETECTIVE);
                             data.setCoin(coin);
                             getRoleCount().setDetectivesCount(getRoleCount().getDetectivesCount() + 1);
-                            p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_DETECTIVE);
-                            p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_DESCRIPTION_DETECTIVE);
-                            p.getInventory().setItem(0, CustomItems.WOOD_SWORD.getItemStack());
-                            p.getInventory().setItem(1, CustomItems.BOW.getItemStack());
-                            p.getInventory().setItem(2, CustomItems.ARROW.getItemStack());
-                            p.setFoodLevel(1);
                             detectives.add(p.getName());
                         }
                         continue;
@@ -356,12 +375,6 @@ public class Game {
                             data.setRole(GameRoles.WOLF);
                             data.setCoin(coin);
                             getRoleCount().setWolvesCount(getRoleCount().getWolvesCount() + 1);
-                            p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_WOLF);
-                            p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_DESCRIPTION_WOLF);
-                            p.getInventory().setItem(0, CustomItems.WOOD_SWORD.getItemStack());
-                            p.getInventory().setItem(1, CustomItems.BOW.getItemStack());
-                            p.getInventory().setItem(2, CustomItems.ARROW.getItemStack());
-                            p.setFoodLevel(1);
                             wolves.add(p.getName());
                         }
                         continue;
@@ -372,32 +385,27 @@ public class Game {
                             data.setRole(GameRoles.FANATIC);
                             data.setCoin(coin);
                             getRoleCount().setFanaticsCount(getRoleCount().getFanaticsCount() + 1);
-                            p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_FANATIC);
-                            p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_DESCRIPTION_FANATIC);
-                            p.getInventory().setItem(0, CustomItems.WOOD_SWORD.getItemStack());
-                            p.getInventory().setItem(1, CustomItems.BOW.getItemStack());
-                            p.getInventory().setItem(2, CustomItems.ARROW.getItemStack());
-                            p.setFoodLevel(1);
                             fanatics.add(p.getName());
                         }
                         continue;
                     }
                     if (role == GameRoles.FOX.getIndex()) {
                         if (getRoleCount().getFoxesCount() < foxesMax) {
-                            int coin = plugin.getTctConfig().getConfig().getInt("roles.coin.foxes", 0);
+                            int coin = plugin.getTctConfig().getConfig().getInt("roles.coin.foxes", 1);
                             data.setRole(GameRoles.FOX);
                             data.setCoin(coin);
-                            if(data.getWatcher() != null) {
-                                data.getWatcher().startCountFox();
-                            }
                             getRoleCount().setFoxesCount(getRoleCount().getFoxesCount() + 1);
-                            p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_FOX);
-                            p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_DESCRIPTION_FOX);
-                            p.getInventory().setItem(0, CustomItems.WOOD_SWORD.getItemStack());
-                            p.getInventory().setItem(1, CustomItems.BOW.getItemStack());
-                            p.getInventory().setItem(2, CustomItems.ARROW.getItemStack());
-                            p.setFoodLevel(1);
                             foxes.add(p.getName());
+                        }
+                        continue;
+                    }
+                    if (role == GameRoles.IMMORAL.getIndex()) {
+                        if (getRoleCount().getImmoralCount() < immoralMax) {
+                            int coin = plugin.getTctConfig().getConfig().getInt("roles.coin.immoral", 0);
+                            data.setRole(GameRoles.IMMORAL);
+                            data.setCoin(coin);
+                            getRoleCount().setImmoralCount(getRoleCount().getImmoralCount() + 1);
+                            immoral.add(p.getName());
                         }
                         continue;
                     }
@@ -406,7 +414,8 @@ public class Game {
                         getRoleCount().getDetectivesCount() >= detectivesMin &&
                         getRoleCount().getWolvesCount() >= wolvesMin &&
                         getRoleCount().getFanaticsCount() >= fanaticsMin &&
-                        getRoleCount().getFoxesCount() >= foxesMin) {
+                        getRoleCount().getFoxesCount() >= foxesMin &&
+                        getRoleCount().getImmoralCount() >= immoralMin) {
                     canStart = true;
                 }
                 if(i > 50) {
@@ -426,6 +435,13 @@ public class Game {
                 p.getInventory().setItem(6, CustomItems.QUICKCHAT_B.getItemStack());
                 p.getInventory().setItem(7, CustomItems.QUICKCHAT_C.getItemStack());
                 p.getInventory().setItem(8, CustomItems.QUICKCHAT_D.getItemStack());
+                p.getInventory().setItem(18, CustomItems.CO_VILLAGER.getItemStack());
+                p.getInventory().setItem(19, CustomItems.CO_DETECTIVE.getItemStack());
+                p.getInventory().setItem(20, CustomItems.CO_HEALER.getItemStack());
+                p.getInventory().setItem(21, CustomItems.CO_WOLF.getItemStack());
+                p.getInventory().setItem(22, CustomItems.CO_FANATIC.getItemStack());
+                p.getInventory().setItem(23, CustomItems.CO_FOX.getItemStack());
+                p.getInventory().setItem(24, CustomItems.CO_IMMORAL.getItemStack());
             }
         }
     }
@@ -475,6 +491,7 @@ public class Game {
         giveItem();
         for(Player p : Bukkit.getOnlinePlayers()) {
             PlayerData data = getReference().PLAYERDATA.get(p.getName());
+            data.setCO(GameRoles.NONE);
             if(data.getRole() == GameRoles.VILLAGER) {
                 int coin = plugin.getTctConfig().getConfig().getInt("roles.coin.villagers", 0);
                 getRoleCount().setVillagersCount(getRoleCount().getVillagersCount() + 1);
@@ -487,6 +504,76 @@ public class Game {
                 p.setFoodLevel(1);
                 villagers.add(p.getName());
             }
+            if(data.getRole() == GameRoles.HEALER) {
+                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_HEALER);
+                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_DESCRIPTION_HEALER);
+                p.getInventory().setItem(0, CustomItems.HEALER_SWORD.getItemStack());
+                p.getInventory().setItem(1, CustomItems.WOOD_SWORD.getItemStack());
+                p.getInventory().setItem(2, CustomItems.BOW.getItemStack());
+                p.getInventory().setItem(3, CustomItems.ARROW.getItemStack());
+                p.setFoodLevel(1);
+            }
+            if(data.getRole() == GameRoles.DETECTIVE) {
+                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_DETECTIVE);
+                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_DESCRIPTION_DETECTIVE);
+                p.getInventory().setItem(0, CustomItems.WOOD_SWORD.getItemStack());
+                p.getInventory().setItem(1, CustomItems.BOW.getItemStack());
+                p.getInventory().setItem(2, CustomItems.ARROW.getItemStack());
+                p.setFoodLevel(1);
+            }
+            if(data.getRole() == GameRoles.WOLF) {
+                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_WOLF);
+                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_DESCRIPTION_WOLF);
+                p.getInventory().setItem(0, CustomItems.WOOD_SWORD.getItemStack());
+                p.getInventory().setItem(1, CustomItems.BOW.getItemStack());
+                p.getInventory().setItem(2, CustomItems.ARROW.getItemStack());
+                p.setFoodLevel(1);
+                String str0 = String.join(", ", wolves);
+                String str1 = String.join(", ", fanatics);
+                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_WOLF_LIST + ": [" + str0 + "]");
+                if(getRoleCount().getFanaticsCount() > 0) {
+                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_FANATIC_LIST + ": [" + str1 + "]");
+                }
+            }
+            if(data.getRole() == GameRoles.FANATIC) {
+                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_FANATIC);
+                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_DESCRIPTION_FANATIC);
+                p.getInventory().setItem(0, CustomItems.WOOD_SWORD.getItemStack());
+                p.getInventory().setItem(1, CustomItems.BOW.getItemStack());
+                p.getInventory().setItem(2, CustomItems.ARROW.getItemStack());
+                p.setFoodLevel(1);
+            }
+            if(data.getRole() == GameRoles.FOX) {
+                if(data.getWatcher() != null) {
+                    data.getWatcher().startCountFox();
+                }
+                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_FOX);
+                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_DESCRIPTION_FOX);
+                p.getInventory().setItem(0, CustomItems.WOOD_SWORD.getItemStack());
+                p.getInventory().setItem(1, CustomItems.BOW.getItemStack());
+                p.getInventory().setItem(2, CustomItems.ARROW.getItemStack());
+                p.setFoodLevel(1);
+                String str0 = String.join(", ", foxes);
+                String str1 = String.join(", ", immoral);
+                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_FOX_LIST + ": [" + str0 + "]");
+                if(getRoleCount().getImmoralCount() > 0) {
+                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_IMMORAL_LIST + ": [" + str1 + "]");
+                }
+            }
+            if(data.getRole() == GameRoles.IMMORAL) {
+                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_IMMORAL);
+                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_DESCRIPTION_IMMORAL);
+                p.getInventory().setItem(0, CustomItems.WOOD_SWORD.getItemStack());
+                p.getInventory().setItem(1, CustomItems.BOW.getItemStack());
+                p.getInventory().setItem(2, CustomItems.ARROW.getItemStack());
+                p.setFoodLevel(1);
+                String str0 = String.join(", ", foxes);
+                String str1 = String.join(", ", immoral);
+                if(getRoleCount().getFoxesCount() > 0) {
+                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_FOX_LIST + ": [" + str0 + "]");
+                }
+                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_IMMORAL_LIST + ": [" + str1 + "]");
+            }
             if(!data.isSpectator()) {
                 remainingPlayers.add(data);
                 realRemainingPlayers.add(data);
@@ -498,6 +585,7 @@ public class Game {
         String trwo = "";
         String trfa = "";
         String trfo = "";
+        String trim = "";
         if(getRoleCount().getVillagersCount() > 0) {
             trvi = Reference.TCT_ROLE_VILLAGER + ": " + getRoleCount().getVillagersCount() + " / ";
         }
@@ -516,12 +604,16 @@ public class Game {
         if(getRoleCount().getFoxesCount() > 0) {
             trfo = Reference.TCT_ROLE_FOX + ": " + getRoleCount().getFoxesCount() + " / ";
         }
+        if(getRoleCount().getImmoralCount() > 0) {
+            trim = Reference.TCT_ROLE_IMMORAL + ": " + getRoleCount().getFoxesCount() + " / ";
+        }
         Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_GAME_PLAYERS.replaceAll("%COUNT%", String.valueOf(playersCount)));
-        Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_GAME_ROLE_SORTING + ": " + ChatColor.GOLD + trvi + trde + trhe + trwo + trfa + trfo);
+        Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_GAME_ROLE_SORTING + ": " + ChatColor.GOLD + trvi + trde + trhe + trwo + trfa + trfo + trim);
 
         // Update Log Book
         getLog().addLine(Reference.TCT_LOGBOOK_GAME_STARTED);
         getLog().addLine(Reference.TCT_LOGBOOK_ROLES);
+        getLog().addLine(" " + " " + Reference.TCT_ROLE_IMMORAL + ": " + ChatColor.GREEN + getRoleCount().getImmoralCount());
         getLog().addLine(" " + " " + Reference.TCT_ROLE_FOX + ": " + ChatColor.GREEN + getRoleCount().getFoxesCount());
         getLog().addLine(" " + " " + Reference.TCT_ROLE_FANATIC + ": " + ChatColor.GREEN + getRoleCount().getFanaticsCount());
         getLog().addLine(" " + " " + Reference.TCT_ROLE_WOLF + ": " + ChatColor.GREEN + getRoleCount().getWolvesCount());
@@ -532,10 +624,20 @@ public class Game {
         getLog().update();
 
         getBar().setTitle(Reference.TCT_BOSSBAR_FORMAT_GAMING.replaceAll("%SECOND%", String.valueOf(sec)));
+        final int[] time = {-1};
         BukkitTask timer = new BukkitRunnable() {
             @Override
             public void run() {
                 if(getRealRemainingSeconds() > 0) {
+                    time[0]++;
+                    if(time[0] == getPlugin().getTctConfig().getConfig().getInt("", 180)) {
+                        time[0] = 0;
+                        for(Player p : Bukkit.getOnlinePlayers()) {
+                            PlayerData data = getReference().PLAYERDATA.get(p.getName());
+                            data.setCoin(data.getCoin() + 1);
+                        }
+                        Bukkit.broadcastMessage(Reference.TCT_CHAT_COIN_DISTRIBUTION);
+                    }
                     setRealRemainingSeconds(getRealRemainingSeconds() - 1);
                 } else {
                     timeOut = true;
@@ -572,6 +674,10 @@ public class Game {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 PlayerData data = getReference().PLAYERDATA.get(p.getName());
                 data.resetBoughtItem();
+                data.setTogether(0);
+                data.setVillager(0);
+                data.setSuspicious(0);
+                data.setWolf(0);
                 if(data.getRole() == GameRoles.FOX && !data.isSpectator()) {
                     if(data.getWatcher() != null) {
                         data.getWatcher().cancelCountFox();
@@ -631,18 +737,24 @@ public class Game {
                 String str = String.join(", ", foxes);
                 Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.GOLD + Reference.TCT_ROLE_FOX + ": [" + str + "]");
             }
+            if(immoral.size() > 0) {
+                String str = String.join(", ", immoral);
+                Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.DARK_GRAY + Reference.TCT_ROLE_IMMORAL + ": [" + str + "]");
+            }
             villagers = new ArrayList<>();
             healers = new ArrayList<>();
             detectives = new ArrayList<>();
             wolves = new ArrayList<>();
             fanatics = new ArrayList<>();
             foxes = new ArrayList<>();
+            immoral = new ArrayList<>();
         }
         for(Player p : Bukkit.getOnlinePlayers()) {
             PlayerData data = getReference().PLAYERDATA.get(p.getName());
             p.setFoodLevel(20);
             p.setMaxHealth(20.0D);
             p.setHealth(20.0D);
+            p.spigot().respawn();
             data.setRole(GameRoles.SPEC);
             data.setSpectator(true);
             data.setCoin(0);

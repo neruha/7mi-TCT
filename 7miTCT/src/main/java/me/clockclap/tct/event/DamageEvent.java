@@ -88,7 +88,7 @@ public class DamageEvent implements Listener {
                             wolves.add(d);
                             continue;
                         }
-                        if (d.getRole().getTeam() == GameTeams.FOXES) {
+                        if (d.getRole() == GameRoles.FOX) {
                             foxes.add(d);
                         }
                     }

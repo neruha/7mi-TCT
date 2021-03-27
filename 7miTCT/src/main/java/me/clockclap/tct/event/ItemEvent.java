@@ -10,6 +10,7 @@ import me.clockclap.tct.item.CustomItem;
 import me.clockclap.tct.item.CustomItems;
 import me.clockclap.tct.item.CustomSpecialItem;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -25,6 +26,7 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
@@ -63,11 +65,12 @@ public class ItemEvent implements Listener {
                                 if(data.getRole() == GameRoles.FOX) {
                                     if(data.getWatcher() != null) {
                                         if(data.getWatcher().getCountFox() <= plugin.getTctConfig().getConfig().getInt("fox-reveal-time", 60)) {
-                                            data.getWatcher().setCountFox(plugin.getTctConfig().getConfig().getInt("fox-reveal-time", 60));
+                                            if(data.getWatcher().getCountFox() > 0) {
+                                                data.getWatcher().setCountFox(plugin.getTctConfig().getConfig().getInt("fox-reveal-time", 60));
+                                            }
                                         }
                                     }
                                 }
-                                return;
                             }
                             item.onAttackPlayer(q, p);
                             if(!item.isQuickChatItem()) {
@@ -88,7 +91,9 @@ public class ItemEvent implements Listener {
             if(data.getRole() == GameRoles.FOX) {
                 if(data.getWatcher() != null) {
                     if(data.getWatcher().getCountFox() <= plugin.getTctConfig().getConfig().getInt("fox-reveal-time", 60)) {
-                        data.getWatcher().setCountFox(plugin.getTctConfig().getConfig().getInt("fox-reveal-time", 60));
+                        if(data.getWatcher().getCountFox() > 0) {
+                            data.getWatcher().setCountFox(plugin.getTctConfig().getConfig().getInt("fox-reveal-time", 60));
+                        }
                     }
                 }
             }
@@ -118,6 +123,38 @@ public class ItemEvent implements Listener {
             }
         } else {
             clickable = true;
+        }
+    }
+
+    private boolean clickable_ = true;
+
+    @EventHandler
+    public void playerInteractAtPlayer(PlayerInteractAtEntityEvent e) {
+        if(clickable_) {
+            clickable_ = false;
+            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
+                clickable_ = true;
+            }, 2);
+            if (e.getRightClicked() == null) {
+                return;
+            }
+            if (e.getRightClicked() instanceof Player) {
+                Player p = e.getPlayer();
+                Player q = (Player) e.getRightClicked();
+                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(q.getName());
+                if (!data.isSpectator()) {
+                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_SEPARATOR_I);
+                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_NAME + ": " + q.getName());
+                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_HP + ": " + ChatColor.RED + q.getHealth());
+                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_TOGETHER + ": " + ChatColor.GREEN + data.getTogether()
+                            + ChatColor.AQUA + ", " + Reference.TCT_VILLAGER + ": " + ChatColor.GREEN + data.getVillager()
+                            + ChatColor.AQUA + ", " + Reference.TCT_SUS + ": " + ChatColor.GREEN + data.getSuspicious()
+                            + ChatColor.AQUA + ", " + Reference.TCT_WOLF + ": " + ChatColor.GREEN + data.getWolf());
+                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_SEPARATOR_I);
+                }
+            }
+        } else {
+
         }
     }
 

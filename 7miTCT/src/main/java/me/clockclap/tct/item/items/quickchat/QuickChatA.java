@@ -1,6 +1,8 @@
 package me.clockclap.tct.item.items.quickchat;
 
+import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
+import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomSpecialItem;
@@ -58,7 +60,8 @@ public class QuickChatA implements CustomSpecialItem {
 
     @Override
     public void onAttackPlayerWithCooldown(Player source, Player target) {
-
+        PlayerData data = NanamiTct.plugin.getGame().getReference().PLAYERDATA.get(target.getName());
+        data.setTogether(data.getTogether() + 1);
         source.chat(Reference.TCT_QUICK_CHAT_0.replaceAll("%PLAYER%", target.getDisplayName()));
     }
 

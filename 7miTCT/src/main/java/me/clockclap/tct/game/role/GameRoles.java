@@ -14,5 +14,6 @@ public class GameRoles {
     public static final GameRole WOLF = new RoleWolf();
     public static final GameRole FANATIC = new RoleFanatic();
     public static final GameRole FOX = new RoleFox();
+    public static final GameRole IMMORAL = new RoleImmoral();
 
 }

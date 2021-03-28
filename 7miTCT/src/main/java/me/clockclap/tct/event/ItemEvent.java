@@ -13,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowball;
@@ -106,6 +107,9 @@ public class ItemEvent implements Listener {
     public void playerInteract(PlayerInteractEvent e) {
         if(clickable) {
             clickable = false;
+            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
+                clickable_ = true;
+            }, 2);
             if (e.getPlayer().getInventory().getItemInMainHand().getType() != Material.AIR) {
                 ItemStack i = e.getPlayer().getInventory().getItemInMainHand();
                 if (i.hasItemMeta()) {
@@ -188,6 +192,21 @@ public class ItemEvent implements Listener {
                 loc.getWorld().createExplosion(loc.getX(), loc.getY(), loc.getZ(), 5.4F, false, false);
                 plugin.getGame().getReference().PROJECTILEDATA.get(projectile).cancelTimer();
                 plugin.getGame().getReference().PROJECTILEDATA.remove(projectile);
+            }
+        }
+        if(projectile instanceof Arrow) {
+            if(projectile.getShooter() instanceof Player) {
+                Player p = (Player) projectile.getShooter();
+                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getName());
+                if(data.getRole() == GameRoles.FOX) {
+                    if(data.getWatcher() != null) {
+                        if(data.getWatcher().getCountFox() <= plugin.getTctConfig().getConfig().getInt("fox-reveal-time", 60)) {
+                            if(data.getWatcher().getCountFox() > 0) {
+                                data.getWatcher().setCountFox(plugin.getTctConfig().getConfig().getInt("fox-reveal-time", 60));
+                            }
+                        }
+                    }
+                }
             }
         }
     }

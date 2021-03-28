@@ -13,6 +13,8 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
 
+import java.util.Iterator;
+
 public class PlayerWatcher {
 
     private Player player;
@@ -224,6 +226,8 @@ public class PlayerWatcher {
                     if(getCountFox() == -1) {
                         Firework fw = (Firework) getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), EntityType.FIREWORK);
                         FireworkMeta meta = fw.getFireworkMeta();
+                        FireworkEffect effect = FireworkEffect.builder().with(FireworkEffect.Type.BALL).withColor(Color.BLACK).build();
+                        meta.addEffect(effect);
                         meta.setPower(1);
                         fw.setFireworkMeta(meta);
                     }

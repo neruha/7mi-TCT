@@ -53,7 +53,9 @@ public class BlockEvent implements Listener {
                     }
                 }
             }
-            e.setCancelled(true);
+            if(e.getPlayer().getGameMode() == GameMode.SURVIVAL) {
+                e.setCancelled(true);
+            }
             return;
         } else {
             if(!e.getPlayer().isOp()) {
@@ -78,7 +80,9 @@ public class BlockEvent implements Listener {
                     }
                 }
             }
-            e.setCancelled(true);
+            if(e.getPlayer().getGameMode() == GameMode.SURVIVAL) {
+                e.setCancelled(true);
+            }
             return;
         } else {
             if(!e.getPlayer().isOp()) {
@@ -94,13 +98,11 @@ public class BlockEvent implements Listener {
     public void playerInteract(PlayerInteractEvent e) {
         if(clickable) {
             Block block = e.getClickedBlock();
-            if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                if(!e.getPlayer().getInventory().getItemInMainHand().getType().isBlock() || e.getPlayer().getInventory().getItemInMainHand().getType() == Material.AIR) {
-                    clickable = false;
-                }
-            }
-            if(e.getPlayer().getGameMode() == GameMode.SPECTATOR) {
+            clickable = false;
+            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
                 clickable = true;
+            }, 2);
+            if(e.getPlayer().getGameMode() == GameMode.SPECTATOR) {
                 PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(e.getPlayer().getName());
                 if(e.getAction() == Action.RIGHT_CLICK_AIR) {
                     block = data.getTargetBlock(5);

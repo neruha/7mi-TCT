@@ -33,6 +33,10 @@ public final class CustomItems {
     public static final CustomItem ARROW = new TctItemArrow();
     public static final CustomItem STRONG_BOW = new TctItemStrongBow();
 
+    public static final CustomItem STICK = new TctItemStick();
+    public static final CustomItem SPEED_POTION = new TctItemPotionSpeed();
+    public static final CustomItem CRACKER = new TctItemCracker();
+
     public static final CustomItem SNOWBALL = new TctItemSnowball();
 
     public static final CustomItem CO_VILLAGER = new TctItemCoVillager();
@@ -93,6 +97,10 @@ public final class CustomItems {
         registerItem(BOW);
         registerItem(ARROW);
         registerItem(STRONG_BOW);
+
+        registerItem(STICK);
+        registerItem(SPEED_POTION);
+        registerItem(CRACKER);
 
         registerItem(SNOWBALL);
 

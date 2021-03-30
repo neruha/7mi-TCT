@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DeadBody {
 
@@ -30,6 +31,8 @@ public class DeadBody {
     private byte beforeBlockData1;
     private int time;
     private BukkitRunnable runnable;
+    private List<String> killedPlayers;
+    private boolean damaged;
 
     public DeadBody(Game game, PlayerData data, TctDeathCause cause, Location loc) {
         this.game = game;
@@ -46,6 +49,8 @@ public class DeadBody {
         this.loc.add(0, 1, 0);
         this.beforeBlockType1 = data.getPlayer().getWorld().getBlockAt(this.loc).getType();
         this.beforeBlockData1 = data.getPlayer().getWorld().getBlockAt(this.loc).getData();
+        this.killedPlayers = new ArrayList<>();
+        this.damaged = false;
     }
 
     public Game getGame() {
@@ -62,6 +67,38 @@ public class DeadBody {
 
     public Player getPlayer() {
         return this.data.getPlayer();
+    }
+
+    public boolean isDamaged() {
+        return this.damaged;
+    }
+
+    public void setDamaged(boolean value) {
+        this.damaged = value;
+    }
+
+    public List<String> getKilledPlayers() {
+        return this.killedPlayers;
+    }
+
+    public void setKilledPlayers(List<String> list) {
+        this.killedPlayers = list;
+    }
+
+    public void addKilledPlayer(String name) {
+        this.killedPlayers.add(name);
+    }
+
+    public void removeKilledPlayer(String name) {
+        this.killedPlayers.remove(name);
+    }
+
+    public void removeKilledPlayer(int index) {
+        this.killedPlayers.remove(index);
+    }
+
+    public void resetKilledPlayers() {
+        this.killedPlayers = new ArrayList<>();
     }
 
     public boolean isFound() {

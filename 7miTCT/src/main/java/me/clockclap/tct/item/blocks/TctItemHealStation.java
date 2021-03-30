@@ -34,7 +34,7 @@ public class TctItemHealStation implements CustomBlock {
     private final int index;
 
     public TctItemHealStation() {
-        this.index = ItemIndex.DETECTIVES_SHOP_ITEM_SLOT_0;
+        this.index = ItemIndex.DETECTIVES_SHOP_ITEM_SLOT_1;
         this.material = Material.REDSTONE_ORE;
         this.name = "HEAL_STATION";
         this.displayName = "Healing Station";

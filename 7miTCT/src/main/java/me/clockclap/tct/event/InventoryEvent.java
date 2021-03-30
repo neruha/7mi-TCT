@@ -43,28 +43,38 @@ public class InventoryEvent implements Listener {
                 e.setCancelled(true);
                 if(e.getWhoClicked() instanceof Player) {
                     Player p = (Player) e.getWhoClicked();
-                    if(e.getCurrentItem().hasItemMeta()) {
-                        ItemMeta meta = e.getCurrentItem().getItemMeta();
-                        PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getName());
-                        if(data.getCoin() <= 0) {
-                            p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_NOT_ENOUGH_COINS);
-                            return;
-                        }
-                        for (CustomItem i : CustomItems.allItems) {
-                            if(meta.getDisplayName().equalsIgnoreCase(i.getItemStack().getItemMeta().getDisplayName())) {
-                                if(data.getBoughtItem().contains(i.getName())) {
-                                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ALREADY_BOUGHT);
+                    if(e.getCurrentItem() != null) {
+                        if (e.getCurrentItem().hasItemMeta()) {
+                            ItemMeta meta = e.getCurrentItem().getItemMeta();
+                            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getName());
+                            if (data.getCoin() <= 0) {
+                                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_NOT_ENOUGH_COINS);
+                                return;
+                            }
+                            for (CustomItem i : CustomItems.allItems) {
+                                if (meta.getDisplayName().equalsIgnoreCase(i.getItemStack().getItemMeta().getDisplayName())) {
+                                    if (data.getBoughtItem().contains(i.getName())) {
+                                        p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ALREADY_BOUGHT);
+                                        return;
+                                    }
+                                    data.setCoin(data.getCoin() - 1);
+                                    data.addBoughtItem(i.getName());
+                                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_BOUGHT_ITEM.replaceAll("%ITEM%", i.getName()));
+                                    if (i.getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.TNT.getItemStack().getItemMeta().getDisplayName())) {
+                                        p.getInventory().setHelmet(e.getCurrentItem());
+                                        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
+                                            p.getWorld().createExplosion(p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ(), 5.4F, false, false);
+                                        }, 60);
+                                        p.closeInventory();
+                                        return;
+                                    }
+                                    p.getInventory().addItem(e.getCurrentItem());
+                                    p.closeInventory();
                                     return;
                                 }
-                                data.setCoin(data.getCoin() - 1);
-                                data.addBoughtItem(i.getName());
-                                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_BOUGHT_ITEM.replaceAll("%ITEM%", i.getName()));
-                                p.getInventory().addItem(e.getCurrentItem());
-                                return;
                             }
                         }
                     }
-                    p.closeInventory();
                 }
             }
         }

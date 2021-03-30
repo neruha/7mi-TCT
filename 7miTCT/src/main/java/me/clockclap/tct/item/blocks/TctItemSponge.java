@@ -29,7 +29,7 @@ public class TctItemSponge implements CustomBlock {
     private final int index;
 
     public TctItemSponge() {
-        this.index = ItemIndex.DETECTIVES_SHOP_ITEM_SLOT_1;
+        this.index = ItemIndex.DETECTIVES_SHOP_ITEM_SLOT_2;
         this.material = Material.SPONGE;
         this.name = "SPONGE";
         this.displayName = "Sponge";

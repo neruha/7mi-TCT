@@ -26,6 +26,8 @@ public class ItemIndex {
     public static final int ALL_SHOP_ITEM_SLOT_3 = 33;
     public static final int ALL_SHOP_ITEM_SLOT_4 = 34;
     public static final int ALL_SHOP_ITEM_SLOT_5 = 35;
+    public static final int ALL_SHOP_ITEM_SLOT_6 = 36;
+    public static final int ALL_SHOP_ITEM_SLOT_7 = 37;
 
     public static final int WOLVES_SHOP_ITEM_SLOT_0 = 70;
     public static final int WOLVES_SHOP_ITEM_SLOT_1 = 71;

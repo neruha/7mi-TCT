@@ -30,7 +30,7 @@ public class TctItemStick implements CustomItem {
     private final int index;
 
     public TctItemStick() {
-        this.index = ItemIndex.ALL_SHOP_ITEM_SLOT_2;
+        this.index = ItemIndex.ALL_SHOP_ITEM_SLOT_3;
         this.isdefault = false;
         this.material = Material.STICK;
         this.name = "STICK";

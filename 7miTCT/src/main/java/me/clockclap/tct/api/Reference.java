@@ -99,6 +99,12 @@ public class Reference {
     //死体
     public static final String TCT_CHAT_DEADBODY_FOUND = ChatColor.RED + "" + ChatColor.BOLD + "%PLAYER%さんが無惨な姿で発見されました";
     public static final String TCT_CHAT_ALREADY_FOUND = ChatColor.GREEN + "この死体は既に発見されています";
+    public static final String TCT_CHAT_DEADBODY_KILLED_PLAYERS = ChatColor.RED + "殺害したプレイヤー";
+    public static final String TCT_CHAT_DEADBODY_HAS_NOT_KILLED = ChatColor.RED + "この死体は誰も殺害していないようだ...";
+    public static final String TCT_CHAT_DEADBODY_DAMAGED = ChatColor.RED + "" + ChatColor.BOLD + "この死体は焼け焦げているようだ...";
+    public static final String TCT_CHAT_DEADBODY_DAMAGED_SUCCESS = ChatColor.RED + "死体を焼きました";
+    public static final String TCT_CHAT_DEADBODY_HAS_NOT_BEEN_FOUND = ChatColor.RED + "" + ChatColor.BOLD + "この死体はまだ発見されていません";
+    public static final String TCT_CHAT_DEADBODY_IS_NOT_WOLF = ChatColor.RED + "" + ChatColor.BOLD + "この死体は人狼ではありません";
     //その他
     public static final String TCT_CHAT_LANDMINE_PLACED = ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "地雷を設置しました、5秒後から効果が適応されます";
     public static final String TCT_CHAT_COIN_DISTRIBUTION = ChatColor.AQUA + "コインが配布されました /shopか/sでショップが開きます";
@@ -111,6 +117,8 @@ public class Reference {
     public static final String TCT_CHAT_HEAL_STATION_USED = ChatColor.GREEN + "回復ステーションを使用しました";
     public static final String TCT_CHAT_CANNOT_USE = ChatColor.RED + "このコマンドを使えない役職です";
     public static final String TCT_CHAT_CANCELLED_EXPLOSION = ChatColor.LIGHT_PURPLE + "爆発ダメージを無効化しました";
+    public static final String TCT_CHAT_CANNOT_ATTACK_WOLF = ChatColor.RED + "仲間の人狼には攻撃できません。";
+    public static final String TCT_CHAT_CANNOT_ATTACK_FOX = ChatColor.GOLD + "仲間の妖狐には攻撃できません。";
     //勝敗
     public static final String TCT_CHAT_VILLAGERS_VICTORY_FOR_TIMEOUT = ChatColor.GREEN + "時間切れにより、村人側の勝利です";
     public static final String TCT_CHAT_VILLAGERS_VICTORY = ChatColor.GREEN + "人狼陣営は全滅し、妖狐も死亡しました";

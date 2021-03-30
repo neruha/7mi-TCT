@@ -33,7 +33,7 @@ public class TctItemCracker implements CustomItem {
     private final int index;
 
     public TctItemCracker() {
-        this.index = ItemIndex.ALL_SHOP_ITEM_SLOT_1;
+        this.index = ItemIndex.ALL_SHOP_ITEM_SLOT_7;
         this.isdefault = false;
         this.material = Material.FIREWORK;
         this.name = "CRACKER";
@@ -48,10 +48,11 @@ public class TctItemCracker implements CustomItem {
         List<String> lore = new ArrayList<>();
         lore.add(description);
         meta.setLore(lore);
-        FireworkEffect effect = FireworkEffect.builder().with(FireworkEffect.Type.BALL).withColor(Color.BLACK).build();
+        FireworkEffect effect = FireworkEffect.builder().with(FireworkEffect.Type.BURST).withColor(Color.BLACK).withFade(Color.BLACK).build();
         meta.addEffect(effect);
         meta.setPower(1);
         item.setItemMeta(meta);
+        item.setAmount(3);
         this.item = item;
     }
 

@@ -13,10 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
-import org.bukkit.entity.Snowball;
+import org.bukkit.entity.*;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -45,55 +42,97 @@ public class ItemEvent implements Listener {
 
     @EventHandler
     public void playerAttack(EntityDamageByEntityEvent e) {
+        if(e.getDamager() instanceof Firework) {
+            e.setCancelled(true);
+            return;
+        }
         if(e.getDamager() instanceof Player) {
             Player p = (Player) e.getDamager();
             if(plugin.getGame().getReference().PLAYERDATA.get(p.getName()).isSpectator()) {
                 e.setCancelled(true);
             }
         }
-        if (e.getEntity() instanceof Player && e.getDamager() instanceof Player) {
-            Player p = (Player) e.getEntity();
-            Player q = (Player) e.getDamager();
-            if(q.getInventory().getItemInMainHand().getType() != Material.AIR) {
-                ItemStack i = q.getInventory().getItemInMainHand();
-                if(i.hasItemMeta()) {
-                    for (CustomSpecialItem item : CustomItems.specialItems) {
-                        if (i.getItemMeta().getDisplayName().equalsIgnoreCase(item.getItemStack().getItemMeta().getDisplayName())) {
-                            if (item.isAttackable() == false) {
-                                e.setCancelled(true);
-                            } else {
-                                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(q.getName());
-                                if(data.getRole() == GameRoles.FOX) {
-                                    if(data.getWatcher() != null) {
-                                        if(data.getWatcher().getCountFox() <= plugin.getTctConfig().getConfig().getInt("fox-reveal-time", 60)) {
-                                            if(data.getWatcher().getCountFox() > 0) {
-                                                data.getWatcher().setCountFox(plugin.getTctConfig().getConfig().getInt("fox-reveal-time", 60));
+        if (e.getEntity() instanceof Player) {
+            if(e.getDamager() instanceof Player || e.getDamager() instanceof Projectile) {
+                Player p;
+                Player q;
+                if(e.getDamager() instanceof Player) {
+                    p = (Player) e.getEntity();
+                    q = (Player) e.getDamager();
+                } else if(e.getDamager() instanceof Projectile) {
+                    p = (Player) e.getEntity();
+                    if(((Projectile) e.getDamager()).getShooter() instanceof Player) {
+                        q = (Player) ((Projectile) e.getDamager()).getShooter();
+                    } else {
+                        return;
+                    }
+                } else {
+                    return;
+                }
+                if (q.getInventory().getItemInMainHand().getType() != Material.AIR) {
+                    ItemStack i = q.getInventory().getItemInMainHand();
+                    if (i.hasItemMeta()) {
+                        for (CustomSpecialItem item : CustomItems.specialItems) {
+                            if (i.getItemMeta().getDisplayName().equalsIgnoreCase(item.getItemStack().getItemMeta().getDisplayName())) {
+                                if (item.isAttackable() == false) {
+                                    e.setCancelled(true);
+                                } else {
+                                    PlayerData data_ = plugin.getGame().getReference().PLAYERDATA.get(p.getName());
+                                    PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(q.getName());
+                                    if (data.getRole() == GameRoles.WOLF && data_.getRole() == GameRoles.WOLF) {
+                                        q.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_CANNOT_ATTACK_WOLF);
+                                        e.setCancelled(true);
+                                        return;
+                                    }
+                                    if (data.getRole() == GameRoles.FOX) {
+                                        if (data_.getRole() == GameRoles.FOX) {
+                                            q.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_CANNOT_ATTACK_FOX);
+                                            e.setCancelled(true);
+                                            return;
+                                        }
+                                        if (data.getWatcher() != null) {
+                                            if (data.getWatcher().getCountFox() <= plugin.getTctConfig().getConfig().getInt("fox-reveal-time", 60)) {
+                                                if (data.getWatcher().getCountFox() > 0) {
+                                                    data.getWatcher().setCountFox(plugin.getTctConfig().getConfig().getInt("fox-reveal-time", 60));
+                                                }
                                             }
                                         }
                                     }
                                 }
-                            }
-                            item.onAttackPlayer(q, p);
-                            if(!item.isQuickChatItem()) {
+                                item.onAttackPlayer(q, p);
+                                if (!item.isQuickChatItem()) {
+                                    return;
+                                }
+                                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(q.getName());
+                                if (data.getQuickChatCooldown() <= 0) {
+                                    item.onAttackPlayerWithCooldown(q, p);
+                                    data.startQCCCountdown();
+                                } else {
+                                    q.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_QUICK_CHAT_CURRENTLY_COOLDOWN);
+                                }
                                 return;
-                            }
-                            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(q.getName());
-                            if (data.getQuickChatCooldown() <= 0) {
-                                item.onAttackPlayerWithCooldown(q, p);
-                                data.startQCCCountdown();
-                            } else {
-                                q.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_QUICK_CHAT_CURRENTLY_COOLDOWN);
                             }
                         }
                     }
                 }
-            }
-            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(q.getName());
-            if(data.getRole() == GameRoles.FOX) {
-                if(data.getWatcher() != null) {
-                    if(data.getWatcher().getCountFox() <= plugin.getTctConfig().getConfig().getInt("fox-reveal-time", 60)) {
-                        if(data.getWatcher().getCountFox() > 0) {
-                            data.getWatcher().setCountFox(plugin.getTctConfig().getConfig().getInt("fox-reveal-time", 60));
+                PlayerData data_ = plugin.getGame().getReference().PLAYERDATA.get(p.getName());
+                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(q.getName());
+                if (data.getRole() == GameRoles.WOLF && data_.getRole() == GameRoles.WOLF) {
+                    q.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_CANNOT_ATTACK_WOLF);
+                    e.setCancelled(true);
+                    return;
+                }
+                if (data.getRole() == GameRoles.FOX) {
+                    if (data_.getRole() == GameRoles.FOX) {
+                        q.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_CANNOT_ATTACK_FOX);
+                        e.setCancelled(true);
+                        return;
+                    }
+                    if (data.getWatcher() != null) {
+                        if (data.getWatcher().getCountFox() <= plugin.getTctConfig().getConfig().getInt("fox-reveal-time", 60)) {
+                            if (data.getWatcher().getCountFox() > 0) {
+                                data.getWatcher().setCountFox(plugin.getTctConfig().getConfig().getInt("fox-reveal-time", 60));
+                            }
                         }
                     }
                 }
@@ -192,21 +231,6 @@ public class ItemEvent implements Listener {
                 loc.getWorld().createExplosion(loc.getX(), loc.getY(), loc.getZ(), 5.4F, false, false);
                 plugin.getGame().getReference().PROJECTILEDATA.get(projectile).cancelTimer();
                 plugin.getGame().getReference().PROJECTILEDATA.remove(projectile);
-            }
-        }
-        if(projectile instanceof Arrow) {
-            if(projectile.getShooter() instanceof Player) {
-                Player p = (Player) projectile.getShooter();
-                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getName());
-                if(data.getRole() == GameRoles.FOX) {
-                    if(data.getWatcher() != null) {
-                        if(data.getWatcher().getCountFox() <= plugin.getTctConfig().getConfig().getInt("fox-reveal-time", 60)) {
-                            if(data.getWatcher().getCountFox() > 0) {
-                                data.getWatcher().setCountFox(plugin.getTctConfig().getConfig().getInt("fox-reveal-time", 60));
-                            }
-                        }
-                    }
-                }
             }
         }
     }

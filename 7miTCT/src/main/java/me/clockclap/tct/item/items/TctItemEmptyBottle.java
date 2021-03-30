@@ -8,11 +8,14 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TctItemSnowball implements CustomItem {
+public class TctItemEmptyBottle implements CustomItem {
 
     private ItemStack item;
     private Material material;
@@ -26,15 +29,15 @@ public class TctItemSnowball implements CustomItem {
     private final boolean isdefault;
     private final int index;
 
-    public TctItemSnowball() {
-        this.index = ItemIndex.WOLVES_SHOP_ITEM_SLOT_2;
+    public TctItemEmptyBottle() {
+        this.index = ItemIndex.ALL_SHOP_ITEM_SLOT_4;
         this.isdefault = false;
-        this.material = Material.SNOW_BALL;
-        this.name = "SNOWBALL";
-        this.displayName = "Snowball";
-        this.title = "Snowball";
-        this.description = ChatColor.RED + "Wolf Item";
-        this.role = GameRoles.WOLF;
+        this.material = Material.GLASS_BOTTLE;
+        this.name = "EMPTY_BOTTLE";
+        this.displayName = "Empty Bottle";
+        this.title = "Empty Bottle";
+        this.description = ChatColor.AQUA + "TCT Item";
+        this.role = GameRoles.VILLAGER;
         this.attackable = true;
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
@@ -98,7 +101,7 @@ public class TctItemSnowball implements CustomItem {
 
     @Override
     public void setAttackable(boolean value) {
-        this.attackable = value;
+        this.attackable = true;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package me.clockclap.tct.game;
 
+import com.mojang.authlib.GameProfile;
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.game.data.PlayerData;
@@ -8,13 +9,19 @@ import me.clockclap.tct.game.death.Killer;
 import me.clockclap.tct.game.role.*;
 import me.clockclap.tct.item.CustomItems;
 import me.clockclap.tct.item.TctLog;
+import net.minecraft.server.v1_12_R1.PacketPlayOutEntityDestroy;
+import net.minecraft.server.v1_12_R1.PacketPlayOutNamedEntitySpawn;
+import net.minecraft.server.v1_12_R1.PacketPlayOutPlayerInfo;
 import org.bukkit.*;
 import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -492,6 +499,29 @@ public class Game {
         for(Player p : Bukkit.getOnlinePlayers()) {
             PlayerData data = getReference().PLAYERDATA.get(p.getName());
             data.setCO(GameRoles.NONE);
+            p.setPlayerListName("");
+//            for(Player pl : Bukkit.getOnlinePlayers()) {
+//                if(pl == p) {
+//                    continue;
+//                }
+//                ((CraftPlayer)pl).getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, ((CraftPlayer)p).getHandle()));
+//                GameProfile gp = ((CraftPlayer)p).getProfile();
+//                try {
+//                    Field nameField = GameProfile.class.getDeclaredField("name");
+//                    nameField.setAccessible(true);
+//
+//                    Field modifiersField = Field.class.getDeclaredField("modifiers");
+//                    modifiersField.setAccessible(true);
+//                    modifiersField.setInt(nameField, nameField.getModifiers() & ~Modifier.FINAL);
+//
+//                    nameField.set(gp, ChatColor.GREEN + p.getName());
+//                } catch (IllegalAccessException | NoSuchFieldException ex) {
+//                    throw new IllegalStateException(ex);
+//                }
+//                ((CraftPlayer)pl).getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer)p).getHandle()));
+//                ((CraftPlayer)pl).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(p.getEntityId()));
+//                ((CraftPlayer)pl).getHandle().playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer)p).getHandle()));
+//            }
             if(data.getRole() == GameRoles.VILLAGER) {
                 int coin = plugin.getTctConfig().getConfig().getInt("roles.coin.villagers", 0);
                 getRoleCount().setVillagersCount(getRoleCount().getVillagersCount() + 1);
@@ -544,6 +574,9 @@ public class Game {
                 p.setFoodLevel(1);
             }
             if(data.getRole() == GameRoles.FOX) {
+                List<String> foxesTeam = new ArrayList<>();
+                foxesTeam.addAll(foxes);
+                foxesTeam.addAll(immoral);
                 if(data.getWatcher() != null) {
                     data.getWatcher().startCountFox();
                 }
@@ -561,6 +594,9 @@ public class Game {
                 }
             }
             if(data.getRole() == GameRoles.IMMORAL) {
+                List<String> foxesTeam = new ArrayList<>();
+                foxesTeam.addAll(foxes);
+                foxesTeam.addAll(immoral);
                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_IMMORAL);
                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_DESCRIPTION_IMMORAL);
                 p.getInventory().setItem(0, CustomItems.WOOD_SWORD.getItemStack());
@@ -673,11 +709,34 @@ public class Game {
         if(gaming) {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 PlayerData data = getReference().PLAYERDATA.get(p.getName());
+                p.setPlayerListName(ChatColor.GREEN + p.getName());
                 data.resetBoughtItem();
                 data.setTogether(0);
                 data.setVillager(0);
                 data.setSuspicious(0);
                 data.setWolf(0);
+//                for(Player pl : Bukkit.getOnlinePlayers()) {
+//                    if(pl == p) {
+//                        continue;
+//                    }
+//                    ((CraftPlayer)pl).getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, ((CraftPlayer)p).getHandle()));
+//                    GameProfile gp = ((CraftPlayer)p).getProfile();
+//                    try {
+//                        Field nameField = GameProfile.class.getDeclaredField("name");
+//                        nameField.setAccessible(true);
+//
+//                        Field modifiersField = Field.class.getDeclaredField("modifiers");
+//                        modifiersField.setAccessible(true);
+//                        modifiersField.setInt(nameField, nameField.getModifiers() & ~Modifier.FINAL);
+//
+//                        nameField.set(gp, ChatColor.GREEN + p.getName());
+//                    } catch (IllegalAccessException | NoSuchFieldException ex) {
+//                        throw new IllegalStateException(ex);
+//                    }
+//                    ((CraftPlayer)pl).getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer)p).getHandle()));
+//                    ((CraftPlayer)pl).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(p.getEntityId()));
+//                    ((CraftPlayer)pl).getHandle().playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer)p).getHandle()));
+//                }
                 if(data.getRole() == GameRoles.FOX && !data.isSpectator()) {
                     if(data.getWatcher() != null) {
                         data.getWatcher().cancelCountFox();

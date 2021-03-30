@@ -3,6 +3,7 @@ package me.clockclap.tct.item;
 import me.clockclap.tct.game.data.CustomBlockData;
 import me.clockclap.tct.item.blocks.TctItemHealStation;
 import me.clockclap.tct.item.blocks.TctItemSponge;
+import me.clockclap.tct.item.blocks.TctItemTnt;
 import me.clockclap.tct.item.items.*;
 import me.clockclap.tct.item.items.co.*;
 import me.clockclap.tct.item.items.quickchat.QuickChatA;
@@ -33,8 +34,11 @@ public final class CustomItems {
     public static final CustomItem ARROW = new TctItemArrow();
     public static final CustomItem STRONG_BOW = new TctItemStrongBow();
 
-    public static final CustomItem STICK = new TctItemStick();
     public static final CustomItem SPEED_POTION = new TctItemPotionSpeed();
+    public static final CustomItem STICK = new TctItemStick();
+    public static final CustomItem EMPTY_BOTTLE = new TctItemEmptyBottle();
+    public static final CustomItem MILK = new TctItemMilk();
+    public static final CustomItem HEAL_POTION = new TctItemPotionSplashHeal();
     public static final CustomItem CRACKER = new TctItemCracker();
 
     public static final CustomItem SNOWBALL = new TctItemSnowball();
@@ -49,6 +53,8 @@ public final class CustomItems {
 
     public static final TctLogBook LOGBOOK = new TctLogBook();
 
+    public static final CustomSpecialItem WOLF_SWORD = new TctItemWolfSword();
+    public static final CustomSpecialItem DETECTIVE_SWORD = new TctItemDetectiveSword();
     public static final CustomSpecialItem HEALER_SWORD = new TctItemHealerSword();
 
     public static final CustomSpecialItem QUICKCHAT_A = new QuickChatA();
@@ -58,6 +64,9 @@ public final class CustomItems {
 
     public static final CustomBlock SPONGE = new TctItemSponge();
     public static final CustomBlock HEAL_STATION = new TctItemHealStation();
+    public static final CustomBlock TNT = new TctItemTnt();
+
+    public static final CustomBlock TORCH = new TctItemTorch();
 
     public static void registerItem(CustomItem item) {
         generalItems.add(item);
@@ -93,13 +102,18 @@ public final class CustomItems {
         registerItem(WOOD_SWORD);
         registerItem(STONE_SWORD);
         registerItem(HEALER_SWORD);
+        registerItem(DETECTIVE_SWORD);
+        registerItem(WOLF_SWORD);
 
         registerItem(BOW);
         registerItem(ARROW);
         registerItem(STRONG_BOW);
 
-        registerItem(STICK);
         registerItem(SPEED_POTION);
+        registerItem(STICK);
+        registerItem(EMPTY_BOTTLE);
+        registerItem(MILK);
+        registerItem(HEAL_POTION);
         registerItem(CRACKER);
 
         registerItem(SNOWBALL);
@@ -116,6 +130,9 @@ public final class CustomItems {
 
         registerBlock(SPONGE);
         registerBlock(HEAL_STATION);
+        registerBlock(TNT);
+
+        registerBlock(TORCH);
     }
 
     public static void unregister() {

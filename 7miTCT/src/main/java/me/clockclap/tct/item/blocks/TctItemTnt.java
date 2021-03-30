@@ -1,8 +1,8 @@
-package me.clockclap.tct.item.items;
+package me.clockclap.tct.item.blocks;
 
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
-import me.clockclap.tct.item.CustomItem;
+import me.clockclap.tct.item.CustomBlock;
 import me.clockclap.tct.item.ItemIndex;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -12,7 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TctItemSnowball implements CustomItem {
+public class TctItemTnt implements CustomBlock {
 
     private ItemStack item;
     private Material material;
@@ -20,21 +20,25 @@ public class TctItemSnowball implements CustomItem {
     private String displayName;
     private String title;
     private String description;
+    private GameRole role;
+    private boolean isdefault;
+    private boolean placeable;
+    private boolean breakable;
     private boolean attackable;
 
-    private final GameRole role;
-    private final boolean isdefault;
     private final int index;
 
-    public TctItemSnowball() {
-        this.index = ItemIndex.WOLVES_SHOP_ITEM_SLOT_2;
-        this.isdefault = false;
-        this.material = Material.SNOW_BALL;
-        this.name = "SNOWBALL";
-        this.displayName = "Snowball";
-        this.title = "Snowball";
+    public TctItemTnt() {
+        this.index = ItemIndex.WOLVES_SHOP_ITEM_SLOT_1;
+        this.material = Material.TNT;
+        this.name = "TNT";
+        this.displayName = "TNT";
+        this.title = "TNT";
         this.description = ChatColor.RED + "Wolf Item";
         this.role = GameRoles.WOLF;
+        this.isdefault = false;
+        this.placeable = false;
+        this.breakable = false;
         this.attackable = true;
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
@@ -82,11 +86,6 @@ public class TctItemSnowball implements CustomItem {
     }
 
     @Override
-    public GameRole getRole() {
-        return this.role;
-    }
-
-    @Override
     public boolean isDefault() {
         return this.isdefault;
     }
@@ -99,6 +98,21 @@ public class TctItemSnowball implements CustomItem {
     @Override
     public void setAttackable(boolean value) {
         this.attackable = value;
+    }
+
+    @Override
+    public boolean isPlaceable() {
+        return this.placeable;
+    }
+
+    @Override
+    public boolean isBreakable() {
+        return this.breakable;
+    }
+
+    @Override
+    public GameRole getRole() {
+        return this.role;
     }
 
     @Override

@@ -15,6 +15,7 @@ import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.inventory.CustomInventory;
 import me.clockclap.tct.item.CustomItems;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
@@ -94,6 +95,7 @@ public final class NanamiTct extends JavaPlugin {
                 data.getWatcher().startWatch();
                 getGame().getReference().PLAYERDATA.put(p.getName(), data);
                 p.setFoodLevel(20);
+                p.setPlayerListName(ChatColor.GREEN + p.getName());
                 bar.addPlayer(p);
             }
         }

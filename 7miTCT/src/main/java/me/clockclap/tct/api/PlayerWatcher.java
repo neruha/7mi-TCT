@@ -19,6 +19,7 @@ public class PlayerWatcher {
 
     private Player player;
     private BukkitRunnable runnable;
+    private BukkitRunnable runnable10;
     private BukkitRunnable runnableFox;
     private Location lastBlock;
     private int count;
@@ -71,8 +72,8 @@ public class PlayerWatcher {
         this.player = player;
     }
 
-    public void startWatch() {
-        runnable = new BukkitRunnable() {
+    public void startWatchWith10Ticks() {
+        runnable10 = new BukkitRunnable() {
             @Override
             public void run() {
                 getObjective().unregister();
@@ -190,6 +191,40 @@ public class PlayerWatcher {
                 }
             }
         };
+        runnable10.runTaskTimer(game.getPlugin(), 0, 10);
+    }
+
+    public void startWatch() {
+        startWatchWith10Ticks();
+        runnable = new BukkitRunnable() {
+            @Override
+            public void run() {
+                if(!data.isSpectator()) {
+                    for(Player p : Bukkit.getOnlinePlayers()) {
+                        PlayerData data = game.getReference().PLAYERDATA.get(p.getName());
+                        if(data.isSpectator()) {
+                            player.hidePlayer(game.getPlugin(), p);
+                        } else {
+                            if(NanamiTct.utilities.canSee(player, p)) {
+                                player.showPlayer(game.getPlugin(), p);
+                            } else {
+                                player.hidePlayer(game.getPlugin(), p);
+                            }
+                        }
+                    }
+                } else {
+                    for(Player p : Bukkit.getOnlinePlayers()) {
+                        player.showPlayer(game.getPlugin(), p);
+                    }
+                }
+                if(player.getExp() > 0F) {
+                    player.setExp(0F);
+                }
+                if(player.getLevel() > 0) {
+                    player.setLevel(0);
+                }
+            }
+        };
         runnable.runTaskTimer(this.game.getPlugin(), 0, 1);
     }
 
@@ -226,7 +261,7 @@ public class PlayerWatcher {
                     if(getCountFox() == -1) {
                         Firework fw = (Firework) getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), EntityType.FIREWORK);
                         FireworkMeta meta = fw.getFireworkMeta();
-                        FireworkEffect effect = FireworkEffect.builder().with(FireworkEffect.Type.BALL).withColor(Color.BLACK).build();
+                        FireworkEffect effect = FireworkEffect.builder().with(FireworkEffect.Type.BURST).withColor(Color.BLACK).withFade(Color.BLACK).build();
                         meta.addEffect(effect);
                         meta.setPower(1);
                         fw.setFireworkMeta(meta);
@@ -252,16 +287,17 @@ public class PlayerWatcher {
     }
 
     public void addCountFox(int value) {
-        this.count = this.count + value;
+        this.count += value;
     }
 
     public void subtractCountFox(int value) {
-        this.count = this.count - value;
+        this.count -= value;
     }
 
     public void cancelPlayerWatcher() {
         if(runnable != null) {
             runnable.cancel();
+            runnable10.cancel();
         }
     }
 

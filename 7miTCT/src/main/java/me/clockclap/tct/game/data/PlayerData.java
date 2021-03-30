@@ -39,6 +39,18 @@ public interface PlayerData extends EntityData {
 
     public int getWolf();
 
+    public List<String> getKilledPlayers();
+
+    public void addKilledPlayer(String name);
+
+    public void removeKilledPlayer(String name);
+
+    public void removeKilledPlayer(int index);
+
+    public void resetKilledPlayers();
+
+    public void setKilledPlayers(List<String> list);
+
     public void setTogether(int value);
 
     public void setVillager(int value);

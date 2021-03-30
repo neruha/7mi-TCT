@@ -32,7 +32,7 @@ public class TctItemPotionSpeed implements CustomItem {
     private final int index;
 
     public TctItemPotionSpeed() {
-        this.index = ItemIndex.ALL_SHOP_ITEM_SLOT_1;
+        this.index = ItemIndex.ALL_SHOP_ITEM_SLOT_2;
         this.isdefault = false;
         this.material = Material.POTION;
         this.name = "SPEED_POTION";
@@ -47,7 +47,7 @@ public class TctItemPotionSpeed implements CustomItem {
         List<String> lore = new ArrayList<>();
         lore.add(description);
         meta.setLore(lore);
-        meta.addCustomEffect(new PotionEffect(PotionEffectType.SPEED, 600, 1), true);
+        meta.addCustomEffect(new PotionEffect(PotionEffectType.SPEED, 3600, 1), true);
         item.setItemMeta(meta);
         this.item = item;
     }

@@ -35,18 +35,20 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
     private int villager;
     private int sus;
     private int wolf;
+    private List<String> killedPlayers;
 
     public TctPlayerData(NanamiTct plugin, GameRole role, String name) {
         super(plugin, Bukkit.getPlayer(name), role);
         this.name = name;
-        this.co = GameRoles.NONE;
         this.spec = true;
+        this.co = GameRoles.NONE;
         this.quickchatcooldown = 0;
         this.coin = 0;
         together = 0;
         villager = 0;
         sus = 0;
         wolf = 0;
+        killedPlayers = new ArrayList<>();
     }
 
     @Override
@@ -145,6 +147,36 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
     }
 
     @Override
+    public List<String> getKilledPlayers() {
+        return this.killedPlayers;
+    }
+
+    @Override
+    public void addKilledPlayer(String name) {
+        this.killedPlayers.add(name);
+    }
+
+    @Override
+    public void removeKilledPlayer(String name) {
+        this.killedPlayers.remove(name);
+    }
+
+    @Override
+    public void removeKilledPlayer(int index) {
+        this.killedPlayers.remove(index);
+    }
+
+    @Override
+    public void resetKilledPlayers() {
+        this.killedPlayers = new ArrayList<>();
+    }
+
+    @Override
+    public void setKilledPlayers(List<String> list) {
+        this.killedPlayers = list;
+    }
+
+    @Override
     public void setTogether(int value) {
         this.together = value;
     }
@@ -240,6 +272,7 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
         Location loc = this.getPlayer().getLocation();
         Location blockLoc = new Location(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
         DeadBody deadBody = new DeadBody(plugin.getGame(), this, cause, blockLoc);
+        deadBody.setKilledPlayers(this.getKilledPlayers());
         plugin.getGame().getReference().DEADBODIES.add(deadBody);
         plugin.getGame().removeRemainingPlayers(this, true);
         if(cause == TctDeathCause.KILL) {

@@ -26,6 +26,7 @@ public class ChatEvent implements Listener {
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent e) throws UnsupportedEncodingException {
+        e.setCancelled(true);
         Player p = e.getPlayer();
         String result;
         result = Japanizer.japanize(e.getMessage());
@@ -68,7 +69,6 @@ public class ChatEvent implements Listener {
                 }
             }
         }
-        e.setCancelled(true);
     }
 
 }

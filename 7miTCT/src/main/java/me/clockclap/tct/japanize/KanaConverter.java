@@ -21,11 +21,6 @@ public class KanaConverter {
     static {
         ImmutableSortedMap.Builder<String, String> builder = ImmutableSortedMap.reverseOrder();
 
-        // プレイヤー名
-        for(Player p : Bukkit.getOnlinePlayers()) {
-            builder.put(p.getDisplayName(), p.getDisplayName());
-        }
-
         // 単語
         builder.put("kyoujin", "狂人");
         builder.put("kyoujinn", "狂人");

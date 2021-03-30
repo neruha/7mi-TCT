@@ -25,6 +25,8 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +49,7 @@ public class DamageEvent implements Listener {
                 e.setCancelled(true);
                 return;
             }
+            int i = 0;
             for(ItemStack item : p.getInventory().getContents()) {
                 if(item == null) {
                     continue;
@@ -58,8 +61,16 @@ public class DamageEvent implements Listener {
                             p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_CANCELLED_EXPLOSION);
                             p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_DESTROY, 1.0F, 2.0F);
                         }
+                        if (item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().equalsIgnoreCase(p.getInventory().getItemInMainHand().getItemMeta().getDisplayName())) {
+                            int amt = item.getAmount() - 1;
+                            item.setAmount(amt);
+                            p.getInventory().setItem(i, amt > 0 ? item : null);
+                            p.updateInventory();
+                            break;
+                        }
                     }
                 }
+                i++;
             }
         }
     }
@@ -68,6 +79,7 @@ public class DamageEvent implements Listener {
     public void onDeath(EntityDeathEvent e) {
         if(e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
+            ItemStack[] contents = p.getInventory().getContents();
             e.getDrops().clear();
             Location loc = p.getLocation();
             PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getName());
@@ -129,7 +141,17 @@ public class DamageEvent implements Listener {
                     if(damageCause == EntityDamageEvent.DamageCause.ENTITY_ATTACK || damageCause == EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK) {
                         cause = TctDeathCause.KILL;
                         if(p.getKiller() != null) {
+                            PlayerData killer = plugin.getGame().getReference().PLAYERDATA.get(p.getKiller().getName());
+                            killer.addKilledPlayer(p.getName());
                             data.setKilledBy(new Killer(p.getKiller(), plugin.getGame().getReference().PLAYERDATA.get(p.getKiller().getName()).getRole()));
+                            for(ItemStack item : contents) {
+                                if(item != null) {
+                                    if(item.hasItemMeta() && item.getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.EMPTY_BOTTLE.getItemStack().getItemMeta().getDisplayName())) {
+                                        p.getKiller().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 200, 2));
+                                        break;
+                                    }
+                                }
+                            }
                         } else {
                             data.setKilledBy(new Killer("AIR", GameRoles.NONE, Killer.KillerCategory.AIR));
                         }
@@ -162,6 +184,7 @@ public class DamageEvent implements Listener {
             if(data.getKilledBy().getCategory() != Killer.KillerCategory.AIR) {
                 e.getPlayer().sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_YOU_ARE_KILLED_BY.replaceAll("%PLAYER%", data.getKilledBy().getName()));
             }
+            e.getPlayer().sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_YOU_ARE_SPECTATOR_MODE);
         }
     }
 

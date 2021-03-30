@@ -8,6 +8,7 @@ import me.clockclap.tct.game.GameState;
 import me.clockclap.tct.game.data.CustomBlockData;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.death.DeadBody;
+import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomBlock;
 import me.clockclap.tct.item.CustomBlockInfo;
 import me.clockclap.tct.item.CustomItems;
@@ -19,6 +20,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -148,26 +150,90 @@ public class BlockEvent implements Listener {
                     block.getLocation().getBlockY() == loc.getBlockY() &&
                     block.getLocation().getBlockZ() == loc.getBlockZ()) {
                 clickable = true;
-                if(deadBody.isFound()) {
-                    player.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ALREADY_FOUND);
-                } else {
+                boolean visible = true;
+                boolean can = true;
+                if(deadBody.isDamaged()) {
+                    player.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_DEADBODY_DAMAGED);
                     if(!plugin.getGame().getReference().PLAYERDATA.get(player.getName()).isSpectator()) {
-                        Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_DEADBODY_FOUND.replaceAll("%PLAYER%", deadBody.getPlayer().getDisplayName()));
-                        deadBody.setFound(true);
+                        can = false;
                     }
                 }
-                player.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_SEPARATOR);
-                player.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.RED + Reference.TCT_NAME + ": " + deadBody.getName());
-                player.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.RED + Reference.TCT_ROLE + ": " + deadBody.getRole().getDisplayName());
-                player.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.RED + Reference.TCT_TIME_AFTER_DEATH + ": " + deadBody.getTimeAfterDeath());
-                player.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.RED + Reference.TCT_CAUSE_OF_DEATH + ": " + deadBody.getCause().getName());
-                player.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_SEPARATOR);
+                if(can) {
+                    if (deadBody.isFound()) {
+                        if (player.getInventory().getItemInMainHand() != null &&
+                                player.getInventory().getItemInMainHand().hasItemMeta() &&
+                                player.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.TORCH.getItemStack().getItemMeta().getDisplayName())) {
+                            deadBody.setDamaged(true);
+                            player.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_DEADBODY_DAMAGED_SUCCESS);
+                            for (int i = 0; i < player.getInventory().getSize(); i++) {
+                                ItemStack item = player.getInventory().getItem(i);
+                                if (item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().equalsIgnoreCase(player.getInventory().getItemInMainHand().getItemMeta().getDisplayName())) {
+                                    int amt = item.getAmount() - 1;
+                                    item.setAmount(amt);
+                                    player.getInventory().setItem(i, amt > 0 ? item : null);
+                                    player.updateInventory();
+                                    break;
+                                }
+                            }
+                        } else if (player.getInventory().getItemInMainHand() != null &&
+                                player.getInventory().getItemInMainHand().hasItemMeta() &&
+                                player.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.STICK.getItemStack().getItemMeta().getDisplayName())) {
+                            if (deadBody.getRole() == GameRoles.WOLF) {
+                                if (deadBody.getKilledPlayers().size() > 0) {
+                                    String str = String.join(", ", deadBody.getKilledPlayers());
+                                    player.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_DEADBODY_KILLED_PLAYERS + ": [" + str + "]");
+                                } else {
+                                    player.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_DEADBODY_HAS_NOT_KILLED);
+                                }
+                                for (int i = 0; i < player.getInventory().getSize(); i++) {
+                                    ItemStack item = player.getInventory().getItem(i);
+                                    if (item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().equalsIgnoreCase(player.getInventory().getItemInMainHand().getItemMeta().getDisplayName())) {
+                                        int amt = item.getAmount() - 1;
+                                        item.setAmount(amt);
+                                        player.getInventory().setItem(i, amt > 0 ? item : null);
+                                        player.updateInventory();
+                                        break;
+                                    }
+                                }
+                            } else {
+                                player.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_DEADBODY_IS_NOT_WOLF);
+                            }
+                            visible = false;
+                        } else {
+                            if (visible) {
+                                player.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ALREADY_FOUND);
+                            }
+                        }
+                    } else {
+                        if (visible) {
+                            if (!plugin.getGame().getReference().PLAYERDATA.get(player.getName()).isSpectator()) {
+                                Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_DEADBODY_FOUND.replaceAll("%PLAYER%", deadBody.getPlayer().getDisplayName()));
+                                deadBody.setFound(true);
+                            }
+                        } else {
+                            player.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_DEADBODY_HAS_NOT_BEEN_FOUND);
+                        }
+                    }
+                    if (visible) {
+                        player.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_SEPARATOR);
+                        player.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.RED + Reference.TCT_NAME + ": " + deadBody.getName());
+                        player.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.RED + Reference.TCT_ROLE + ": " + deadBody.getRole().getDisplayName());
+                        player.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.RED + Reference.TCT_TIME_AFTER_DEATH + ": " + deadBody.getTimeAfterDeath());
+                        player.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.RED + Reference.TCT_CAUSE_OF_DEATH + ": " + deadBody.getCause().getName());
+                        player.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_SEPARATOR);
+                    }
+                }
             }
         }
     }
 
     @EventHandler
     public void onExplode(EntityExplodeEvent e) {
+        e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onExplodeBlock(BlockExplodeEvent e) {
         e.setCancelled(true);
     }
 

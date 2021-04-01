@@ -152,4 +152,12 @@ public class Utilities {
         return true;
     }
 
+    public String resetColor(String input) {
+        String result = input;
+        for(String str : Reference.colorChars()) {
+            result = result.replaceAll(Reference.colorChar() + str, "");
+        }
+        return result;
+    }
+
 }

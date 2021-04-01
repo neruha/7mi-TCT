@@ -1,5 +1,6 @@
 package me.clockclap.tct.game.death;
 
+import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.role.GameRole;
 import org.bukkit.entity.Player;
@@ -21,7 +22,7 @@ public class Killer {
     }
 
     public Killer(Player killer, GameRole role) {
-        this.killer = killer.getName();
+        this.killer = NanamiTct.utilities.resetColor(killer.getName());
         this.role = role;
         this.killerCategory = KillerCategory.PLAYER;
     }

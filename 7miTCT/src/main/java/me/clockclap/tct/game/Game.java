@@ -177,7 +177,7 @@ public class Game {
             getReference().setGameState(GameState.STARTING);
             this.loc = loc;
             for(Player p : Bukkit.getOnlinePlayers()) {
-                PlayerData data = getReference().PLAYERDATA.get(p.getName());
+                PlayerData data = getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
                 data.resetBoughtItem();
                 data.setTogether(0);
                 data.setVillager(0);
@@ -330,7 +330,7 @@ public class Game {
         if(playersCount >= resultCount) {
             Collection<? extends Player> players = Bukkit.getOnlinePlayers();
             for(Player p : Bukkit.getOnlinePlayers()) {
-                if (getReference().PLAYERDATA.get(p.getName()).getRole() != GameRoles.VILLAGER) {
+                if (getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName())).getRole() != GameRoles.VILLAGER) {
                     players.remove(p);
                 }
             }
@@ -353,7 +353,7 @@ public class Game {
                 getRoleCount().setImmoralCount(0);
                 for (Player p : players) {
                     int remaining = playersCount;
-                    PlayerData data = getReference().PLAYERDATA.get(p.getName());
+                    PlayerData data = getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
                     Random rand = new Random();
                     int role = rand.nextInt(6) + 1;
                     if (role == GameRoles.HEALER.getIndex()) {
@@ -362,7 +362,7 @@ public class Game {
                             data.setRole(GameRoles.HEALER);
                             data.setCoin(coin);
                             getRoleCount().setHealersCount(getRoleCount().getHealersCount() + 1);
-                            healers.add(p.getName());
+                            healers.add(NanamiTct.utilities.resetColor(p.getName()));
                         }
                         continue;
                     }
@@ -372,7 +372,7 @@ public class Game {
                             data.setRole(GameRoles.DETECTIVE);
                             data.setCoin(coin);
                             getRoleCount().setDetectivesCount(getRoleCount().getDetectivesCount() + 1);
-                            detectives.add(p.getName());
+                            detectives.add(NanamiTct.utilities.resetColor(p.getName()));
                         }
                         continue;
                     }
@@ -382,7 +382,7 @@ public class Game {
                             data.setRole(GameRoles.WOLF);
                             data.setCoin(coin);
                             getRoleCount().setWolvesCount(getRoleCount().getWolvesCount() + 1);
-                            wolves.add(p.getName());
+                            wolves.add(NanamiTct.utilities.resetColor(p.getName()));
                         }
                         continue;
                     }
@@ -392,7 +392,7 @@ public class Game {
                             data.setRole(GameRoles.FANATIC);
                             data.setCoin(coin);
                             getRoleCount().setFanaticsCount(getRoleCount().getFanaticsCount() + 1);
-                            fanatics.add(p.getName());
+                            fanatics.add(NanamiTct.utilities.resetColor(p.getName()));
                         }
                         continue;
                     }
@@ -402,7 +402,7 @@ public class Game {
                             data.setRole(GameRoles.FOX);
                             data.setCoin(coin);
                             getRoleCount().setFoxesCount(getRoleCount().getFoxesCount() + 1);
-                            foxes.add(p.getName());
+                            foxes.add(NanamiTct.utilities.resetColor(p.getName()));
                         }
                         continue;
                     }
@@ -412,7 +412,7 @@ public class Game {
                             data.setRole(GameRoles.IMMORAL);
                             data.setCoin(coin);
                             getRoleCount().setImmoralCount(getRoleCount().getImmoralCount() + 1);
-                            immoral.add(p.getName());
+                            immoral.add(NanamiTct.utilities.resetColor(p.getName()));
                         }
                         continue;
                     }
@@ -435,7 +435,7 @@ public class Game {
 
     public void giveItem() {
         for(Player p : Bukkit.getOnlinePlayers()) {
-            PlayerData data = getReference().PLAYERDATA.get(p.getName());
+            PlayerData data = getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
             if(!data.isSpectator()) {
                 p.getInventory().setItem(4, getLog().getItem());
                 p.getInventory().setItem(5, CustomItems.QUICKCHAT_A.getItemStack());
@@ -463,21 +463,21 @@ public class Game {
         for(Player p : Bukkit.getOnlinePlayers()) {
             if(p.getGameMode() == GameMode.CREATIVE || p.getGameMode() == GameMode.SPECTATOR) {
                 playersCount--;
-                getReference().PLAYERDATA.get(p.getName()).setRole(GameRoles.SPEC);
-                getReference().PLAYERDATA.get(p.getName()).setSpectator(true);
+                getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName())).setRole(GameRoles.SPEC);
+                getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName())).setSpectator(true);
             } else {
                 p.getInventory().clear();
                 p.setGameMode(GameMode.SURVIVAL);
-                getReference().PLAYERDATA.get(p.getName()).setRole(GameRoles.VILLAGER);
-                getReference().PLAYERDATA.get(p.getName()).setSpectator(false);
+                getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName())).setRole(GameRoles.VILLAGER);
+                getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName())).setSpectator(false);
             }
         }
         if(playersCount < neededPlayers) {
             Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_PLAYERS_NEEDED);
             for(Player p : Bukkit.getOnlinePlayers()) {
                 p.playSound(p.getLocation(), Sound.BLOCK_DISPENSER_FAIL, 1.5F, 1F);
-                getReference().PLAYERDATA.get(p.getName()).setRole(GameRoles.SPEC);
-                getReference().PLAYERDATA.get(p.getName()).setSpectator(true);
+                getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName())).setRole(GameRoles.SPEC);
+                getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName())).setSpectator(true);
                 p.setFoodLevel(20);
                 RoleCount count = new RoleCount(this);
                 count.setVillagersCount(0);
@@ -497,7 +497,7 @@ public class Game {
         giveRole(playersCount);
         giveItem();
         for(Player p : Bukkit.getOnlinePlayers()) {
-            PlayerData data = getReference().PLAYERDATA.get(p.getName());
+            PlayerData data = getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
             data.setCO(GameRoles.NONE);
             p.setPlayerListName("");
 //            for(Player pl : Bukkit.getOnlinePlayers()) {
@@ -532,7 +532,7 @@ public class Game {
                 p.getInventory().setItem(1, CustomItems.BOW.getItemStack());
                 p.getInventory().setItem(2, CustomItems.ARROW.getItemStack());
                 p.setFoodLevel(1);
-                villagers.add(p.getName());
+                villagers.add(NanamiTct.utilities.resetColor(p.getName()));
             }
             if(data.getRole() == GameRoles.HEALER) {
                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_HEALER);
@@ -669,7 +669,7 @@ public class Game {
                     if(time[0] == getPlugin().getTctConfig().getConfig().getInt("", 180)) {
                         time[0] = 0;
                         for(Player p : Bukkit.getOnlinePlayers()) {
-                            PlayerData data = getReference().PLAYERDATA.get(p.getName());
+                            PlayerData data = getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
                             data.setCoin(data.getCoin() + 1);
                         }
                         Bukkit.broadcastMessage(Reference.TCT_CHAT_COIN_DISTRIBUTION);
@@ -708,8 +708,8 @@ public class Game {
         getBar().setTitle(Reference.TCT_BOSSBAR_FORMAT_WAITING);
         if(gaming) {
             for (Player p : Bukkit.getOnlinePlayers()) {
-                PlayerData data = getReference().PLAYERDATA.get(p.getName());
-                p.setPlayerListName(ChatColor.GREEN + p.getName());
+                PlayerData data = getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
+                p.setPlayerListName(ChatColor.GREEN + NanamiTct.utilities.resetColor(p.getName()));
                 data.resetBoughtItem();
                 data.setTogether(0);
                 data.setVillager(0);
@@ -809,7 +809,7 @@ public class Game {
             immoral = new ArrayList<>();
         }
         for(Player p : Bukkit.getOnlinePlayers()) {
-            PlayerData data = getReference().PLAYERDATA.get(p.getName());
+            PlayerData data = getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
             p.setFoodLevel(20);
             p.setMaxHealth(20.0D);
             p.setHealth(20.0D);

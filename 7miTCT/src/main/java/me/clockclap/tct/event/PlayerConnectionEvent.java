@@ -11,6 +11,7 @@ import me.clockclap.tct.game.death.TctDeathCause;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.game.role.GameTeams;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BossBar;
 import org.bukkit.boss.BarStyle;
@@ -36,12 +37,12 @@ public class PlayerConnectionEvent implements Listener {
         Player p = e.getPlayer();
         e.setJoinMessage(Reference.TCT_CHAT_JOIN_MESSAGE.replaceAll("%PLAYER%",p.getDisplayName()));
         plugin.getGame().getBar().addPlayer(p);
-        PlayerData data = new TctPlayerData(plugin, GameRoles.SPEC, p.getName());
+        PlayerData data = new TctPlayerData(plugin, GameRoles.SPEC, NanamiTct.utilities.resetColor(p.getName()));
         PlayerWatcher watcher = new PlayerWatcher(plugin.getGame(), p);
         data.setSpectator(true);
         data.setWatcher(watcher);
         data.getWatcher().startWatch();
-        plugin.getGame().getReference().PLAYERDATA.put(p.getName(), data);
+        plugin.getGame().getReference().PLAYERDATA.put(NanamiTct.utilities.resetColor(p.getName()), data);
         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_JOIN_MESSAGE_0.replaceAll("%VERSION%", plugin.getDescription().getVersion()));
         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_JOIN_MESSAGE_1);
         String gameState = "";
@@ -54,24 +55,19 @@ public class PlayerConnectionEvent implements Listener {
         }
         if(isAdmin == false) {
             for (String str : plugin.getTctConfig().getConfig().getStringList("admin")) {
-                if (p.getName().equalsIgnoreCase(str)) {
+                if (NanamiTct.utilities.resetColor(p.getName()).equalsIgnoreCase(str)) {
                     isAdmin = true;
                     break;
                 }
             }
         }
-        if(plugin.getGame().getReference().getGameState() == GameState.WAITING) {
-            gameState = "Waiting";
-            if(isAdmin == true) {
-                message = Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_PLEASE_START;
-            } else {
-                message = Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_PLEASE_WAIT;
-            }
-        } else if(plugin.getGame().getReference().getGameState() == GameState.GAMING) {
+        if(plugin.getGame().getReference().getGameState() == GameState.GAMING) {
             gameState = "Gaming";
+            p.setPlayerListName("");
             message = Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_GAME_ALREADY_STARTED;
         } else {
             gameState = "Waiting";
+            p.setPlayerListName(ChatColor.GREEN + NanamiTct.utilities.resetColor(p.getName()));
             if(isAdmin == true) {
                 message = Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_PLEASE_START;
             } else {
@@ -87,7 +83,7 @@ public class PlayerConnectionEvent implements Listener {
     public void onQuit(PlayerQuitEvent e) {
         Player p = e.getPlayer();
         e.setQuitMessage(Reference.TCT_CHAT_QUIT_MESSAGE.replaceAll("%PLAYER%",p.getDisplayName()));
-        PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getName());
+        PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
         if(data.getWatcher() != null) {
             data.getWatcher().cancelPlayerWatcher();
         }
@@ -145,7 +141,7 @@ public class PlayerConnectionEvent implements Listener {
                 data.kill(TctDeathCause.LOST_CONNECTION);
             }
         }
-        plugin.getGame().getReference().PLAYERDATA.remove(p.getName());
+        plugin.getGame().getReference().PLAYERDATA.remove(NanamiTct.utilities.resetColor(p.getName()));
     }
 
 }

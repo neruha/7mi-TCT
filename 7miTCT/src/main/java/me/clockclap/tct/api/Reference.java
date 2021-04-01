@@ -21,6 +21,15 @@ public class Reference {
             "REDSTONE_COMPARATOR_ON", "FENCE", "SPRUCE_FENCE", "BIRCH_FENCE", "JUNGLE_FENCE", "DARK_OAK_FENCE",
             "ACACIA_FENCE", "NETHER_FENCE", "BREWING_STAND", "CAULDRON", "SIGN_POST", "WALL_SIGN", "SIGN");
 
+    //カラーコード
+    public static String colorChar() {
+        return "\u00a7";
+    }
+    public static List<String> colorChars() {
+        return Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+            "a", "b", "c", "d", "e", "f", "k", "l", "m", "n", "o");
+    }
+
     //ボスバー
     public static final String TCT_BOSSBAR_FORMAT_WAITING = ChatColor.RED + "待機中 - 運営がゲームを開始するまでお待ちください";
     public static final String TCT_BOSSBAR_FORMAT_GAMING = ChatColor.AQUA + "ゲーム中 - 残り%SECOND%秒";

@@ -32,10 +32,10 @@ public class ChatEvent implements Listener {
         result = Japanizer.japanize(e.getMessage());
         String role_chatprefix;
 
-        GameRole role = plugin.getGame().getReference().PLAYERDATA.get(p.getName()).getRole();
+        GameRole role = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName())).getRole();
         boolean visible = true;
-        GameRole co = plugin.getGame().getReference().PLAYERDATA.get(p.getName()).getCO();
-        if(role == GameRoles.SPEC || plugin.getGame().getReference().PLAYERDATA.get(p.getName()).isSpectator()) {
+        GameRole co = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName())).getCO();
+        if(role == GameRoles.SPEC || plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName())).isSpectator()) {
             role_chatprefix = Reference.TCT_CHAT_ROLE_SPEC_P;
             if(plugin.getGame().getReference().getGameState() == GameState.GAMING) {
                 visible = false;
@@ -63,7 +63,7 @@ public class ChatEvent implements Listener {
             Bukkit.getServer().broadcastMessage(Reference.TCT_CHAT_FORMAT.replaceAll("%ROLE%", role_chatprefix).replaceAll("%PLAYER%", p.getDisplayName()).replaceAll("%MESSAGE%", result));
         } else {
             for(Player q : Bukkit.getOnlinePlayers()) {
-                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(q.getName());
+                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(q.getName()));
                 if(data.getRole() == GameRoles.SPEC || data.isSpectator()) {
                     q.sendMessage(Reference.TCT_CHAT_FORMAT.replaceAll("%ROLE%", role_chatprefix).replaceAll("%PLAYER%", p.getDisplayName()).replaceAll("%MESSAGE%", result));
                 }

@@ -88,14 +88,15 @@ public final class NanamiTct extends JavaPlugin {
         // Initialize player data
         if(Bukkit.getOnlinePlayers().size() > 0) {
             for (Player p : Bukkit.getOnlinePlayers()) {
-                PlayerData data = new TctPlayerData(this, GameRoles.SPEC, p.getName());
+                String name = utilities.resetColor(p.getName());
+                PlayerData data = new TctPlayerData(this, GameRoles.SPEC, name);
                 PlayerWatcher watcher = new PlayerWatcher(plugin.getGame(), p);
                 data.setSpectator(true);
                 data.setWatcher(watcher);
                 data.getWatcher().startWatch();
-                getGame().getReference().PLAYERDATA.put(p.getName(), data);
+                getGame().getReference().PLAYERDATA.put(name, data);
                 p.setFoodLevel(20);
-                p.setPlayerListName(ChatColor.GREEN + p.getName());
+                p.setPlayerListName(ChatColor.GREEN + name);
                 bar.addPlayer(p);
             }
         }

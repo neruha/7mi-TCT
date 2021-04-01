@@ -19,7 +19,7 @@ public class CancelHunger implements Listener {
     public void onHunger(FoodLevelChangeEvent e) {
         if(e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
-            if(plugin.getGame().getReference().PLAYERDATA.get(p.getName()).isSpectator()) {
+            if(plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName())).isSpectator()) {
                 e.setFoodLevel(20);
             } else {
                 e.setFoodLevel(1);

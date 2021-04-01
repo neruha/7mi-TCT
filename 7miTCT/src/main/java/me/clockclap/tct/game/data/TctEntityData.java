@@ -37,7 +37,7 @@ public class TctEntityData implements EntityData {
 
     @Override
     public String getName() {
-        return this.entity.getName();
+        return NanamiTct.utilities.resetColor(this.entity.getName());
     }
 
     @Override

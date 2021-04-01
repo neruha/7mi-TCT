@@ -21,7 +21,7 @@ public class CommandShop implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender instanceof Player) {
             Player p = (Player) sender;
-            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getName());
+            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
             if(!data.isSpectator()) {
                 if(data.getRole() == GameRoles.WOLF) {
                     p.openInventory(plugin.getCustomInventory().getWolfShop());

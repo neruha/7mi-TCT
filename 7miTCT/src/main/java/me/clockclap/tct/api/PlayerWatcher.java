@@ -32,10 +32,10 @@ public class PlayerWatcher {
     public PlayerWatcher(Game game, Player player) {
         this.game = game;
         this.player = player;
-        this.data = this.game.getReference().PLAYERDATA.get(this.player.getName());
+        this.data = this.game.getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(this.player.getName()));
         this.count = 0;
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        this.objective = this.scoreboard.registerNewObjective(player.getName(), "dummy");
+        this.objective = this.scoreboard.registerNewObjective(NanamiTct.utilities.resetColor(player.getName()), "dummy");
         this.objective.setDisplayName(Reference.TCT_SIDEBAR_TITLE);
         this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
     }
@@ -77,10 +77,10 @@ public class PlayerWatcher {
             @Override
             public void run() {
                 getObjective().unregister();
-                setObjective(getScoreboard().registerNewObjective(player.getName(), "dummy"));
+                setObjective(getScoreboard().registerNewObjective(NanamiTct.utilities.resetColor(getPlayer().getName()), "dummy"));
                 getObjective().setDisplayName(Reference.TCT_SIDEBAR_TITLE);
                 getObjective().setDisplaySlot(DisplaySlot.SIDEBAR);
-                setPlayerData(getGame().getReference().PLAYERDATA.get(getPlayer().getName()));
+                setPlayerData(getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(getPlayer().getName())));
                 if(getGame().getReference().getGameState() == GameState.WAITING) {
                     Score line0 = getObjective().getScore(ChatColor.RESET + Reference.TCT_UI_SEPARATOR);
                     Score line1 = getObjective().getScore(Reference.TCT_UI_GAME_STATUS + ": " + Reference.TCT_STATE_WAITING);
@@ -201,7 +201,7 @@ public class PlayerWatcher {
             public void run() {
                 if(!data.isSpectator()) {
                     for(Player p : Bukkit.getOnlinePlayers()) {
-                        PlayerData data = game.getReference().PLAYERDATA.get(p.getName());
+                        PlayerData data = game.getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
                         if(data.isSpectator()) {
                             player.hidePlayer(game.getPlugin(), p);
                         } else {

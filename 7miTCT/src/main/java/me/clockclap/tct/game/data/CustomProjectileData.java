@@ -1,5 +1,6 @@
 package me.clockclap.tct.game.data;
 
+import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.game.Game;
 import me.clockclap.tct.game.role.GameRole;
 import org.bukkit.Bukkit;
@@ -61,7 +62,7 @@ public class CustomProjectileData extends TctEntityData implements EntityData {
 
     @Override
     public String getName() {
-        return super.entity.getName();
+        return NanamiTct.utilities.resetColor(super.entity.getName());
     }
 
     @Override

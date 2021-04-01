@@ -62,8 +62,8 @@ public class TctItemWolfSword implements CustomSpecialItem {
     public void onAttackPlayer(Player attacker, Player target) {
         if(target != null) {
             NanamiTct plugin = NanamiTct.plugin;
-            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(target.getName());
-            PlayerData data_ = plugin.getGame().getReference().PLAYERDATA.get(attacker.getName());
+            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(target.getName()));
+            PlayerData data_ = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(attacker.getName()));
             if(!data.isSpectator()) {
                 if (data_.getRole() == GameRoles.WOLF && data.getRole() == GameRoles.WOLF) {
                     attacker.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_CANNOT_ATTACK_WOLF);

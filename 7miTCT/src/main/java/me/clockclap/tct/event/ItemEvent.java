@@ -48,7 +48,7 @@ public class ItemEvent implements Listener {
         }
         if(e.getDamager() instanceof Player) {
             Player p = (Player) e.getDamager();
-            if(plugin.getGame().getReference().PLAYERDATA.get(p.getName()).isSpectator()) {
+            if(plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName())).isSpectator()) {
                 e.setCancelled(true);
             }
         }
@@ -77,8 +77,8 @@ public class ItemEvent implements Listener {
                                 if (item.isAttackable() == false) {
                                     e.setCancelled(true);
                                 } else {
-                                    PlayerData data_ = plugin.getGame().getReference().PLAYERDATA.get(p.getName());
-                                    PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(q.getName());
+                                    PlayerData data_ = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
+                                    PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(q.getName()));
                                     if (data.getRole() == GameRoles.WOLF && data_.getRole() == GameRoles.WOLF) {
                                         q.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_CANNOT_ATTACK_WOLF);
                                         e.setCancelled(true);
@@ -103,7 +103,7 @@ public class ItemEvent implements Listener {
                                 if (!item.isQuickChatItem()) {
                                     return;
                                 }
-                                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(q.getName());
+                                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(q.getName()));
                                 if (data.getQuickChatCooldown() <= 0) {
                                     item.onAttackPlayerWithCooldown(q, p);
                                     data.startQCCCountdown();
@@ -115,8 +115,8 @@ public class ItemEvent implements Listener {
                         }
                     }
                 }
-                PlayerData data_ = plugin.getGame().getReference().PLAYERDATA.get(p.getName());
-                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(q.getName());
+                PlayerData data_ = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
+                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(q.getName()));
                 if (data.getRole() == GameRoles.WOLF && data_.getRole() == GameRoles.WOLF) {
                     q.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_CANNOT_ATTACK_WOLF);
                     e.setCancelled(true);
@@ -184,10 +184,10 @@ public class ItemEvent implements Listener {
             if (e.getRightClicked() instanceof Player) {
                 Player p = e.getPlayer();
                 Player q = (Player) e.getRightClicked();
-                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(q.getName());
+                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(q.getName()));
                 if (!data.isSpectator()) {
                     p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_SEPARATOR_I);
-                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_NAME + ": " + q.getName());
+                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_NAME + ": " + NanamiTct.utilities.resetColor(q.getName()));
                     p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_HP + ": " + ChatColor.RED + q.getHealth());
                     p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_TOGETHER + ": " + ChatColor.GREEN + data.getTogether()
                             + ChatColor.AQUA + ", " + Reference.TCT_VILLAGER + ": " + ChatColor.GREEN + data.getVillager()
@@ -208,7 +208,7 @@ public class ItemEvent implements Listener {
         GameRole role = GameRoles.NONE;
         if(source instanceof Player) {
             Player p = (Player) source;
-            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getName());
+            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
             if(data.isSpectator()) {
                 e.setCancelled(true);
                 return;

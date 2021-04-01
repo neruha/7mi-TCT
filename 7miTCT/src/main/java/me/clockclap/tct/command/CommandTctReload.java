@@ -37,7 +37,7 @@ public class CommandTctReload implements CommandExecutor {
             }
             if(isAdmin == false) {
                 for (String str : plugin.getTctConfig().getConfig().getStringList("admin")) {
-                    if (p.getName().equalsIgnoreCase(str)) {
+                    if (NanamiTct.utilities.resetColor(p.getName()).equalsIgnoreCase(str)) {
                         isAdmin = true;
                         break;
                     }

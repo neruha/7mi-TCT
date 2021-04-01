@@ -60,7 +60,7 @@ public class QuickChatC implements CustomSpecialItem {
 
     @Override
     public void onAttackPlayerWithCooldown(Player source, Player target) {
-        PlayerData data = NanamiTct.plugin.getGame().getReference().PLAYERDATA.get(target.getName());
+        PlayerData data = NanamiTct.plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(target.getName()));
         data.setSuspicious(data.getSuspicious() + 1);
         source.chat(Reference.TCT_QUICK_CHAT_2.replaceAll("%PLAYER%", target.getDisplayName()));
     }

@@ -36,7 +36,8 @@ public class CommandItem implements TabExecutor {
             }
             if(isAdmin == false) {
                 for (String str : plugin.getTctConfig().getConfig().getStringList("admin")) {
-                    if (p.getName().equalsIgnoreCase(str)) {
+                    String name = NanamiTct.utilities.resetColor(p.getName());
+                    if (name.equalsIgnoreCase(str)) {
                         isAdmin = true;
                         break;
                     }

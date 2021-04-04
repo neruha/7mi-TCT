@@ -71,6 +71,7 @@ public class Reference {
     public static final String TCT_CHAT_ERROR_PERMISSION = ChatColor.RED + "このコマンドを実行するための権限がありません";
     public static final String TCT_CHAT_ERROR_GAME_NOT_STARTED = ChatColor.RED + "ゲームがまだ開始されていません";
     public static final String TCT_CHAT_ERROR_PLAYERS_NEEDED = ChatColor.RED + "人数が揃っていないため、ゲームを開始できません";
+    public static final String TCT_CHAT_NEEDED_PLAYERS = ChatColor.LIGHT_PURPLE + "ゲームを開始するには最低%COUNT_A%人必要です (あと%COUNT_B%人)";
     public static final String TCT_CHAT_ERROR_NUM_ONLY = ChatColor.RED + "引数に入力する値が間違っています。引数には数値を入力してください。";
     public static final String TCT_CHAT_ERROR_COMMAND = ChatColor.RED + "エラーが発生しました。引数に入力した値が間違っていないか確認してください。";
     public static final String TCT_CHAT_PLAYER_ONLY = ChatColor.RED + "このコマンドはプレイヤーのみ実行できます";

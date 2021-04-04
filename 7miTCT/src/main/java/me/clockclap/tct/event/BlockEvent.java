@@ -9,10 +9,7 @@ import me.clockclap.tct.game.data.CustomBlockData;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.death.DeadBody;
 import me.clockclap.tct.game.role.GameRoles;
-import me.clockclap.tct.item.CustomBlock;
-import me.clockclap.tct.item.CustomBlockInfo;
-import me.clockclap.tct.item.CustomItems;
-import me.clockclap.tct.item.CustomSpecialItem;
+import me.clockclap.tct.item.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -209,6 +206,10 @@ public class BlockEvent implements Listener {
                             if (!plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(player.getName())).isSpectator()) {
                                 Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_DEADBODY_FOUND.replaceAll("%PLAYER%", deadBody.getPlayer().getDisplayName()));
                                 deadBody.setFound(true);
+                                TctLog log = plugin.getGame().getLog();
+                                log.addLine(Reference.TCT_LOGBOOK_FOUND_DEADBODY);
+                                log.addLine(deadBody.getName());
+                                log.update();
                             }
                         } else {
                             player.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_DEADBODY_HAS_NOT_BEEN_FOUND);

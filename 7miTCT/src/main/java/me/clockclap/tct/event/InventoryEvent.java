@@ -9,8 +9,10 @@ import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomItem;
 import me.clockclap.tct.item.CustomItems;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Snowball;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -63,7 +65,8 @@ public class InventoryEvent implements Listener {
                                     if (i.getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.TNT.getItemStack().getItemMeta().getDisplayName())) {
                                         p.getInventory().setHelmet(e.getCurrentItem());
                                         Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
-                                            p.getWorld().createExplosion(p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ(), 5.4F, false, false);
+                                            Location loc = new Location(p.getLocation().getWorld(), p.getLocation().getX(), p.getLocation().getY() + 1, p.getLocation().getZ());
+                                            p.getWorld().spawn(loc, Snowball.class);
                                         }, 60);
                                         p.closeInventory();
                                         return;

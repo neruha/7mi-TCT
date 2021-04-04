@@ -12,14 +12,19 @@ import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.game.role.GameTeams;
 import me.clockclap.tct.item.CustomItems;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import net.minecraft.server.v1_12_R1.Explosion;
+import org.apache.logging.log4j.util.ReflectionUtil;
+import org.bukkit.*;
+import org.bukkit.craftbukkit.v1_12_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Explosive;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -49,29 +54,39 @@ public class DamageEvent implements Listener {
                 e.setCancelled(true);
                 return;
             }
+        }
+    }
+
+    @EventHandler
+    public synchronized void onDamageByEntity(EntityDamageByEntityEvent e) {
+        if(e.getEntity() instanceof Player && e.getDamager() instanceof TNTPrimed) {
+            e.setCancelled(true);
+            Player p = (Player) e.getEntity();
             int i = 0;
+            boolean passed = true;
             for(ItemStack item : p.getInventory().getContents()) {
                 if(item == null) {
                     continue;
                 }
                 if(item.hasItemMeta()) {
                     if(item.getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.SPONGE.getItemStack().getItemMeta().getDisplayName())) {
-                        if(e.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION || e.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
-                            e.setCancelled(true);
-                            p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_CANCELLED_EXPLOSION);
-                            p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_DESTROY, 1.0F, 2.0F);
-                        }
-                        if (item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().equalsIgnoreCase(p.getInventory().getItemInMainHand().getItemMeta().getDisplayName())) {
-                            int amt = item.getAmount() - 1;
-                            item.setAmount(amt);
-                            p.getInventory().setItem(i, amt > 0 ? item : null);
-                            p.updateInventory();
-                            break;
-                        }
+                        passed = false;
+                        p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_CANCELLED_EXPLOSION);
+                        p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_DESTROY, 1.0F, 2.0F);
+                        int amt = item.getAmount() - 1;
+                        item.setAmount(amt);
+                        p.getInventory().setItem(i, amt > 0 ? item : null);
+                        p.updateInventory();
+                        break;
                     }
                 }
                 i++;
             }
+            try {
+                wait(100);
+            } catch (InterruptedException interruptedException) { }
+            if(passed) e.setCancelled(false);
+            passed = false;
         }
     }
 
@@ -123,6 +138,7 @@ public class DamageEvent implements Listener {
                         return;
                     }
                     if (villagers.size() <= 0 && wolves.size() <= 0) {
+                        p.spigot().respawn();
                         plugin.getGame().getTimer().cancel();
                         if (foxes.size() > 0) {
                             plugin.getGame().stop(GameTeams.FOXES);

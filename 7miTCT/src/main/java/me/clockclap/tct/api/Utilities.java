@@ -1,11 +1,21 @@
 package me.clockclap.tct.api;
 
+import com.mojang.authlib.GameProfile;
+import me.clockclap.tct.NanamiTct;
+import me.clockclap.tct.game.data.PlayerData;
+import me.clockclap.tct.game.role.GameRoles;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import java.lang.reflect.Field;
 
 public class Utilities {
 
@@ -158,6 +168,65 @@ public class Utilities {
             result = result.replaceAll(Reference.colorChar() + str, "");
         }
         return result;
+    }
+
+    public void modifyName(Player player, String name) {
+        GameProfile gameProfile = ((CraftPlayer) player).getHandle().getProfile();
+        try {
+            Field field = gameProfile.getClass().getDeclaredField("name");
+            field.setAccessible(true);
+            field.set(gameProfile, name);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void reloadPlayer() {
+        for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
+            for(Player player : Bukkit.getServer().getOnlinePlayers()) {
+                if(player != null && pl != null) {
+                    pl.hidePlayer(plugin, player);
+                    pl.showPlayer(plugin, player);
+                }
+            }
+        }
+    }
+
+    public void hidePlayer(Player player, Player target) {
+        player.hidePlayer(this.plugin, target);
+    }
+
+    public void showPlayer(Player player, Player target) {
+        if(this.plugin instanceof NanamiTct) {
+            NanamiTct tct = ((NanamiTct) this.plugin);
+            PlayerData d = tct.getGame().getReference().PLAYERDATA.get(resetColor(player.getName()));
+            PlayerData e = tct.getGame().getReference().PLAYERDATA.get(resetColor(target.getName()));
+            modifyName(target, ChatColor.GREEN + resetColor(target.getName()));
+            if (d != null && e != null) {
+                if(!e.isSpectator()) {
+                    if(d.getRole() == GameRoles.WOLF) {
+                        if(e.getRole() == GameRoles.WOLF) {
+                            modifyName(target, ChatColor.RED + resetColor(target.getName()));
+                        } else if(e.getRole() == GameRoles.FANATIC) {
+                            modifyName(target, ChatColor.DARK_PURPLE + resetColor(target.getName()));
+                        }
+                    } else if(d.getRole() == GameRoles.FOX || d.getRole() == GameRoles.IMMORAL) {
+                        if(e.getRole() == GameRoles.FOX) {
+                            modifyName(target, ChatColor.GOLD + resetColor(target.getName()));
+                        } else if(e.getRole() == GameRoles.IMMORAL) {
+                            modifyName(target, ChatColor.DARK_GRAY + resetColor(target.getName()));
+                        }
+                    }
+                }
+            }
+            player.showPlayer(plugin, target);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    modifyName(target, ChatColor.GREEN + resetColor(target.getName()));
+                }
+            }.runTaskLater(plugin, 1);
+        }
     }
 
 }

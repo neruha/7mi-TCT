@@ -206,15 +206,15 @@ public class PlayerWatcher {
                             player.hidePlayer(game.getPlugin(), p);
                         } else {
                             if(NanamiTct.utilities.canSee(player, p)) {
-                                player.showPlayer(game.getPlugin(), p);
+                                NanamiTct.utilities.showPlayer(player, p);
                             } else {
-                                player.hidePlayer(game.getPlugin(), p);
+                                NanamiTct.utilities.hidePlayer(player, p);
                             }
                         }
                     }
                 } else {
                     for(Player p : Bukkit.getOnlinePlayers()) {
-                        player.showPlayer(game.getPlugin(), p);
+                        NanamiTct.utilities.showPlayer(player, p);
                     }
                 }
                 if(player.getExp() > 0F) {

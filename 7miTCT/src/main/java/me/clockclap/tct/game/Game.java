@@ -174,6 +174,10 @@ public class Game {
         }
         success = true;
         if(success) {
+            for(Player p : Bukkit.getOnlinePlayers()) {
+                NanamiTct.utilities.modifyName(p, ChatColor.GREEN + NanamiTct.utilities.resetColor(p.getName()));
+                NanamiTct.utilities.reloadPlayer();
+            }
             getReference().setGameState(GameState.STARTING);
             this.loc = loc;
             for(Player p : Bukkit.getOnlinePlayers()) {
@@ -425,9 +429,6 @@ public class Game {
                         getRoleCount().getImmoralCount() >= immoralMin) {
                     canStart = true;
                 }
-                if(i > 50) {
-                    break;
-                }
                 i++;
             }
         }
@@ -522,6 +523,8 @@ public class Game {
 //                ((CraftPlayer)pl).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(p.getEntityId()));
 //                ((CraftPlayer)pl).getHandle().playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer)p).getHandle()));
 //            }
+            NanamiTct.utilities.modifyName(p, ChatColor.GREEN + NanamiTct.utilities.resetColor(p.getName()));
+            NanamiTct.utilities.reloadPlayer();
             if(data.getRole() == GameRoles.VILLAGER) {
                 int coin = plugin.getTctConfig().getConfig().getInt("roles.coin.villagers", 0);
                 getRoleCount().setVillagersCount(getRoleCount().getVillagersCount() + 1);
@@ -613,6 +616,16 @@ public class Game {
             if(!data.isSpectator()) {
                 remainingPlayers.add(data);
                 realRemainingPlayers.add(data);
+            }
+            for(Player pl : Bukkit.getOnlinePlayers()) {
+                NanamiTct.utilities.hidePlayer(pl, p);
+                new BukkitRunnable() {
+
+                    @Override
+                    public void run() {
+                        NanamiTct.utilities.showPlayer(pl, p);
+                    }
+                }.runTaskLater(getPlugin(), 8);
             }
         }
         String trvi = "";
@@ -715,28 +728,8 @@ public class Game {
                 data.setVillager(0);
                 data.setSuspicious(0);
                 data.setWolf(0);
-//                for(Player pl : Bukkit.getOnlinePlayers()) {
-//                    if(pl == p) {
-//                        continue;
-//                    }
-//                    ((CraftPlayer)pl).getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, ((CraftPlayer)p).getHandle()));
-//                    GameProfile gp = ((CraftPlayer)p).getProfile();
-//                    try {
-//                        Field nameField = GameProfile.class.getDeclaredField("name");
-//                        nameField.setAccessible(true);
-//
-//                        Field modifiersField = Field.class.getDeclaredField("modifiers");
-//                        modifiersField.setAccessible(true);
-//                        modifiersField.setInt(nameField, nameField.getModifiers() & ~Modifier.FINAL);
-//
-//                        nameField.set(gp, ChatColor.GREEN + p.getName());
-//                    } catch (IllegalAccessException | NoSuchFieldException ex) {
-//                        throw new IllegalStateException(ex);
-//                    }
-//                    ((CraftPlayer)pl).getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer)p).getHandle()));
-//                    ((CraftPlayer)pl).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(p.getEntityId()));
-//                    ((CraftPlayer)pl).getHandle().playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer)p).getHandle()));
-//                }
+                NanamiTct.utilities.modifyName(p, ChatColor.GREEN + NanamiTct.utilities.resetColor(p.getName()));
+                NanamiTct.utilities.reloadPlayer();
                 if(data.getRole() == GameRoles.FOX && !data.isSpectator()) {
                     if(data.getWatcher() != null) {
                         data.getWatcher().cancelCountFox();
@@ -810,10 +803,10 @@ public class Game {
         }
         for(Player p : Bukkit.getOnlinePlayers()) {
             PlayerData data = getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
+            p.spigot().respawn();
             p.setFoodLevel(20);
             p.setMaxHealth(20.0D);
             p.setHealth(20.0D);
-            p.spigot().respawn();
             data.setRole(GameRoles.SPEC);
             data.setSpectator(true);
             data.setCoin(0);
@@ -826,7 +819,7 @@ public class Game {
             count.setFoxesCount(0);
             setRoleCount(count);
             p.getInventory().clear();
-            p.teleport(this.loc);
+            p.teleport(loc);
             p.setGameMode(GameMode.SURVIVAL);
             if(data.getKilledBy() != null) {
                 if (data.getKilledBy().getCategory() != Killer.KillerCategory.AIR) {
@@ -872,6 +865,10 @@ public class Game {
 
     public int getRealRemainingSeconds() {
         return this.realRemainingSeconds;
+    }
+
+    public int getNeededPlayers() {
+        return this.neededPlayers;
     }
 
     public List<PlayerData> getRemainingPlayers(boolean isReal) {

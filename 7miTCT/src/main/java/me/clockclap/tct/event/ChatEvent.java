@@ -60,7 +60,9 @@ public class ChatEvent implements Listener {
             }
         }
         if(visible) {
-            Bukkit.getServer().broadcastMessage(Reference.TCT_CHAT_FORMAT.replaceAll("%ROLE%", role_chatprefix).replaceAll("%PLAYER%", p.getDisplayName()).replaceAll("%MESSAGE%", result));
+            if(e.getPlayer() != null) {
+                Bukkit.getServer().broadcastMessage(Reference.TCT_CHAT_FORMAT.replaceAll("%ROLE%", role_chatprefix).replaceAll("%PLAYER%", p.getDisplayName()).replaceAll("%MESSAGE%", result));
+            }
         } else {
             for(Player q : Bukkit.getOnlinePlayers()) {
                 PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(q.getName()));

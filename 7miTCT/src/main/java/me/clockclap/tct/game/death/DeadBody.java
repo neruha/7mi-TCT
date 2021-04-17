@@ -117,9 +117,13 @@ public class DeadBody {
             if(getCause() == TctDeathCause.KILL) {
                 getGame().setRemainingSeconds(getGame().getRemainingSeconds() + getGame().getPlugin().getTctConfig().getConfig().getInt("countdown.addcount.kill", 20));
             }
-            for(PlayerData data : getGame().getRemainingPlayers(false)) {
-                if(data.getName().equalsIgnoreCase(this.getName())) {
-                    getGame().removeRemainingPlayers(data, false);
+            if(getGame().getRemainingPlayers(false) != null) {
+                for (PlayerData data : getGame().getRemainingPlayers(false)) {
+                    if(data != null) {
+                        if (data.getName().equalsIgnoreCase(this.getName())) {
+                            getGame().removeRemainingPlayers(data, false);
+                        }
+                    }
                 }
             }
         }

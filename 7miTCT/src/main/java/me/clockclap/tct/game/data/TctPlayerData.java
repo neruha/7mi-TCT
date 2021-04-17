@@ -2,6 +2,7 @@ package me.clockclap.tct.game.data;
 
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.PlayerWatcher;
+import me.clockclap.tct.game.data.profile.TctPlayerProfile;
 import me.clockclap.tct.game.death.DeadBody;
 import me.clockclap.tct.game.death.Killer;
 import me.clockclap.tct.game.death.TctDeathCause;
@@ -36,6 +37,8 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
     private int sus;
     private int wolf;
     private List<String> killedPlayers;
+    private TctPlayerProfile profile;
+    private boolean sponge;
 
     public TctPlayerData(NanamiTct plugin, GameRole role, String name) {
         super(plugin, Bukkit.getPlayer(name), role);
@@ -49,6 +52,28 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
         sus = 0;
         wolf = 0;
         killedPlayers = new ArrayList<>();
+        sponge = false;
+        profile = new TctPlayerProfile(name);
+        Player p = Bukkit.getPlayer(name);
+        if(p != null) {
+            boolean isAdmin = false;
+            if (plugin.getTctConfig().getConfig().getStringList("admin").contains("op")) {
+                if (p.isOp()) {
+                    isAdmin = true;
+                }
+            }
+            if (!isAdmin) {
+                for (String str : plugin.getTctConfig().getConfig().getStringList("admin")) {
+                    if (NanamiTct.utilities.resetColor(p.getName()).equalsIgnoreCase(str)) {
+                        isAdmin = true;
+                        break;
+                    }
+                }
+            }
+            if (isAdmin) {
+                profile.modify().setBoolean("admin", true).save();
+            }
+        }
     }
 
     @Override
@@ -147,8 +172,23 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
     }
 
     @Override
+    public TctPlayerProfile getProfile() {
+        return profile;
+    }
+
+    @Override
     public List<String> getKilledPlayers() {
         return this.killedPlayers;
+    }
+
+    @Override
+    public boolean hasSponge() {
+        return sponge;
+    }
+
+    @Override
+    public void setSponge(boolean bool) {
+        this.sponge = bool;
     }
 
     @Override

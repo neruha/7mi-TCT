@@ -19,6 +19,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -88,16 +89,34 @@ public final class NanamiTct extends JavaPlugin {
         // Initialize player data
         if(Bukkit.getOnlinePlayers().size() > 0) {
             for (Player p : Bukkit.getOnlinePlayers()) {
-                String name = utilities.resetColor(p.getName());
-                PlayerData data = new TctPlayerData(this, GameRoles.SPEC, name);
-                PlayerWatcher watcher = new PlayerWatcher(plugin.getGame(), p);
-                data.setSpectator(true);
-                data.setWatcher(watcher);
-                data.getWatcher().startWatch();
-                getGame().getReference().PLAYERDATA.put(name, data);
-                p.setFoodLevel(20);
-                p.setPlayerListName(ChatColor.GREEN + name);
-                bar.addPlayer(p);
+                if(p != null) {
+                    String name = utilities.resetColor(p.getName());
+                    PlayerData data = new TctPlayerData(this, GameRoles.SPEC, name);
+                    PlayerWatcher watcher = new PlayerWatcher(plugin.getGame(), p);
+                    data.setSpectator(true);
+                    data.setWatcher(watcher);
+                    data.getWatcher().startWatch();
+                    boolean isAdmin = false;
+                    FileConfiguration config = getTctConfig().getConfig();
+                    if (config.getStringList("admin").contains(name)) {
+                        isAdmin = true;
+                    } else if (config.getStringList("admin").contains("op") && p.isOp()) {
+                        isAdmin = true;
+                    }
+                    data.getProfile().modify().setBoolean("admin", isAdmin).save();
+                    getGame().getReference().PLAYERDATA.put(name, data);
+                    p.setFoodLevel(20);
+                    p.setPlayerListName(ChatColor.GREEN + name);
+                    bar.addPlayer(p);
+                    Utilities utilities = NanamiTct.utilities;
+                    utilities.modifyName(p, ChatColor.GREEN + name);
+                    for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
+                        if (pl != null) {
+                            pl.hidePlayer(plugin, p);
+                            pl.showPlayer(plugin, p);
+                        }
+                    }
+                }
             }
         }
 

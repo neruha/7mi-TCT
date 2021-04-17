@@ -3,6 +3,9 @@ package me.clockclap.tct.command;
 import com.google.common.base.Charsets;
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
+import me.clockclap.tct.game.data.PlayerData;
+import me.clockclap.tct.game.data.profile.TctPlayerProfile;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -29,26 +32,29 @@ public class CommandTctReload implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender instanceof Player) {
             Player p = (Player) sender;
-            boolean isAdmin = false;
-            if(plugin.getTctConfig().getConfig().getStringList("admin").contains("op")) {
-                if(p.isOp()) {
-                    isAdmin = true;
+            if(p != null) {
+                TctPlayerProfile profile = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName())).getProfile();
+                boolean isAdmin = profile.isAdmin();
+//              if(plugin.getTctConfig().getConfig().getStringList("admin").contains("op")) {
+//                  if(p.isOp()) {
+//                      isAdmin = true;
+//                  }
+//              }
+//              if(isAdmin == false) {
+//                 for (String str : plugin.getTctConfig().getConfig().getStringList("admin")) {
+//                      if (NanamiTct.utilities.resetColor(p.getName()).equalsIgnoreCase(str)) {
+//                          isAdmin = true;
+//                          break;
+//                      }
+//                  }
+//              }
+                if (isAdmin == false) {
+                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_PERMISSION);
+                    return true;
                 }
+                reload();
+                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_SYSTEM_RELOAD_COMPLETE);
             }
-            if(isAdmin == false) {
-                for (String str : plugin.getTctConfig().getConfig().getStringList("admin")) {
-                    if (NanamiTct.utilities.resetColor(p.getName()).equalsIgnoreCase(str)) {
-                        isAdmin = true;
-                        break;
-                    }
-                }
-            }
-            if(isAdmin == false) {
-                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_PERMISSION);
-                return true;
-            }
-            reload();
-            p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_SYSTEM_RELOAD_COMPLETE);
             return true;
         }
         reload();
@@ -71,6 +77,24 @@ public class CommandTctReload implements CommandExecutor {
             e.printStackTrace();
         } catch (InvalidConfigurationException e) {
             e.printStackTrace();
+        }
+
+        for(Player p : Bukkit.getOnlinePlayers()) {
+            if(p != null) {
+                String name = NanamiTct.utilities.resetColor(p.getName());
+                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(name);
+                if(data == null) {
+                    continue;
+                }
+                boolean isAdmin = false;
+                FileConfiguration config = plugin.getTctConfig().getConfig();
+                if(config.getStringList("admin").contains(name)) {
+                    isAdmin = true;
+                } else if(config.getStringList("admin").contains("op") && p.isOp()) {
+                    isAdmin = true;
+                }
+                data.getProfile().modify().setBoolean("admin", isAdmin).save();
+            }
         }
     }
 

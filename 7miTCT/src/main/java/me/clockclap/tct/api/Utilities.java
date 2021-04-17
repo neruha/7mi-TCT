@@ -3,6 +3,7 @@ package me.clockclap.tct.api;
 import com.mojang.authlib.GameProfile;
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.game.data.PlayerData;
+import me.clockclap.tct.game.data.profile.TctProperty;
 import me.clockclap.tct.game.role.GameRoles;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -16,6 +17,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.lang.reflect.Field;
+import java.util.*;
 
 public class Utilities {
 

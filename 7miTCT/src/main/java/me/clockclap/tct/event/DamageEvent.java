@@ -58,35 +58,37 @@ public class DamageEvent implements Listener {
     }
 
     @EventHandler
-    public synchronized void onDamageByEntity(EntityDamageByEntityEvent e) {
-        if(e.getEntity() instanceof Player && e.getDamager() instanceof TNTPrimed) {
-            e.setCancelled(true);
-            Player p = (Player) e.getEntity();
-            int i = 0;
-            boolean passed = true;
-            for(ItemStack item : p.getInventory().getContents()) {
-                if(item == null) {
-                    continue;
-                }
-                if(item.hasItemMeta()) {
-                    if(item.getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.SPONGE.getItemStack().getItemMeta().getDisplayName())) {
-                        passed = false;
-                        p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_CANCELLED_EXPLOSION);
-                        p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_DESTROY, 1.0F, 2.0F);
-                        int amt = item.getAmount() - 1;
-                        item.setAmount(amt);
-                        p.getInventory().setItem(i, amt > 0 ? item : null);
-                        p.updateInventory();
-                        break;
+    public void onDamageByEntity(EntityDamageByEntityEvent e) {
+        if(e.getEntity() != null && e.getDamager() != null) {
+            if (e.getEntity() instanceof Player && e.getDamager() instanceof TNTPrimed) {
+                e.setCancelled(true);
+                Player p = (Player) e.getEntity();
+                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
+                if(data.hasSponge()) {
+                    e.setCancelled(false);
+                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_CANCELLED_EXPLOSION);
+                    p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_DESTROY, 1.0F, 2.0F);
+                    int i = 0;
+                    for (ItemStack item : p.getInventory().getContents()) {
+                        if (item == null) {
+                            continue;
+                        }
+                        if (item.hasItemMeta()) {
+                            if (item.getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.SPONGE.getItemStack().getItemMeta().getDisplayName())) {
+                                int amt = item.getAmount() - 1;
+                                if(amt <= 0) {
+                                    data.setSponge(false);
+                                }
+                                item.setAmount(amt);
+                                p.getInventory().setItem(i, amt > 0 ? item : null);
+                                p.updateInventory();
+                                break;
+                            }
+                        }
+                        i++;
                     }
                 }
-                i++;
             }
-            try {
-                wait(100);
-            } catch (InterruptedException interruptedException) { }
-            if(passed) e.setCancelled(false);
-            passed = false;
         }
     }
 

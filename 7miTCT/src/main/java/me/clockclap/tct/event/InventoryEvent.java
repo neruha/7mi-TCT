@@ -13,6 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -59,6 +60,9 @@ public class InventoryEvent implements Listener {
                                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ALREADY_BOUGHT);
                                         return;
                                     }
+                                    if (meta.getDisplayName().equalsIgnoreCase(CustomItems.SPONGE.getItemStack().getItemMeta().getDisplayName())) {
+                                        data.setSponge(true);
+                                    }
                                     data.setCoin(data.getCoin() - 1);
                                     data.addBoughtItem(i.getName());
                                     p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_BOUGHT_ITEM.replaceAll("%ITEM%", i.getName()));
@@ -66,7 +70,9 @@ public class InventoryEvent implements Listener {
                                         p.getInventory().setHelmet(e.getCurrentItem());
                                         Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
                                             Location loc = new Location(p.getLocation().getWorld(), p.getLocation().getX(), p.getLocation().getY() + 1, p.getLocation().getZ());
-                                            p.getWorld().spawn(loc, Snowball.class);
+                                            TNTPrimed tnt = loc.getWorld().spawn(loc, TNTPrimed.class);
+                                            tnt.setYield(5.4F);
+                                            tnt.setFuseTicks(0);
                                         }, 60);
                                         p.closeInventory();
                                         return;

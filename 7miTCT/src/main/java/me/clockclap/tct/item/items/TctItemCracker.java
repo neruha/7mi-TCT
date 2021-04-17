@@ -48,7 +48,7 @@ public class TctItemCracker implements CustomItem {
         List<String> lore = new ArrayList<>();
         lore.add(description);
         meta.setLore(lore);
-        FireworkEffect effect = FireworkEffect.builder().with(FireworkEffect.Type.BURST).withColor(Color.BLACK).withFade(Color.BLACK).build();
+        FireworkEffect effect = FireworkEffect.builder().with(FireworkEffect.Type.BURST).withColor(Color.RED).withFade(Color.BLACK).build();
         meta.addEffect(effect);
         meta.setPower(1);
         item.setItemMeta(meta);

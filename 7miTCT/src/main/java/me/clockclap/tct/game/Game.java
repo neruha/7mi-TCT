@@ -1,6 +1,5 @@
 package me.clockclap.tct.game;
 
-import com.mojang.authlib.GameProfile;
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.game.data.PlayerData;
@@ -9,19 +8,14 @@ import me.clockclap.tct.game.death.Killer;
 import me.clockclap.tct.game.role.*;
 import me.clockclap.tct.item.CustomItems;
 import me.clockclap.tct.item.TctLog;
-import net.minecraft.server.v1_12_R1.PacketPlayOutEntityDestroy;
-import net.minecraft.server.v1_12_R1.PacketPlayOutNamedEntitySpawn;
-import net.minecraft.server.v1_12_R1.PacketPlayOutPlayerInfo;
+import net.minecraft.server.v1_12_R1.CommandKill;
 import org.bukkit.*;
 import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -40,8 +34,8 @@ public class Game {
     private int neededPlayers;
     private TctLog log;
     private Location loc;
-    private List<PlayerData> remainingPlayers = new ArrayList<>();
-    private List<PlayerData> realRemainingPlayers = new ArrayList<>();
+    private List<PlayerData> remainingPlayers;
+    private List<PlayerData> realRemainingPlayers;
     private boolean timeOut = false;
     private int startingIn = 0;
     public List<String> villagers = new ArrayList<>();
@@ -204,6 +198,9 @@ public class Game {
                     int j = sec[0];
                     if(j > 0) {
                         getBar().setTitle(Reference.TCT_BOSSBAR_FORMAT_STARTING.replaceAll("%SECOND%", String.valueOf(j)));
+                        for (Player p : Bukkit.getOnlinePlayers()) {
+                            p.setLevel(j);
+                        }
                         getBar().setProgress((1.0 / plugin.getTctConfig().getConfig().getInt("countdown.prestart", 10)) * j);
                         setStartingIn(j);
                     }
@@ -501,28 +498,6 @@ public class Game {
             PlayerData data = getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
             data.setCO(GameRoles.NONE);
             p.setPlayerListName("");
-//            for(Player pl : Bukkit.getOnlinePlayers()) {
-//                if(pl == p) {
-//                    continue;
-//                }
-//                ((CraftPlayer)pl).getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, ((CraftPlayer)p).getHandle()));
-//                GameProfile gp = ((CraftPlayer)p).getProfile();
-//                try {
-//                    Field nameField = GameProfile.class.getDeclaredField("name");
-//                    nameField.setAccessible(true);
-//
-//                    Field modifiersField = Field.class.getDeclaredField("modifiers");
-//                    modifiersField.setAccessible(true);
-//                    modifiersField.setInt(nameField, nameField.getModifiers() & ~Modifier.FINAL);
-//
-//                    nameField.set(gp, ChatColor.GREEN + p.getName());
-//                } catch (IllegalAccessException | NoSuchFieldException ex) {
-//                    throw new IllegalStateException(ex);
-//                }
-//                ((CraftPlayer)pl).getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer)p).getHandle()));
-//                ((CraftPlayer)pl).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(p.getEntityId()));
-//                ((CraftPlayer)pl).getHandle().playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer)p).getHandle()));
-//            }
             NanamiTct.utilities.modifyName(p, ChatColor.GREEN + NanamiTct.utilities.resetColor(p.getName()));
             NanamiTct.utilities.reloadPlayer();
             if(data.getRole() == GameRoles.VILLAGER) {
@@ -679,7 +654,7 @@ public class Game {
             public void run() {
                 if(getRealRemainingSeconds() > 0) {
                     time[0]++;
-                    if(time[0] == getPlugin().getTctConfig().getConfig().getInt("", 180)) {
+                    if(time[0] % getPlugin().getTctConfig().getConfig().getInt("", 180) == 0) {
                         time[0] = 0;
                         for(Player p : Bukkit.getOnlinePlayers()) {
                             PlayerData data = getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
@@ -696,6 +671,9 @@ public class Game {
                 if(getRemainingSeconds() > 0) {
                     setRemainingSeconds(getRemainingSeconds() - 1);
                     getBar().setTitle(Reference.TCT_BOSSBAR_FORMAT_GAMING.replaceAll("%SECOND%", String.valueOf(getRemainingSeconds())));
+                    for(Player p : Bukkit.getOnlinePlayers()) {
+                        p.setLevel(getRemainingSeconds());
+                    }
                 }
             }
         }.runTaskTimer(plugin, 0L, 20L);

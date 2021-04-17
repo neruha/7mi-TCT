@@ -60,7 +60,7 @@ public class TctItemWolfSword implements CustomSpecialItem {
 
     @Override
     public void onAttackPlayer(Player attacker, Player target) {
-        if(target != null) {
+        if(target != null && attacker != null) {
             NanamiTct plugin = NanamiTct.plugin;
             PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(target.getName()));
             PlayerData data_ = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(attacker.getName()));

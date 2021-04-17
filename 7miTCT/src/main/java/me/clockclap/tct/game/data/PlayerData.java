@@ -1,6 +1,7 @@
 package me.clockclap.tct.game.data;
 
 import me.clockclap.tct.api.PlayerWatcher;
+import me.clockclap.tct.game.data.profile.TctPlayerProfile;
 import me.clockclap.tct.game.death.Killer;
 import me.clockclap.tct.game.death.TctDeathCause;
 import me.clockclap.tct.game.role.GameRole;
@@ -39,7 +40,13 @@ public interface PlayerData extends EntityData {
 
     public int getWolf();
 
+    public TctPlayerProfile getProfile();
+
     public List<String> getKilledPlayers();
+
+    public boolean hasSponge();
+
+    public void setSponge(boolean bool);
 
     public void addKilledPlayer(String name);
 

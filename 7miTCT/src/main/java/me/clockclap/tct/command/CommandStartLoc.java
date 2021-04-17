@@ -2,6 +2,9 @@ package me.clockclap.tct.command;
 
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
+import me.clockclap.tct.game.GameState;
+import me.clockclap.tct.game.data.profile.TctPlayerProfile;
+import me.clockclap.tct.game.role.GameTeams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -23,29 +26,35 @@ public class CommandStartLoc implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender instanceof Player) {
             Player p = (Player) sender;
-            boolean isAdmin = false;
-            if(plugin.getTctConfig().getConfig().getStringList("admin").contains("op")) {
-                if(p.isOp()) {
-                    isAdmin = true;
+            if(p != null) {
+                TctPlayerProfile profile = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName())).getProfile();
+                boolean isAdmin = profile.isAdmin();
+//              if(plugin.getTctConfig().getConfig().getStringList("admin").contains("op")) {
+//                  if(p.isOp()) {
+//                      isAdmin = true;
+//                  }
+//              }
+//              if(isAdmin == false) {
+//                 for (String str : plugin.getTctConfig().getConfig().getStringList("admin")) {
+//                      if (NanamiTct.utilities.resetColor(p.getName()).equalsIgnoreCase(str)) {
+//                          isAdmin = true;
+//                          break;
+//                      }
+//                  }
+//              }
+                if (isAdmin == false) {
+                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_PERMISSION);
+                    return true;
                 }
-            }
-            if(isAdmin == false) {
-                for (String str : plugin.getTctConfig().getConfig().getStringList("admin")) {
-                    if (NanamiTct.utilities.resetColor(p.getName()).equalsIgnoreCase(str)) {
-                        isAdmin = true;
-                        break;
-                    }
+                if(plugin.getGame().getReference().getGameState() == GameState.GAMING || plugin.getGame().getReference().getGameState() == GameState.STARTING) {
+                    stopGame();
                 }
+                if (args.length < 4) {
+                    sender.sendMessage(Reference.TCT_CHATPREFIX + " " + usage);
+                    return true;
+                }
+                process(sender, args);
             }
-            if(isAdmin == false) {
-                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_PERMISSION);
-                return true;
-            }
-            if(args.length < 4) {
-                sender.sendMessage(Reference.TCT_CHATPREFIX + " " + usage);
-                return true;
-            }
-            process(sender, args);
             return true;
         }
         if(args.length < 4) {
@@ -54,6 +63,16 @@ public class CommandStartLoc implements CommandExecutor {
         }
         process(sender, args);
         return true;
+    }
+
+    private void stopGame() {
+        if(plugin.getGame().getReference().getGameState() == GameState.STARTING) {
+            plugin.getGame().getPreTimer().cancel();
+        } else if(plugin.getGame().getReference().getGameState() == GameState.GAMING) {
+            plugin.getGame().getTimer().cancel();
+        }
+        plugin.getGame().stop(GameTeams.NONE);
+        Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_SYSTEM_STOPPED_GAME);
     }
 
     private void process(CommandSender sender, String[] args) {

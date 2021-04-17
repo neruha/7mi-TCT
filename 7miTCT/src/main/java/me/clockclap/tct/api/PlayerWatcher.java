@@ -221,7 +221,9 @@ public class PlayerWatcher {
                     player.setExp(0F);
                 }
                 if(player.getLevel() > 0) {
-                    player.setLevel(0);
+                    if(getGame().getReference().getGameState() == GameState.WAITING || getGame().getReference().getGameState() == GameState.ENDING) {
+                        player.setLevel(0);
+                    }
                 }
             }
         };
@@ -259,12 +261,14 @@ public class PlayerWatcher {
                         }
                     }
                     if(getCountFox() == -1) {
-                        Firework fw = (Firework) getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), EntityType.FIREWORK);
-                        FireworkMeta meta = fw.getFireworkMeta();
-                        FireworkEffect effect = FireworkEffect.builder().with(FireworkEffect.Type.BURST).withColor(Color.BLACK).withFade(Color.BLACK).build();
-                        meta.addEffect(effect);
-                        meta.setPower(1);
-                        fw.setFireworkMeta(meta);
+                        if(!getPlayerData().isSpectator()) {
+                            Firework fw = (Firework) getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), EntityType.FIREWORK);
+                            FireworkMeta meta = fw.getFireworkMeta();
+                            FireworkEffect effect = FireworkEffect.builder().with(FireworkEffect.Type.BURST).withColor(Color.RED).withFade(Color.BLACK).build();
+                            meta.addEffect(effect);
+                            meta.setPower(1);
+                            fw.setFireworkMeta(meta);
+                        }
                     }
                 }
             };

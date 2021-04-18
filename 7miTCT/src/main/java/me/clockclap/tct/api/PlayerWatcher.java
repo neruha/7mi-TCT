@@ -6,6 +6,7 @@ import me.clockclap.tct.game.GameState;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.role.GameRoles;
 import org.bukkit.*;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
@@ -262,11 +263,45 @@ public class PlayerWatcher {
                     }
                     if(getCountFox() == -1) {
                         if(!getPlayerData().isSpectator()) {
+                            FileConfiguration config = NanamiTct.plugin.getTctConfig().getConfig();
                             Firework fw = (Firework) getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), EntityType.FIREWORK);
                             FireworkMeta meta = fw.getFireworkMeta();
-                            FireworkEffect effect = FireworkEffect.builder().with(FireworkEffect.Type.BURST).withColor(Color.RED).withFade(Color.BLACK).build();
+                            FireworkEffect.Builder builder = FireworkEffect.builder();
+                            try {
+                                FireworkEffect.Type type = FireworkEffect.Type.valueOf(config.getString("fireworks.type"));
+                                builder.with(type);
+                            } catch (Exception e) {
+                                builder.with(FireworkEffect.Type.BURST);
+                            }
+                            try {
+                                for (String color : config.getStringList("fireworks.colors")) {
+                                    int c;
+                                    if (color.startsWith("0x")) {
+                                        c = (int) Long.parseLong(color, 16);
+                                    } else {
+                                        c = (int) Long.parseLong(color, 10);
+                                    }
+                                    builder.withColor(Color.fromRGB(c));
+                                }
+                            } catch(Exception e) {
+                                builder.withColor(Color.RED);
+                            }
+                            try {
+                                for (String color : config.getStringList("fireworks.fades")) {
+                                    int c;
+                                    if (color.startsWith("0x")) {
+                                        c = (int) Long.parseLong(color, 16);
+                                    } else {
+                                        c = (int) Long.parseLong(color, 10);
+                                    }
+                                    builder.withFade(Color.fromRGB(c));
+                                }
+                            } catch(Exception e) {
+                                builder.withFade(Color.RED);
+                            }
+                            FireworkEffect effect = builder.build();
                             meta.addEffect(effect);
-                            meta.setPower(1);
+                            meta.setPower(config.getInt("fireworks.power"));
                             fw.setFireworkMeta(meta);
                         }
                     }

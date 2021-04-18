@@ -1,5 +1,6 @@
 package me.clockclap.tct.item.items;
 
+import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomItem;
@@ -7,6 +8,7 @@ import me.clockclap.tct.item.ItemIndex;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -47,7 +49,37 @@ public class TctItemPotionSpeed implements CustomItem {
         List<String> lore = new ArrayList<>();
         lore.add(description);
         meta.setLore(lore);
-        meta.addCustomEffect(new PotionEffect(PotionEffectType.SPEED, 3600, 1), true);
+        int tick = 3600;
+        int level;
+        FileConfiguration config = NanamiTct.plugin.getTctConfig().getConfig();
+        try {
+            if (config.getString("potion-effect.speed.duration").endsWith("t")) {
+                String str = config.getString("potion-effect.speed.duration");
+                str = str.substring(0, str.length() - 1);
+                try {
+                    tick = Integer.parseInt(str);
+                } catch (NumberFormatException e) {
+                    tick = 3600;
+                }
+            } else if (config.getString("potion-effect.speed.duration").endsWith("s")) {
+                String str = config.getString("potion-effect.speed.duration");
+                str = str.substring(0, str.length() - 1);
+                try {
+                    tick = Integer.parseInt(str) * 20;
+                } catch (NumberFormatException e) {
+                    tick = 3600;
+                }
+            }
+        } catch(NullPointerException e) {
+            tick = 3600;
+        }
+        try {
+            level = config.getInt("potion-effect.speed.level");
+        } catch(Exception e) {
+            level = 1;
+        }
+        meta.addCustomEffect(new PotionEffect(PotionEffectType.SPEED, tick, level), true);
+        meta.setColor(Color.fromRGB(150, 150, 255));
         item.setItemMeta(meta);
         this.item = item;
     }

@@ -1,5 +1,6 @@
 package me.clockclap.tct.item.items;
 
+import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomItem;
@@ -8,6 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -48,9 +50,43 @@ public class TctItemCracker implements CustomItem {
         List<String> lore = new ArrayList<>();
         lore.add(description);
         meta.setLore(lore);
-        FireworkEffect effect = FireworkEffect.builder().with(FireworkEffect.Type.BURST).withColor(Color.RED).withFade(Color.BLACK).build();
+        FileConfiguration config = NanamiTct.plugin.getTctConfig().getConfig();
+        FireworkEffect.Builder builder = FireworkEffect.builder();
+        try {
+            FireworkEffect.Type type = FireworkEffect.Type.valueOf(config.getString("fireworks.type"));
+            builder.with(type);
+        } catch (Exception e) {
+            builder.with(FireworkEffect.Type.BURST);
+        }
+        try {
+            for (String color : config.getStringList("fireworks.colors")) {
+                int c;
+                if (color.startsWith("0x")) {
+                    c = (int) Long.parseLong(color, 16);
+                } else {
+                    c = (int) Long.parseLong(color, 10);
+                }
+                builder.withColor(Color.fromRGB(c));
+            }
+        } catch(Exception e) {
+            builder.withColor(Color.RED);
+        }
+        try {
+            for (String color : config.getStringList("fireworks.fades")) {
+                int c;
+                if (color.startsWith("0x")) {
+                    c = (int) Long.parseLong(color, 16);
+                } else {
+                    c = (int) Long.parseLong(color, 10);
+                }
+                builder.withFade(Color.fromRGB(c));
+            }
+        } catch(Exception e) {
+            builder.withFade(Color.RED);
+        }
+        FireworkEffect effect = builder.build();
         meta.addEffect(effect);
-        meta.setPower(1);
+        meta.setPower(config.getInt("fireworks.power"));
         item.setItemMeta(meta);
         item.setAmount(3);
         this.item = item;

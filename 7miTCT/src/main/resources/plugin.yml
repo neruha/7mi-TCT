@@ -17,6 +17,7 @@ commands:
   tctreload:
     description: "コンフィグをリロードします。"
   barrier:
+    aliases: ["gb"]
     description: "バリアブロックを入手します。"
   start:
     description: "ゲームを開始します。"

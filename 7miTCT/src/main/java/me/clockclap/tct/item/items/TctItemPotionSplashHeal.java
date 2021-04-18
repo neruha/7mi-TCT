@@ -1,11 +1,13 @@
 package me.clockclap.tct.item.items;
 
+import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomItem;
 import me.clockclap.tct.item.ItemIndex;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -45,7 +47,14 @@ public class TctItemPotionSplashHeal implements CustomItem {
         List<String> lore = new ArrayList<>();
         lore.add(description);
         meta.setLore(lore);
-        meta.addCustomEffect(new PotionEffect(PotionEffectType.HEAL, 1, 2), false);
+        int level;
+        FileConfiguration config = NanamiTct.plugin.getTctConfig().getConfig();
+        try {
+            level = config.getInt("potion-effect.heal.level");
+        } catch(Exception e) {
+            level = 2;
+        }
+        meta.addCustomEffect(new PotionEffect(PotionEffectType.HEAL, 1, level), false);
         item.setItemMeta(meta);
         this.item = item;
     }

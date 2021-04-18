@@ -1,5 +1,6 @@
 package me.clockclap.tct.item.items;
 
+import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomSpecialItem;
@@ -8,6 +9,7 @@ import me.clockclap.tct.item.ItemIndex;
 import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -86,7 +88,36 @@ public class TctItemHealerSword implements CustomSpecialItem {
 
     @Override
     public void onAttackPlayer(Player attacker, Player target) {
-        target.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20, 3));
+        int tick = 20;
+        int level;
+        FileConfiguration config = NanamiTct.plugin.getTctConfig().getConfig();
+        try {
+            if (config.getString("effect.healer-regeneration.duration").endsWith("t")) {
+                String str = config.getString("effect.healer-regeneration.duration");
+                str = str.substring(0, str.length() - 1);
+                try {
+                    tick = Integer.parseInt(str);
+                } catch (NumberFormatException e) {
+                    tick = 20;
+                }
+            } else if (config.getString("effect.healer-regeneration.duration").endsWith("s")) {
+                String str = config.getString("effect.healer-regeneration.duration");
+                str = str.substring(0, str.length() - 1);
+                try {
+                    tick = Integer.parseInt(str) * 20;
+                } catch (NumberFormatException e) {
+                    tick = 20;
+                }
+            }
+        } catch(NullPointerException e) {
+            tick = 20;
+        }
+        try {
+            level = config.getInt("effect.healer-regeneration.level");
+        } catch(Exception e) {
+            level = 3;
+        }
+        target.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, tick, level));
     }
 
     @Override

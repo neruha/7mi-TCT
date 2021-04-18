@@ -1,5 +1,6 @@
 package me.clockclap.tct.item.blocks;
 
+import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
@@ -8,6 +9,7 @@ import me.clockclap.tct.item.CustomBlock;
 import me.clockclap.tct.item.ItemIndex;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -66,7 +68,32 @@ public class TctItemHealStation implements CustomBlock {
     }
 
     private void heal(Player p) {
-        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 40, 3));
+        int tick = 40;
+        int level;
+        FileConfiguration config = NanamiTct.plugin.getTctConfig().getConfig();
+        if(config.getString("effect.detective-regeneration.duration").endsWith("t")) {
+            String str = config.getString("effect.detective-regeneration.duration");
+            str = str.substring(0, str.length() - 1);
+            try {
+                tick = Integer.parseInt(str);
+            } catch(NumberFormatException e) {
+                tick = 40;
+            }
+        } else if(config.getString("effect.detective-regeneration.duration").endsWith("s")) {
+            String str = config.getString("effect.detective-regeneration.duration");
+            str = str.substring(0, str.length() - 1);
+            try {
+                tick = Integer.parseInt(str) * 20;
+            } catch(NumberFormatException e) {
+                tick = 40;
+            }
+        }
+        try {
+            level = config.getInt("effect.detective-regeneration.level");
+        } catch(Exception e) {
+            level = 3;
+        }
+        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, tick, level));
         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_HEAL_STATION_USED);
     }
 

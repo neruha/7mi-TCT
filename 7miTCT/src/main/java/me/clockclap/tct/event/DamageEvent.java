@@ -15,6 +15,7 @@ import me.clockclap.tct.item.CustomItems;
 import net.minecraft.server.v1_12_R1.Explosion;
 import org.apache.logging.log4j.util.ReflectionUtil;
 import org.bukkit.*;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.craftbukkit.v1_12_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
@@ -165,7 +166,36 @@ public class DamageEvent implements Listener {
                             for(ItemStack item : contents) {
                                 if(item != null) {
                                     if(item.hasItemMeta() && item.getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.EMPTY_BOTTLE.getItemStack().getItemMeta().getDisplayName())) {
-                                        p.getKiller().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 200, 2));
+                                        int tick = 200;
+                                        int level;
+                                        FileConfiguration config = NanamiTct.plugin.getTctConfig().getConfig();
+                                        try {
+                                            if (config.getString("potion-effect.slowness.duration").endsWith("t")) {
+                                                String str = config.getString("potion-effect.slowness.duration");
+                                                str = str.substring(0, str.length() - 1);
+                                                try {
+                                                    tick = Integer.parseInt(str);
+                                                } catch (NumberFormatException ex) {
+                                                    tick = 200;
+                                                }
+                                            } else if (config.getString("potion-effect.slowness.duration").endsWith("s")) {
+                                                String str = config.getString("potion-effect.slowness.duration");
+                                                str = str.substring(0, str.length() - 1);
+                                                try {
+                                                    tick = Integer.parseInt(str) * 20;
+                                                } catch (NumberFormatException ex) {
+                                                    tick = 200;
+                                                }
+                                            }
+                                        } catch(NullPointerException ex) {
+                                            tick = 200;
+                                        }
+                                        try {
+                                            level = config.getInt("potion-effect.slowness.level");
+                                        } catch(Exception ex) {
+                                            level = 2;
+                                        }
+                                        p.getKiller().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, tick, level));
                                         break;
                                     }
                                 }
@@ -185,6 +215,7 @@ public class DamageEvent implements Listener {
             } else {
                 respawnLoc = e.getEntity().getLocation();
             }
+            p.spigot().respawn();
         }
 
     }

@@ -8,6 +8,7 @@ import me.clockclap.tct.game.GameState;
 import me.clockclap.tct.game.data.profile.TctPlayerProfile;
 import me.clockclap.tct.game.role.GameTeams;
 import me.clockclap.tct.item.TctLog;
+import net.minecraft.server.v1_12_R1.CommandGamerule;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;

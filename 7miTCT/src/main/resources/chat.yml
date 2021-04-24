@@ -1,0 +1,33 @@
+### 7mi TCT Chat Config
+
+#デフォルト: true
+#チャットを日本語化するかどうか
+japanize: true
+
+#デフォルト: '#'
+#変換を無効化する文字
+japanize-disabler: '#'
+
+#デフォルト: '!'
+#漢字変換を無効化する文字 (かな変換のみが行われます)
+ime-disabler: '!'
+
+#デフォルト: '.'
+#先頭に入れると消える文字 (先頭に/を入力できる)
+escape: '.'
+
+#デフォルト: '&r%ROLE% %PLAYER%: &r%MESSAGE%'
+#チャットのフォーマット
+format: '&r%ROLE% %PLAYER%: &r%MESSAGE%'
+
+#デフォルト: '&r%JAPANIZE%&r &8(&7%MESSAGE%&8)&r'
+#日本語化のフォーマット
+japanize-format: '&r%JAPANIZE%&r &8(&7%MESSAGE%&8)&r'
+
+#デフォルト: true
+#プレイヤー名を日本語化しないようにするかどうか
+disable-playername-japanize: true
+
+#デフォルト: true
+#チャットに色を付けられるようにするかどうか
+coloured-chat: true

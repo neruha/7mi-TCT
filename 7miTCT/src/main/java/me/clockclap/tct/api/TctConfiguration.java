@@ -11,6 +11,8 @@ public class TctConfiguration {
     private NanamiTct plugin;
     private FileConfiguration config;
     private File configFile;
+    private FileConfiguration chat;
+    private File chatFile;
 
     public TctConfiguration(NanamiTct plugin) {
         this.plugin = plugin;
@@ -35,7 +37,7 @@ public class TctConfiguration {
             existsConfig = false;
         }
         FileConfiguration config = YamlConfiguration.loadConfiguration(fConfig);
-        if(existsConfig == false) {
+        if(!existsConfig) {
             try {
                 InputStream inputStream = plugin.getResource("config.yml");
                 File file = fConfig;
@@ -53,14 +55,49 @@ public class TctConfiguration {
         }
         this.config = config;
 
+        //chat.yml
+        File fChat = new File(datafolder + "/chat.yml");
+        this.chatFile = fChat;
+        boolean existsChat = true;
+        if(!fChat.exists()) {
+            fChat.createNewFile();
+            existsChat = false;
+        }
+        FileConfiguration chat = YamlConfiguration.loadConfiguration(fChat);
+        if(!existsChat) {
+            try {
+                InputStream inputStream = plugin.getResource("chat.yml");
+                File file = fChat;
+                OutputStream out = new FileOutputStream(file);
+                byte[] buf = new byte['?'];
+                int length;
+                while ((length = inputStream.read(buf)) > 0) {
+                    out.write(buf, 0, length);
+                }
+                out.close();
+                inputStream.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        this.chat = chat;
+
     }
 
     public FileConfiguration getConfig() {
         return this.config;
     }
 
+    public FileConfiguration getChat() {
+        return this.chat;
+    }
+
     public File getConfigFile() {
         return this.configFile;
+    }
+
+    public File getChatFile() {
+        return this.chatFile;
     }
 
 }

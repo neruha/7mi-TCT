@@ -16,4 +16,6 @@ public class GameRoles {
     public static final GameRole FOX = new RoleFox();
     public static final GameRole IMMORAL = new RoleImmoral();
 
+    public static final GameRole CONFIRM_DETECTIVE = new ConfirmDetective();
+
 }

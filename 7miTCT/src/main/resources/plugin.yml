@@ -3,7 +3,7 @@ version: ${version}
 main: me.clockclap.tct.NanamiTct
 api-version: 1.12
 prefix: 7mi-TCT
-authors: [ClockClap, ShoboSuke, jack_basukeraihu]
+authors: [ClockClap, jack_basukeraihu, ShoboSuke]
 
 commands:
   abouttct:

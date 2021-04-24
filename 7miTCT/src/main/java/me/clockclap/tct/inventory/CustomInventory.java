@@ -68,13 +68,14 @@ public class CustomInventory {
         inv1.setItem(1, CustomItems.STRONG_BOW.getItemStack());
         inv1.setItem(2, CustomItems.DETECTIVE_SWORD.getItemStack());
         inv1.setItem(3, CustomItems.HEAL_STATION.getItemStack());
-        inv1.setItem(4, CustomItems.SPEED_POTION.getItemStack());
-        inv1.setItem(5, CustomItems.STICK.getItemStack());
-        inv1.setItem(6, CustomItems.EMPTY_BOTTLE.getItemStack());
-        inv1.setItem(7, CustomItems.MILK.getItemStack());
-        inv1.setItem(8, CustomItems.SPONGE.getItemStack());
-        inv1.setItem(9, CustomItems.HEAL_POTION.getItemStack());
-        inv1.setItem(10, CustomItems.CRACKER.getItemStack());
+        inv1.setItem(4, CustomItems.DIAMOND_HELMET.getItemStack());
+        inv1.setItem(5, CustomItems.SPEED_POTION.getItemStack());
+        inv1.setItem(6, CustomItems.STICK.getItemStack());
+        inv1.setItem(7, CustomItems.EMPTY_BOTTLE.getItemStack());
+        inv1.setItem(8, CustomItems.MILK.getItemStack());
+        inv1.setItem(9, CustomItems.SPONGE.getItemStack());
+        inv1.setItem(10, CustomItems.HEAL_POTION.getItemStack());
+        inv1.setItem(11, CustomItems.CRACKER.getItemStack());
 
         inv2.setItem(0, CustomItems.STONE_SWORD.getItemStack());
         inv2.setItem(1, CustomItems.STRONG_BOW.getItemStack());

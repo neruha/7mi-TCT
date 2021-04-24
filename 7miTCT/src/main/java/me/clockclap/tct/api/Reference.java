@@ -27,7 +27,9 @@ public class Reference {
     }
     public static List<String> colorChars() {
         return Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
-            "a", "b", "c", "d", "e", "f", "k", "l", "m", "n", "o");
+            "a", "b", "c", "d", "e", "f", "k", "l", "m", "n", "o",
+            "A", "B", "C", "D", "E", "F", "K", "L", "M", "N", "O"
+        );
     }
 
     //ボスバー
@@ -196,6 +198,8 @@ public class Reference {
 
     //役職 CO
     public static final String TCT_CHAT_CO = ChatColor.AQUA + "%PLAYER%が%CO%" + ChatColor.AQUA + "をしました";
+    public static final String TCT_CONFIRM_DETECTIVE = ChatColor.BLUE + "探偵の証明";
+    public static final String TCT_CHAT_DETECTIVE = ChatColor.AQUA + "%PLAYER%がダイヤのヘルメットを買って" + TCT_CONFIRM_DETECTIVE + ChatColor.AQUA + "を行いました";
     public static final String TCT_CHAT_ROLE_SPEC_P = ChatColor.GREEN + "[観戦チャット]";
     public static final String TCT_CHAT_ROLE_CO_NONE_P = ChatColor.RESET + "[CO無し]";
     public static final String TCT_CHAT_ROLE_CO_VILLAGER_P = ChatColor.GREEN + "[村人CO]";
@@ -204,6 +208,8 @@ public class Reference {
     public static final String TCT_CHAT_ROLE_CO_FANATIC_P = ChatColor.DARK_PURPLE + "[狂人CO]";
     public static final String TCT_CHAT_ROLE_CO_WOLF_P = ChatColor.RED + "[人狼CO]";
     public static final String TCT_CHAT_ROLE_CO_FOX_P = ChatColor.GOLD + "[妖狐CO]";
+    public static final String TCT_CHAT_ROLE_CO_IMMORAL_P = ChatColor.DARK_GRAY + "[背徳者CO]";
+    public static final String TCT_CHAT_ROLE_DETECTIVE = ChatColor.BLUE + "[探偵確定]";
 
     public static final String TCT_CHAT_ROLE_CO_VILLAGER = ChatColor.GREEN + "村人CO";
     public static final String TCT_CHAT_ROLE_CO_DETECTIVE = ChatColor.BLUE + "探偵CO";
@@ -211,12 +217,11 @@ public class Reference {
     public static final String TCT_CHAT_ROLE_CO_FANATIC = ChatColor.DARK_PURPLE + "狂人CO";
     public static final String TCT_CHAT_ROLE_CO_WOLF = ChatColor.RED + "人狼CO";
     public static final String TCT_CHAT_ROLE_CO_FOX = ChatColor.GOLD + "妖狐CO";
+    public static final String TCT_CHAT_ROLE_CO_IMMORAL = ChatColor.DARK_GRAY + "背徳者CO";
     //(おまけ)
-    public static final String TCT_CHAT_ROLE_CO_IMMORAL_P = ChatColor.DARK_GRAY + "[背徳者CO]";
     public static final String TCT_CHAT_ROLE_CO_MEDIUM_P = ChatColor.DARK_PURPLE + "[霊媒師CO]";
     public static final String TCT_CHAT_ROLE_CO_HUNTER_P = ChatColor.DARK_GREEN + "[狩人CO]";
 
-    public static final String TCT_CHAT_ROLE_CO_IMMORAL = ChatColor.DARK_GRAY + "背徳者CO";
     public static final String TCT_CHAT_ROLE_CO_MEDIUM = ChatColor.DARK_PURPLE + "霊媒師CO";
     public static final String TCT_CHAT_ROLE_CO_HUNTER = ChatColor.DARK_GREEN + "狩人CO";
 

@@ -18,6 +18,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TctItemCracker implements CustomItem {
@@ -53,7 +54,7 @@ public class TctItemCracker implements CustomItem {
         FileConfiguration config = NanamiTct.plugin.getTctConfig().getConfig();
         FireworkEffect.Builder builder = FireworkEffect.builder();
         try {
-            FireworkEffect.Type type = FireworkEffect.Type.valueOf(config.getString("fireworks.type"));
+            FireworkEffect.Type type = FireworkEffect.Type.valueOf(config.getString("fireworks.type", "BURST"));
             builder.with(type);
         } catch (Exception e) {
             builder.with(FireworkEffect.Type.BURST);
@@ -84,9 +85,15 @@ public class TctItemCracker implements CustomItem {
         } catch(Exception e) {
             builder.withFade(Color.RED);
         }
-        FireworkEffect effect = builder.build();
-        meta.addEffect(effect);
-        meta.setPower(config.getInt("fireworks.power"));
+        if(builder != null) {
+            FireworkEffect effect = builder.build();
+            meta.addEffect(effect);
+            meta.setPower(config.getInt("fireworks.power"));
+        } else {
+            FireworkEffect effect = FireworkEffect.builder().with(FireworkEffect.Type.BURST).withColor(Color.RED).withFade(Color.RED).build();
+            meta.addEffect(effect);
+            meta.setPower(1);
+        }
         item.setItemMeta(meta);
         item.setAmount(3);
         this.item = item;

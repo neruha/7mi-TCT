@@ -77,6 +77,11 @@ public class InventoryEvent implements Listener {
                                         p.closeInventory();
                                         return;
                                     }
+                                    if (i.getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.DIAMOND_HELMET.getItemStack().getItemMeta().getDisplayName())) {
+                                        p.getInventory().setHelmet(e.getCurrentItem());
+                                        p.closeInventory();
+                                        return;
+                                    }
                                     p.getInventory().addItem(e.getCurrentItem());
                                     p.closeInventory();
                                     return;
@@ -181,6 +186,14 @@ public class InventoryEvent implements Listener {
                         PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName()));
                         data.setCO(GameRoles.IMMORAL);
                         Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_CO.replaceAll("%PLAYER%", NanamiTct.utilities.resetColor(e.getPlayer().getName())).replaceAll("%CO%", Reference.TCT_CHAT_ROLE_CO_IMMORAL));
+                        plugin.getGame().getLog().addLine(Reference.TCT_LOGBOOK_CO_IMMORAL);
+                        plugin.getGame().getLog().addLine(NanamiTct.utilities.resetColor(e.getPlayer().getName()));
+                        plugin.getGame().getLog().update();
+                    }
+                    if (CustomItems.DIAMOND_HELMET.getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(newArmor.getItemMeta().getDisplayName())) {
+                        PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName()));
+                        data.setCO(GameRoles.CONFIRM_DETECTIVE);
+                        Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_DETECTIVE.replaceAll("%PLAYER%", NanamiTct.utilities.resetColor(e.getPlayer().getName())));
                         plugin.getGame().getLog().addLine(Reference.TCT_LOGBOOK_CO_IMMORAL);
                         plugin.getGame().getLog().addLine(NanamiTct.utilities.resetColor(e.getPlayer().getName()));
                         plugin.getGame().getLog().update();

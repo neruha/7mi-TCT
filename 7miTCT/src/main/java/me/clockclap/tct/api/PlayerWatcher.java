@@ -299,9 +299,15 @@ public class PlayerWatcher {
                             } catch(Exception e) {
                                 builder.withFade(Color.RED);
                             }
-                            FireworkEffect effect = builder.build();
-                            meta.addEffect(effect);
-                            meta.setPower(config.getInt("fireworks.power"));
+                            if(builder != null) {
+                                FireworkEffect effect = builder.build();
+                                meta.addEffect(effect);
+                                meta.setPower(config.getInt("fireworks.power"));
+                            } else {
+                                FireworkEffect effect = FireworkEffect.builder().with(FireworkEffect.Type.BURST).withColor(Color.RED).withFade(Color.RED).build();
+                                meta.addEffect(effect);
+                                meta.setPower(1);
+                            }
                             fw.setFireworkMeta(meta);
                         }
                     }

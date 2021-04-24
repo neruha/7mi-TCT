@@ -51,6 +51,8 @@ public final class CustomItems {
     public static final CustomItem CO_FOX = new TctItemCoFox();
     public static final CustomItem CO_IMMORAL = new TctItemCoImmoral();
 
+    public static final CustomItem DIAMOND_HELMET = new TctItemDiamondHelmet();
+
     public static final TctLogBook LOGBOOK = new TctLogBook();
 
     public static final CustomSpecialItem WOLF_SWORD = new TctItemWolfSword();
@@ -125,6 +127,8 @@ public final class CustomItems {
         registerItem(CO_FANATIC);
         registerItem(CO_FOX);
         registerItem(CO_IMMORAL);
+
+        registerItem(DIAMOND_HELMET);
 
         registerLogItem(LOGBOOK);
 

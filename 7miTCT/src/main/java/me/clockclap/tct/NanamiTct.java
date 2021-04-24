@@ -1,5 +1,6 @@
 package me.clockclap.tct;
 
+import com.google.common.base.Charsets;
 import me.clockclap.tct.api.PlayerWatcher;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.api.TctConfiguration;
@@ -19,12 +20,17 @@ import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public final class NanamiTct extends JavaPlugin {
 
@@ -135,6 +141,42 @@ public final class NanamiTct extends JavaPlugin {
 
     public CustomInventory getCustomInventory() {
         return this.customInventory;
+    }
+
+    private void reload() {
+        FileConfiguration newConfig = YamlConfiguration.loadConfiguration(plugin.getTctConfig().getConfigFile());
+
+        final InputStream defConfigStream = plugin.getResource("config.yml");
+        if (defConfigStream == null) {
+            return;
+        }
+
+        newConfig.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream, Charsets.UTF_8)));
+        try {
+            plugin.getTctConfig().getConfig().load(plugin.getTctConfig().getConfigFile());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
+
+        for(Player p : Bukkit.getOnlinePlayers()) {
+            if(p != null) {
+                String name = NanamiTct.utilities.resetColor(p.getName());
+                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(name);
+                if(data == null) {
+                    continue;
+                }
+                boolean isAdmin = false;
+                FileConfiguration config = plugin.getTctConfig().getConfig();
+                if(config.getStringList("admin").contains(name)) {
+                    isAdmin = true;
+                } else if(config.getStringList("admin").contains("op") && p.isOp()) {
+                    isAdmin = true;
+                }
+                data.getProfile().modify().setBoolean("admin", isAdmin).save();
+            }
+        }
     }
 
     @Override

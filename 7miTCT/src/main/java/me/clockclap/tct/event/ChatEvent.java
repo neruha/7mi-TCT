@@ -8,6 +8,7 @@ import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.japanize.Japanizer;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,9 +27,10 @@ public class ChatEvent implements Listener {
     @EventHandler
     public void onChat(AsyncPlayerChatEvent e) throws UnsupportedEncodingException {
         e.setCancelled(true);
+        boolean japanize = plugin.getTctConfig().getChat().getBoolean("japanize", true);
         Player p = e.getPlayer();
-        String result;
-        result = Japanizer.japanize(e.getMessage());
+        String result = e.getMessage();
+        if(japanize) { result = Japanizer.japanize(result); }
         String role_chatprefix;
 
         GameRole role = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName())).getRole();
@@ -54,19 +56,25 @@ public class ChatEvent implements Listener {
                 role_chatprefix = Reference.TCT_CHAT_ROLE_CO_FOX_P;
             } else if (co == GameRoles.IMMORAL) {
                 role_chatprefix = Reference.TCT_CHAT_ROLE_CO_IMMORAL_P;
+            } else if (co == GameRoles.CONFIRM_DETECTIVE) {
+                role_chatprefix = Reference.TCT_CHAT_ROLE_DETECTIVE;
             } else {
                 role_chatprefix = Reference.TCT_CHAT_ROLE_CO_NONE_P;
             }
         }
         if(visible) {
             if(e.getPlayer() != null) {
-                Bukkit.getServer().broadcastMessage(Reference.TCT_CHAT_FORMAT.replaceAll("%ROLE%", role_chatprefix).replaceAll("%PLAYER%", p.getDisplayName()).replaceAll("%MESSAGE%", result));
+                String format = plugin.getTctConfig().getChat().getString("format", Reference.TCT_CHAT_FORMAT);
+                format = ChatColor.translateAlternateColorCodes('&', format);
+                Bukkit.getServer().broadcastMessage(format.replaceAll("%ROLE%", role_chatprefix).replaceAll("%PLAYER%", p.getDisplayName()).replaceAll("%MESSAGE%", result));
             }
         } else {
             for(Player q : Bukkit.getOnlinePlayers()) {
                 PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(q.getName()));
                 if(data.getRole() == GameRoles.SPEC || data.isSpectator()) {
-                    q.sendMessage(Reference.TCT_CHAT_FORMAT.replaceAll("%ROLE%", role_chatprefix).replaceAll("%PLAYER%", p.getDisplayName()).replaceAll("%MESSAGE%", result));
+                    String format = plugin.getTctConfig().getChat().getString("format", Reference.TCT_CHAT_FORMAT);
+                    format = ChatColor.translateAlternateColorCodes('&', format);
+                    q.sendMessage(format.replaceAll("%ROLE%", role_chatprefix).replaceAll("%PLAYER%", p.getDisplayName()).replaceAll("%MESSAGE%", result));
                 }
             }
         }

@@ -2,6 +2,7 @@ package me.clockclap.tct.item.items;
 
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
+import me.clockclap.tct.game.Game;
 import me.clockclap.tct.game.GameState;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.death.DeadBody;
@@ -10,6 +11,7 @@ import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomSpecialItem;
 import me.clockclap.tct.item.ItemIndex;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -63,10 +65,11 @@ public class TctItemClock implements CustomSpecialItem {
     @Override
     public void onRightClick(Player player) {
         if(player != null) {
-            PlayerData data = NanamiTct.plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(player.getName()));
+            Game game = NanamiTct.plugin.getGame();
+            PlayerData data = game.getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(player.getName()));
             Location loc = player.getLocation();
             Location blockLoc = new Location(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-            DeadBody deadBody = new DeadBody(NanamiTct.plugin.getGame(), data, TctDeathCause.AIR, blockLoc);
+            DeadBody deadBody = new DeadBody(game, data, TctDeathCause.AIR, blockLoc);
             deadBody.setKilledPlayers(data.getKilledPlayers());
             NanamiTct.plugin.getGame().getReference().DEADBODIES.add(deadBody);
             deadBody.process();
@@ -94,6 +97,13 @@ public class TctItemClock implements CustomSpecialItem {
                 tick = 2000;
             }
             player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, tick, 1));
+            data.setInvisible(true);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    data.setInvisible(false);
+                }
+            }.runTaskLater(NanamiTct.plugin, tick);
             for (int i = 0; i < player.getInventory().getSize(); i++) {
                 ItemStack item = player.getInventory().getItem(i);
                 if (item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().equalsIgnoreCase(player.getInventory().getItemInMainHand().getItemMeta().getDisplayName())) {

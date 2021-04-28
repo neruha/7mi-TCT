@@ -595,11 +595,13 @@ public class Game {
             }
             for(Player pl : Bukkit.getOnlinePlayers()) {
                 NanamiTct.utilities.hidePlayer(pl, p);
+                data.setInvisible(true);
                 new BukkitRunnable() {
 
                     @Override
                     public void run() {
                         NanamiTct.utilities.showPlayer(pl, p);
+                        data.setInvisible(false);
                     }
                 }.runTaskLater(getPlugin(), 8);
             }

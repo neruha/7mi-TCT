@@ -48,7 +48,8 @@ public class ItemEvent implements Listener {
         }
         if(e.getDamager() instanceof Player) {
             Player p = (Player) e.getDamager();
-            if(plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName())).isSpectator()) {
+            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
+            if(data.isSpectator() || data.isInvisible()) {
                 e.setCancelled(true);
             }
         }
@@ -209,7 +210,7 @@ public class ItemEvent implements Listener {
         if(source instanceof Player) {
             Player p = (Player) source;
             PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
-            if(data.isSpectator()) {
+            if(data.isSpectator() || data.isInvisible()) {
                 e.setCancelled(true);
                 return;
             } else {

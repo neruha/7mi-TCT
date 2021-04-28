@@ -208,14 +208,18 @@ public class PlayerWatcher {
                 if(!data.isSpectator()) {
                     for(Player p : Bukkit.getOnlinePlayers()) {
                         PlayerData data = game.getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
-                        if(data.isSpectator()) {
-                            player.hidePlayer(game.getPlugin(), p);
-                        } else {
-                            if(NanamiTct.utilities.canSee(player, p)) {
-                                NanamiTct.utilities.showPlayer(player, p);
+                        if(!data.isInvisible()) {
+                            if (data.isSpectator()) {
+                                player.hidePlayer(game.getPlugin(), p);
                             } else {
-                                NanamiTct.utilities.hidePlayer(player, p);
+                                if (NanamiTct.utilities.canSee(player, p)) {
+                                    NanamiTct.utilities.showPlayer(player, p);
+                                } else {
+                                    NanamiTct.utilities.hidePlayer(player, p);
+                                }
                             }
+                        } else {
+                            NanamiTct.utilities.hidePlayer(player, p);
                         }
                     }
                 } else {

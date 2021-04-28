@@ -46,6 +46,10 @@ public interface PlayerData extends EntityData {
 
     public boolean hasSponge();
 
+    public boolean isInvisible();
+
+    public void setInvisible(boolean bool);
+
     public void setSponge(boolean bool);
 
     public void addKilledPlayer(String name);

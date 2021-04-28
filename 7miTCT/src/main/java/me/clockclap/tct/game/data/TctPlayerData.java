@@ -40,6 +40,7 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
     private TctPlayerProfile profile;
     private Player player;
     private boolean sponge;
+    private boolean invisible;
 
     public TctPlayerData(NanamiTct plugin, GameRole role, String name) {
         super(plugin, Bukkit.getPlayer(name), role);
@@ -54,6 +55,7 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
         wolf = 0;
         killedPlayers = new ArrayList<>();
         sponge = false;
+        invisible = false;
         profile = new TctPlayerProfile(name);
         Player p = Bukkit.getPlayer(name);
         this.player = p;
@@ -186,6 +188,16 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
     @Override
     public boolean hasSponge() {
         return sponge;
+    }
+
+    @Override
+    public boolean isInvisible() {
+        return invisible;
+    }
+
+    @Override
+    public void setInvisible(boolean bool) {
+        this.invisible = bool;
     }
 
     @Override

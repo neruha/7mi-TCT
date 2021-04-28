@@ -14,7 +14,9 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 public class PlayerWatcher {
 
@@ -226,11 +228,14 @@ public class PlayerWatcher {
                         player.setLevel(0);
                     }
                 }
+                Player p = NanamiTct.utilities.getNearestPlayer(player);
+                if(p != null) player.setCompassTarget(p.getLocation());
             }
         };
         runnable.runTaskTimer(this.game.getPlugin(), 0, 1);
     }
 
+    @SuppressWarnings("unchecked")
     public void startCountFox() {
         int defaultCount = getGame().getPlugin().getTctConfig().getConfig().getInt("fox-reveal-time-default", 70);
         if(defaultCount > 0) {
@@ -268,13 +273,13 @@ public class PlayerWatcher {
                             FireworkMeta meta = fw.getFireworkMeta();
                             FireworkEffect.Builder builder = FireworkEffect.builder();
                             try {
-                                FireworkEffect.Type type = FireworkEffect.Type.valueOf(config.getString("fireworks.type"));
+                                FireworkEffect.Type type = FireworkEffect.Type.valueOf(config.getString("fireworks.type", "BURST"));
                                 builder.with(type);
                             } catch (Exception e) {
                                 builder.with(FireworkEffect.Type.BURST);
                             }
                             try {
-                                for (String color : config.getStringList("fireworks.colors")) {
+                                for (String color : (List<String>) config.getList("fireworks.colors", Arrays.asList("0xff0000"))) {
                                     int c;
                                     if (color.startsWith("0x")) {
                                         c = (int) Long.parseLong(color, 16);
@@ -287,7 +292,7 @@ public class PlayerWatcher {
                                 builder.withColor(Color.RED);
                             }
                             try {
-                                for (String color : config.getStringList("fireworks.fades")) {
+                                for (String color : (List<String>) config.getList("fireworks.fades", Arrays.asList("0xff0000"))) {
                                     int c;
                                     if (color.startsWith("0x")) {
                                         c = (int) Long.parseLong(color, 16);

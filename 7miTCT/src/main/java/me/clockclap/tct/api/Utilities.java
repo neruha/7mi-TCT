@@ -231,4 +231,20 @@ public class Utilities {
         }
     }
 
+    public Player getNearestPlayer(Player player) {
+        Player result = null;
+        double lastDistance = Double.MAX_VALUE;
+        for(Player p : player.getWorld().getPlayers()) {
+            if(player == p)
+                continue;
+
+            double distance = player.getLocation().distance(p.getLocation());
+            if(distance < lastDistance) {
+                lastDistance = distance;
+                result = p;
+            }
+        }
+        return result;
+    }
+
 }

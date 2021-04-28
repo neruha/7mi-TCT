@@ -96,29 +96,26 @@ public final class CustomItems {
     }
 
     public static void register() {
-        registerItem(QUICKCHAT_A);
-        registerItem(QUICKCHAT_B);
-        registerItem(QUICKCHAT_C);
-        registerItem(QUICKCHAT_D);
-
         registerItem(WOOD_SWORD);
+        registerItem(BOW);
+        registerItem(ARROW);
         registerItem(STONE_SWORD);
+        registerItem(STRONG_BOW);
         registerItem(HEALER_SWORD);
         registerItem(DETECTIVE_SWORD);
         registerItem(WOLF_SWORD);
-
-        registerItem(BOW);
-        registerItem(ARROW);
-        registerItem(STRONG_BOW);
-
+        registerBlock(HEAL_STATION);
+        registerItem(DIAMOND_HELMET);
+        registerBlock(TNT);
+        registerItem(SNOWBALL);
         registerItem(SPEED_POTION);
         registerItem(STICK);
+        registerBlock(TORCH);
+        registerBlock(SPONGE);
         registerItem(EMPTY_BOTTLE);
         registerItem(MILK);
         registerItem(HEAL_POTION);
         registerItem(CRACKER);
-
-        registerItem(SNOWBALL);
 
         registerItem(CO_VILLAGER);
         registerItem(CO_DETECTIVE);
@@ -128,15 +125,12 @@ public final class CustomItems {
         registerItem(CO_FOX);
         registerItem(CO_IMMORAL);
 
-        registerItem(DIAMOND_HELMET);
-
         registerLogItem(LOGBOOK);
 
-        registerBlock(SPONGE);
-        registerBlock(HEAL_STATION);
-        registerBlock(TNT);
-
-        registerBlock(TORCH);
+        registerItem(QUICKCHAT_A);
+        registerItem(QUICKCHAT_B);
+        registerItem(QUICKCHAT_C);
+        registerItem(QUICKCHAT_D);
     }
 
     public static void unregister() {

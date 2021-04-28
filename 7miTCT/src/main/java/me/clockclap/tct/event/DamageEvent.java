@@ -33,6 +33,8 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,11 +64,23 @@ public class DamageEvent implements Listener {
     public void onDamageByEntity(EntityDamageByEntityEvent e) {
         if(e.getEntity() != null && e.getDamager() != null) {
             if (e.getEntity() instanceof Player && e.getDamager() instanceof TNTPrimed) {
-                e.setCancelled(true);
+                double damage = e.getDamage();
+                e.setDamage(0.0D);
                 Player p = (Player) e.getEntity();
                 PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
+                Location loc = p.getLocation();
+                p.setVelocity(new Vector());
+                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+                    p.setVelocity(new Vector());
+                    if(!data.isSpectator()) {
+                        p.teleport(loc);
+                    }
+                }, 1L);
+                if(!data.hasSponge()) {
+                    e.setDamage(damage);
+                    return;
+                }
                 if(data.hasSponge()) {
-                    e.setCancelled(false);
                     p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_CANCELLED_EXPLOSION);
                     p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_DESTROY, 1.0F, 2.0F);
                     int i = 0;

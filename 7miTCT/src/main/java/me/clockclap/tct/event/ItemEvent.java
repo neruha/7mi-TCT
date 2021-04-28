@@ -229,7 +229,7 @@ public class ItemEvent implements Listener {
             Location loc = projectile.getLocation();
             if(loc != null) {
                 TNTPrimed tnt = loc.getWorld().spawn(loc, TNTPrimed.class);
-                tnt.setYield(5.4F);
+                tnt.setYield(6.0F);
                 tnt.setFuseTicks(0);
 //                loc.getWorld().createExplosion(loc.getX(), loc.getY(), loc.getZ(), 5.4F, false, false);
                 plugin.getGame().getReference().PROJECTILEDATA.get(projectile).cancelTimer();

@@ -7,16 +7,22 @@ public enum GameState {
     GAMING(2, "gaming"),
     ENDING(3, "ending");
 
-    private final int gameStateCode;
+    private final int index;
+    private final String id;
     private final String toString;
 
-    private GameState(int code, String id) {
-        this.gameStateCode = code;
-        this.toString = id;
+    private GameState(int index, String id) {
+        this.index = index;
+        this.id = id;
+        this.toString = "(" + index + ": " + id + ")";
     }
 
-    public int getCode() {
-        return this.gameStateCode;
+    public int getIndex() {
+        return this.index;
+    }
+
+    public String getId() {
+        return this.id;
     }
 
     @Override

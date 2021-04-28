@@ -23,6 +23,7 @@ public class CommandShop implements CommandExecutor {
             Player p = (Player) sender;
             PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
             if(!data.isSpectator()) {
+                plugin.getCustomInventory().initialize();
                 if(data.getRole() == GameRoles.WOLF) {
                     p.openInventory(plugin.getCustomInventory().getWolfShop());
                 } else if(data.getRole() == GameRoles.DETECTIVE) {

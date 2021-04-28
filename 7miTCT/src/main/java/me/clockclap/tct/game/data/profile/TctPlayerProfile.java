@@ -3,6 +3,9 @@ package me.clockclap.tct.game.data.profile;
 import me.clockclap.tct.NanamiTct;
 import org.bukkit.Bukkit;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class TctPlayerProfile {
 
     String name;
@@ -39,10 +42,10 @@ public class TctPlayerProfile {
     }
 
     public boolean isAdmin() {
-        if(NanamiTct.plugin.getTctConfig().getConfig().getStringList("admin").contains("op")) {
+        if(NanamiTct.plugin.getTctConfig().getConfig().getList("admin", Arrays.asList("op")).contains("op")) {
             return Bukkit.getPlayer(name).isOp() || NanamiTct.plugin.getTctConfig().getConfig().getStringList("admin").contains(name);
         }
-        return NanamiTct.plugin.getTctConfig().getConfig().getStringList("admin").contains(name);
+        return NanamiTct.plugin.getTctConfig().getConfig().getList("admin", Arrays.asList("op")).contains(name);
     }
 
     public TctProfileModifier modify() {

@@ -101,7 +101,7 @@ public class TctItemWolfSword implements CustomSpecialItem {
                                 break;
                             }
                         }
-                        target.damage(target.getHealth(), attacker);
+                        target.damage(target.getHealth() + 1, attacker);
                     } else {
                         attacker.damage(2.0D);
                     }

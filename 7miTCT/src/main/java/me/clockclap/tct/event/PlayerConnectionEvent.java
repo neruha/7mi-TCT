@@ -11,6 +11,8 @@ import me.clockclap.tct.game.death.Killer;
 import me.clockclap.tct.game.death.TctDeathCause;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.game.role.GameTeams;
+import net.minecraft.server.v1_12_R1.CommandSay;
+import net.minecraft.server.v1_12_R1.ICommandListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -50,44 +52,34 @@ public class PlayerConnectionEvent implements Listener {
         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_JOIN_MESSAGE_1);
         String gameState = "";
         String message = "";
-        boolean isAdmin = false;
-        if(plugin.getTctConfig().getConfig().getStringList("admin").contains("op")) {
-            if(p.isOp()) {
-                isAdmin = true;
-            }
-        }
-        if(!isAdmin) {
-            for (String str : plugin.getTctConfig().getConfig().getStringList("admin")) {
-                if (NanamiTct.utilities.resetColor(p.getName()).equalsIgnoreCase(str)) {
-                    isAdmin = true;
-                    break;
-                }
-            }
-        }
+        boolean isAdmin = data.getProfile().isAdmin();
         if(plugin.getGame().getReference().getGameState() == GameState.GAMING) {
-            gameState = "Gaming";
+            gameState = Reference.TCT_CHAT_STATE_PLAYING;
             Utilities utilities = NanamiTct.utilities;
             utilities.modifyName(p, ChatColor.GREEN + utilities.resetColor(p.getName()));
-            for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
-                if(e.getPlayer() != null && pl != null) {
-                    pl.hidePlayer(plugin, p);
-                    pl.showPlayer(plugin, p);
-                }
-            }
+            utilities.reloadPlayer();
+            utilities.modifyName(p, utilities.resetColor(p.getName()));
             p.setPlayerListName("");
             p.setGameMode(GameMode.SPECTATOR);
+            p.teleport(plugin.getGame().getLocation());
             message = Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_GAME_ALREADY_STARTED;
-        } else {
-            gameState = "Waiting";
+        } else if(plugin.getGame().getReference().getGameState() == GameState.STARTING) {
+            gameState = Reference.TCT_CHAT_STATE_PREGAMING;
             Utilities utilities = NanamiTct.utilities;
             utilities.modifyName(p, ChatColor.GREEN + utilities.resetColor(p.getName()));
-            for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
-                if(e.getPlayer() != null && pl != null) {
-                    pl.hidePlayer(plugin, p);
-                    pl.showPlayer(plugin, p);
-                }
-            }
+            utilities.reloadPlayer();
+            utilities.modifyName(p, utilities.resetColor(p.getName()));
+            p.setPlayerListName("");
+            p.teleport(plugin.getGame().getLocation());
+            message = Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_GAME_READY_TIME;
+        } else {
+            gameState = Reference.TCT_CHAT_STATE_WAITING;
+            Utilities utilities = NanamiTct.utilities;
+            utilities.modifyName(p, ChatColor.GREEN + utilities.resetColor(p.getName()));
+            utilities.reloadPlayer();
+            utilities.modifyName(p, utilities.resetColor(p.getName()));
             p.setPlayerListName(ChatColor.GREEN + NanamiTct.utilities.resetColor(p.getName()));
+            p.setDisplayName(utilities.resetColor(p.getName()));
             if(isAdmin) {
                 message = Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_PLEASE_START;
             } else {

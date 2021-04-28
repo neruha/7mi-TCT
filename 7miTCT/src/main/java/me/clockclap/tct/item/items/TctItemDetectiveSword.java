@@ -88,9 +88,9 @@ public class TctItemDetectiveSword implements CustomSpecialItem {
                         }
                     }
                     if (data.getRole() == GameRoles.WOLF || data.getRole() == GameRoles.FOX) {
-                        target.damage(target.getHealth(), attacker);
+                        target.damage(target.getHealth() + 1, attacker);
                     } else {
-                        attacker.damage(attacker.getHealth());
+                        attacker.damage(attacker.getHealth() + 1);
                     }
                 }
             }

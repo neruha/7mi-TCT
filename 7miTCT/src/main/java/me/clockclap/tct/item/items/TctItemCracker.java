@@ -35,6 +35,7 @@ public class TctItemCracker implements CustomItem {
     private final boolean isdefault;
     private final int index;
 
+    @SuppressWarnings("unchecked")
     public TctItemCracker() {
         this.index = ItemIndex.ALL_SHOP_ITEM_SLOT_7;
         this.isdefault = false;
@@ -60,7 +61,7 @@ public class TctItemCracker implements CustomItem {
             builder.with(FireworkEffect.Type.BURST);
         }
         try {
-            for (String color : config.getStringList("fireworks.colors")) {
+            for (String color : (List<String>) config.getList("fireworks.colors", Arrays.asList("0xff0000"))) {
                 int c;
                 if (color.startsWith("0x")) {
                     c = (int) Long.parseLong(color, 16);
@@ -73,7 +74,7 @@ public class TctItemCracker implements CustomItem {
             builder.withColor(Color.RED);
         }
         try {
-            for (String color : config.getStringList("fireworks.fades")) {
+            for (String color : (List<String>) config.getList("fireworks.fades", Arrays.asList("0xff0000"))) {
                 int c;
                 if (color.startsWith("0x")) {
                     c = (int) Long.parseLong(color, 16);

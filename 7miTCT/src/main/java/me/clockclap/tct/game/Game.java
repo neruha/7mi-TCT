@@ -38,6 +38,7 @@ public class Game {
     private List<PlayerData> realRemainingPlayers;
     private boolean timeOut = false;
     private int startingIn = 0;
+    private int elapsedTime = 0;
     public List<String> villagers = new ArrayList<>();
     public List<String> healers = new ArrayList<>();
     public List<String> detectives = new ArrayList<>();
@@ -654,7 +655,8 @@ public class Game {
             public void run() {
                 if(getRealRemainingSeconds() > 0) {
                     time[0]++;
-                    if(time[0] % getPlugin().getTctConfig().getConfig().getInt("", 180) == 0) {
+                    elapsedTime = time[0];
+                    if(time[0] != 0 && time[0] % getPlugin().getTctConfig().getConfig().getInt("first-coin-time", 180) == 0) {
                         time[0] = 0;
                         for(Player p : Bukkit.getOnlinePlayers()) {
                             PlayerData data = getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
@@ -681,6 +683,18 @@ public class Game {
     }
 
     public void stop(GameTeam winners) {
+        List<PlayerData> vil = new ArrayList<>();
+        List<PlayerData> wol = new ArrayList<>();
+        for (PlayerData d : plugin.getGame().getRemainingPlayers(true)) {
+            if (d.getRole().getTeam() == GameTeams.VILLAGERS) {
+                vil.add(d);
+                continue;
+            }
+            if (d.getRole().getTeam() == GameTeams.WOLVES) {
+                wol.add(d);
+                continue;
+            }
+        }
         boolean gaming = false;
         if(getReference().getGameState() == GameState.GAMING) {
             gaming = true;
@@ -733,8 +747,13 @@ public class Game {
                 }
                 if (winners == GameTeams.FOXES) {
                     p.playSound(p.getLocation(), Sound.ENTITY_FIREWORK_LAUNCH, 1.0F, 1.0F);
-                    p.sendTitle(Reference.TCT_TITLE_MAIN_FOX_VICTORY, Reference.TCT_TITLE_SUB_FOX_VICTORY, 5, 40, 5);
-                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_FOX_VICTORY);
+                    if (vil.size() > 0 && wol.size() <= 0) {
+                        p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_FOX_VICTORY_A);
+                        p.sendTitle(Reference.TCT_TITLE_MAIN_FOX_VICTORY, Reference.TCT_TITLE_SUB_FOX_VICTORY_A, 5, 40, 5);
+                    } else if (wol.size() > 0 && vil.size() <= 0) {
+                        p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_FOX_VICTORY_B);
+                        p.sendTitle(Reference.TCT_TITLE_MAIN_FOX_VICTORY, Reference.TCT_TITLE_SUB_FOX_VICTORY_B, 5, 40, 5);
+                    }
                 }
                 if (winners == GameTeams.WOLVES) {
                     p.playSound(p.getLocation(), Sound.ENTITY_WOLF_HOWL, 1.0F, 1.0F);
@@ -823,6 +842,10 @@ public class Game {
 
     public Location getLocation() {
         return this.loc;
+    }
+
+    public int getElapsedTime() {
+        return this.elapsedTime;
     }
 
     public void setLocation(Location loc) {

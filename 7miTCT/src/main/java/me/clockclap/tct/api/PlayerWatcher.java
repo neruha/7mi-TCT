@@ -227,6 +227,7 @@ public class PlayerWatcher {
                         NanamiTct.utilities.showPlayer(player, p);
                     }
                 }
+                NanamiTct.utilities.modifyName(player, NanamiTct.utilities.resetColor(player.getName()));
                 if(player.getExp() > 0F) {
                     player.setExp(0F);
                 }

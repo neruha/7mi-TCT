@@ -56,8 +56,10 @@ public class PlayerConnectionEvent implements Listener {
         if(plugin.getGame().getReference().getGameState() == GameState.GAMING) {
             gameState = Reference.TCT_CHAT_STATE_PLAYING;
             Utilities utilities = NanamiTct.utilities;
-            utilities.modifyName(p, ChatColor.GREEN + utilities.resetColor(p.getName()));
-            utilities.reloadPlayer();
+            for(Player pl : Bukkit.getOnlinePlayers()) {
+                NanamiTct.utilities.hidePlayer(p, pl);
+                NanamiTct.utilities.showPlayer(p, pl);
+            }
             utilities.modifyName(p, utilities.resetColor(p.getName()));
             p.setPlayerListName("");
             p.setGameMode(GameMode.SPECTATOR);
@@ -67,6 +69,10 @@ public class PlayerConnectionEvent implements Listener {
             gameState = Reference.TCT_CHAT_STATE_PREGAMING;
             Utilities utilities = NanamiTct.utilities;
             utilities.modifyName(p, ChatColor.GREEN + utilities.resetColor(p.getName()));
+            for(Player pl : Bukkit.getOnlinePlayers()) {
+                utilities.hidePlayer(p, pl);
+                utilities.showPlayer(p, pl);
+            }
             utilities.reloadPlayer();
             utilities.modifyName(p, utilities.resetColor(p.getName()));
             p.setPlayerListName("");
@@ -76,6 +82,10 @@ public class PlayerConnectionEvent implements Listener {
             gameState = Reference.TCT_CHAT_STATE_WAITING;
             Utilities utilities = NanamiTct.utilities;
             utilities.modifyName(p, ChatColor.GREEN + utilities.resetColor(p.getName()));
+            for(Player pl : Bukkit.getOnlinePlayers()) {
+                utilities.hidePlayer(p, pl);
+                utilities.showPlayer(p, pl);
+            }
             utilities.reloadPlayer();
             utilities.modifyName(p, utilities.resetColor(p.getName()));
             p.setPlayerListName(ChatColor.GREEN + NanamiTct.utilities.resetColor(p.getName()));

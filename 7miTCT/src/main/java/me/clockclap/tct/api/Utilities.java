@@ -225,7 +225,7 @@ public class Utilities {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    modifyName(target, ChatColor.GREEN + resetColor(target.getName()));
+                    modifyName(target, resetColor(target.getName()));
                 }
             }.runTaskLater(plugin, 1);
         }

@@ -82,7 +82,7 @@ roles:
 #   detectives: 2
 #   wolves: 2
 #   fanatics: 0
-#   foxes: 0
+#   foxes: 1
 #   immoral: 0
   coin:
     villagers: 0
@@ -299,6 +299,12 @@ quickchat-cooldown: 20 #クイックチャットのクールタイム (秒)
 #デフォルト: 20秒
 heal-station-cooldown: 20 #回復ステーションのクールタイム (秒)
 
+#デフォルト: 5秒
+landmine-cooldown: 5 #地雷のクールダウン (秒)
+
+#デフォルト: 5ブロック
+landmine-range: 5 #地雷の範囲 (ブロック)
+
 #デフォルト: 70秒
 fox-reveal-time-default: 70 #妖狐の正体がばれる時間 (秒)
 #デフォルト: 60秒
@@ -343,6 +349,10 @@ effect:
     duration: 2s
     #デフォルト: 3
     level: 3
+  #人狼の時計をクリックしたときに付与される透明化エフェクト
+  wolf-invisible:
+    #デフォルト: 10s
+    duration: 10s
 
 #花火の設定
 fireworks:

@@ -16,6 +16,7 @@ public class CustomBlockData implements CustomData {
     private Location loc;
     private Block block;
     private Material type;
+    private boolean enabled;
 
     private final Game game;
     private final CustomBlock customBlock;
@@ -27,6 +28,7 @@ public class CustomBlockData implements CustomData {
         this.type = this.block.getType();
         this.loc = this.block.getLocation();
         this.cooldown = 0;
+        this.enabled = false;
     }
 
     public Game getGame() {
@@ -77,6 +79,14 @@ public class CustomBlockData implements CustomData {
                 }
             };
             timer.runTaskTimer(this.game.getPlugin(), 0L, 20L);
+        } else if(type == CooldownTypes.LANDMINE) {
+            timer = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    enabled = true;
+                }
+            };
+            timer.runTaskLater(this.game.getPlugin(), this.game.getPlugin().getTctConfig().getConfig().getInt("landmine-cooldown", 5) * 20L);
         }
     }
 
@@ -86,6 +96,10 @@ public class CustomBlockData implements CustomData {
 
     public BukkitRunnable getTimer() {
         return this.timer;
+    }
+
+    public boolean isEnabled() {
+        return this.enabled;
     }
 
     public int getCooldown() {

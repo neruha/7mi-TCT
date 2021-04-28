@@ -73,7 +73,7 @@ public class DamageEvent implements Listener {
                 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                     p.setVelocity(new Vector());
                     if(!data.isSpectator()) {
-                        p.teleport(loc);
+                        p.teleport(new Location(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), p.getLocation().getYaw(), p.getLocation().getPitch()));
                     }
                 }, 1L);
                 if(!data.hasSponge()) {

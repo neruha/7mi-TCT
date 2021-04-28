@@ -121,7 +121,7 @@ public class Reference {
     public static final String TCT_CHAT_DEADBODY_HAS_NOT_BEEN_FOUND = ChatColor.RED + "" + ChatColor.BOLD + "この死体はまだ発見されていません";
     public static final String TCT_CHAT_DEADBODY_IS_NOT_WOLF = ChatColor.RED + "" + ChatColor.BOLD + "この死体は人狼ではありません";
     //その他
-    public static final String TCT_CHAT_LANDMINE_PLACED = ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "地雷を設置しました、5秒後から効果が適応されます";
+    public static final String TCT_CHAT_LANDMINE_PLACED = ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "地雷を設置しました、%SECOND%秒後から効果が適応されます";
     public static final String TCT_CHAT_COIN_DISTRIBUTION = ChatColor.AQUA + "コインが配布されました /shopか/sでショップが開きます";
     public static final String TCT_CHAT_YOUR_COIN = ChatColor.AQUA + "あなたの所持コイン枚数は%COUNT%枚です";
     public static final String TCT_CHAT_NOT_ENOUGH_COINS = ChatColor.RED + "コインが足りません";

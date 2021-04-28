@@ -3,8 +3,11 @@ package me.clockclap.tct.api;
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.game.Game;
 import me.clockclap.tct.game.GameState;
+import me.clockclap.tct.game.data.CustomBlockData;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.role.GameRoles;
+import me.clockclap.tct.item.CustomBlockInfo;
+import me.clockclap.tct.item.CustomItems;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
@@ -230,6 +233,24 @@ public class PlayerWatcher {
                 }
                 Player p = NanamiTct.utilities.getNearestPlayer(player);
                 if(p != null) player.setCompassTarget(p.getLocation());
+                if(getPlayer().getGameMode() == GameMode.SURVIVAL || getPlayer().getGameMode() == GameMode.ADVENTURE) {
+                    if (!getPlayerData().isSpectator()) {
+                        if(getPlayerData().getRole() != GameRoles.WOLF) {
+                            for (CustomBlockData data : CustomBlockInfo.blockDataList) {
+                                if (data.getCustomBlock().getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.LANDMINE.getItemStack().getItemMeta().getDisplayName())) {
+                                    if(data.isEnabled()) {
+                                        double maxFar = NanamiTct.plugin.getTctConfig().getConfig().getInt("landmine-range", 5);
+                                        double far = data.getLocation().distance(getPlayer().getLocation());
+                                        if (far <= maxFar) {
+                                            getPlayer().damage(getPlayer().getHealth() + 1);
+                                            getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1F, 1F);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         };
         runnable.runTaskTimer(this.game.getPlugin(), 0, 1);

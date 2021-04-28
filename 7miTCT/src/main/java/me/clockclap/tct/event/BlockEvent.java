@@ -43,7 +43,13 @@ public class BlockEvent implements Listener {
                     for (CustomBlock block : CustomItems.generalBlocks) {
                         if (item.getItemMeta().getDisplayName().equalsIgnoreCase(block.getItemStack().getItemMeta().getDisplayName())) {
                             if (block.isPlaceable()) {
-                                CustomBlockInfo.blockDataList.add(new CustomBlockData(plugin.getGame(), block, e.getBlockPlaced()));
+                                CustomBlockData data = new CustomBlockData(plugin.getGame(), block, e.getBlockPlaced());
+                                CustomBlockInfo.blockDataList.add(data);
+
+                                if (block.getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.LANDMINE.getItemStack().getItemMeta().getDisplayName())) {
+                                    data.runTimer(CooldownTypes.LANDMINE);
+                                    e.getPlayer().sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_LANDMINE_PLACED.replaceAll("%SECOND%", String.valueOf(NanamiTct.plugin.getTctConfig().getConfig().getInt("landmine-cooldown", 5))));
+                                }
                             } else {
                                 e.setCancelled(true);
                             }
@@ -125,8 +131,11 @@ public class BlockEvent implements Listener {
                                         data.getCustomBlock().onRightClick(e.getPlayer());
                                     }
 
-                                    data.runTimer(CooldownTypes.HEAL_STATION);
+                                    if(data.getCustomBlock().getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.HEAL_STATION.getItemStack().getItemMeta().getDisplayName())) {
+                                        data.runTimer(CooldownTypes.HEAL_STATION);
+                                    }
                                 }
+
                             }
                         }
                     }

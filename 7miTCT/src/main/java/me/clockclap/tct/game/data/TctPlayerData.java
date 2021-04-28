@@ -38,6 +38,7 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
     private int wolf;
     private List<String> killedPlayers;
     private TctPlayerProfile profile;
+    private Player player;
     private boolean sponge;
 
     public TctPlayerData(NanamiTct plugin, GameRole role, String name) {
@@ -55,6 +56,7 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
         sponge = false;
         profile = new TctPlayerProfile(name);
         Player p = Bukkit.getPlayer(name);
+        this.player = p;
         if(p != null) {
             boolean isAdmin = false;
             if (plugin.getTctConfig().getConfig().getStringList("admin").contains("op")) {
@@ -128,7 +130,7 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
 
     @Override
     public Player getPlayer() {
-        return Bukkit.getPlayer(this.name);
+        return this.player;
     }
 
     @Override

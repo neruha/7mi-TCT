@@ -1,7 +1,9 @@
 package me.clockclap.tct.item;
 
+import com.sun.org.apache.bcel.internal.generic.LAND;
 import me.clockclap.tct.game.data.CustomBlockData;
 import me.clockclap.tct.item.blocks.TctItemHealStation;
+import me.clockclap.tct.item.blocks.TctItemLandmine;
 import me.clockclap.tct.item.blocks.TctItemSponge;
 import me.clockclap.tct.item.blocks.TctItemTnt;
 import me.clockclap.tct.item.items.*;
@@ -40,6 +42,8 @@ public final class CustomItems {
     public static final CustomItem MILK = new TctItemMilk();
     public static final CustomItem HEAL_POTION = new TctItemPotionSplashHeal();
     public static final CustomItem CRACKER = new TctItemCracker();
+    public static final CustomItem COMPASS = new TctItemCompass();
+    public static final CustomSpecialItem CLOCK = new TctItemClock();
 
     public static final CustomItem SNOWBALL = new TctItemSnowball();
 
@@ -67,6 +71,7 @@ public final class CustomItems {
     public static final CustomBlock SPONGE = new TctItemSponge();
     public static final CustomBlock HEAL_STATION = new TctItemHealStation();
     public static final CustomBlock TNT = new TctItemTnt();
+    public static final CustomBlock LANDMINE = new TctItemLandmine();
 
     public static final CustomBlock TORCH = new TctItemTorch();
 
@@ -108,7 +113,9 @@ public final class CustomItems {
         registerItem(DIAMOND_HELMET);
         registerBlock(TNT);
         registerItem(SNOWBALL);
+        registerItem(COMPASS);
         registerItem(SPEED_POTION);
+        registerItem(CLOCK);
         registerItem(STICK);
         registerBlock(TORCH);
         registerBlock(SPONGE);
@@ -116,6 +123,7 @@ public final class CustomItems {
         registerItem(MILK);
         registerItem(HEAL_POTION);
         registerItem(CRACKER);
+        registerBlock(LANDMINE);
 
         registerItem(CO_VILLAGER);
         registerItem(CO_DETECTIVE);

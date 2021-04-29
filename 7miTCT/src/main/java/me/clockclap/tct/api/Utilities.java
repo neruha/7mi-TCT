@@ -206,18 +206,25 @@ public class Utilities {
             modifyName(target, ChatColor.GREEN + resetColor(target.getName()));
             if (d != null && e != null) {
                 if(!e.isSpectator()) {
+                    modifyName(target, ChatColor.GREEN + resetColor(target.getName()));
                     if(d.getRole() == GameRoles.WOLF) {
+                        modifyName(target, ChatColor.GREEN + resetColor(target.getName()));
                         if(e.getRole() == GameRoles.WOLF) {
                             modifyName(target, ChatColor.RED + resetColor(target.getName()));
                         } else if(e.getRole() == GameRoles.FANATIC) {
                             modifyName(target, ChatColor.DARK_PURPLE + resetColor(target.getName()));
                         }
                     } else if(d.getRole() == GameRoles.FOX || d.getRole() == GameRoles.IMMORAL) {
+                        modifyName(target, ChatColor.GREEN + resetColor(target.getName()));
                         if(e.getRole() == GameRoles.FOX) {
                             modifyName(target, ChatColor.GOLD + resetColor(target.getName()));
                         } else if(e.getRole() == GameRoles.IMMORAL) {
                             modifyName(target, ChatColor.DARK_GRAY + resetColor(target.getName()));
+                        } else {
+                            modifyName(target, ChatColor.GREEN + resetColor(target.getName()));
                         }
+                    } else {
+                        modifyName(target, ChatColor.GREEN + resetColor(target.getName()));
                     }
                 }
             }

@@ -22,6 +22,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.Ref;
 import java.util.ArrayList;
@@ -119,23 +120,30 @@ public class BlockEvent implements Listener {
                     if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_BLOCK) {
                         for (CustomBlockData data : CustomBlockInfo.blockDataList) {
                             if (data.getLocation().getBlockX() == block.getLocation().getBlockX() && data.getLocation().getBlockY() == block.getLocation().getBlockY() && data.getLocation().getBlockZ() == block.getLocation().getBlockZ()) {
-                                String cooldownMsg = Reference.TCT_CHATPREFIX + " " + Reference.TCT_QUICK_CHAT_CURRENTLY_COOLDOWN;
-                                if (data.getCooldown() > 0) {
-                                    e.getPlayer().sendMessage(cooldownMsg);
-                                    break;
-                                } else {
-                                    if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
-                                        data.getCustomBlock().onLeftClick(e.getPlayer());
-                                    }
-                                    if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                                        data.getCustomBlock().onRightClick(e.getPlayer());
-                                    }
-
+                                if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
+                                    data.getCustomBlock().onLeftClick(e.getPlayer());
                                     if(data.getCustomBlock().getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.HEAL_STATION.getItemStack().getItemMeta().getDisplayName())) {
-                                        data.runTimer(CooldownTypes.HEAL_STATION);
+                                        int t = NanamiTct.plugin.getTctConfig().getConfig().getInt("heal-station-respawn-time", 5);
+                                        block.setType(Material.AIR);
+                                        block.getLocation().getWorld().spawnParticle(Particle.ITEM_CRACK, block.getLocation().add(0.5,0.5,0.5), 1, 1, 0.1, 0.1, 0.1, CustomItems.HEAL_STATION.getItemStack());
+                                        final Location[] l = { block.getLocation() };
+                                        Bukkit.getScheduler().runTaskLater(NanamiTct.plugin, () -> {
+                                            l[0].getBlock().setType(CustomItems.HEAL_STATION.getMaterial());
+                                        }, t * 20L);
                                     }
                                 }
-
+                                if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                                    String cooldownMsg = Reference.TCT_CHATPREFIX + " " + Reference.TCT_QUICK_CHAT_CURRENTLY_COOLDOWN;
+                                    if (data.getCooldown() > 0) {
+                                        e.getPlayer().sendMessage(cooldownMsg);
+                                        break;
+                                    } else {
+                                        data.getCustomBlock().onRightClick(e.getPlayer());
+                                        if (data.getCustomBlock().getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.HEAL_STATION.getItemStack().getItemMeta().getDisplayName())) {
+                                            data.runTimer(CooldownTypes.HEAL_STATION);
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

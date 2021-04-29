@@ -6,7 +6,7 @@
 
     <groupId>me.clockclap</groupId>
     <artifactId>nanami-tct-api</artifactId>
-    <version>3.0.0</version>
+    <version>3.1.0</version>
     <packaging>jar</packaging>
 
     <name>7miTctApi</name>

@@ -227,6 +227,12 @@ public class PlayerWatcher {
                         NanamiTct.utilities.showPlayer(player, p);
                     }
                 }
+//                new BukkitRunnable() {
+//                    @Override
+//                    public void run() {
+//                        NanamiTct.utilities.modifyName(player, NanamiTct.utilities.resetColor(player.getName()));
+//                    }
+//                }.runTaskLater(NanamiTct.plugin, 0);
                 NanamiTct.utilities.modifyName(player, NanamiTct.utilities.resetColor(player.getName()));
                 if(player.getExp() > 0F) {
                     player.setExp(0F);

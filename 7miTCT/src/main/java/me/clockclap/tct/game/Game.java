@@ -603,7 +603,7 @@ public class Game {
                         NanamiTct.utilities.showPlayer(pl, p);
                         data.setInvisible(false);
                     }
-                }.runTaskLater(getPlugin(), 8);
+                }.runTaskLater(getPlugin(), 10);
             }
         }
         String trvi = "";

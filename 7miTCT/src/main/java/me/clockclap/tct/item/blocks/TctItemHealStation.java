@@ -59,7 +59,7 @@ public class TctItemHealStation implements CustomBlock {
 
     @Override
     public void onLeftClick(Player player) {
-        heal(player);
+
     }
 
     @Override

@@ -1,6 +1,5 @@
 package me.clockclap.tct.item;
 
-import com.sun.org.apache.bcel.internal.generic.LAND;
 import me.clockclap.tct.game.data.CustomBlockData;
 import me.clockclap.tct.item.blocks.TctItemHealStation;
 import me.clockclap.tct.item.blocks.TctItemLandmine;
@@ -15,9 +14,7 @@ import me.clockclap.tct.item.items.quickchat.QuickChatD;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public final class CustomItems {
 
@@ -44,6 +41,7 @@ public final class CustomItems {
     public static final CustomItem CRACKER = new TctItemCracker();
     public static final CustomItem COMPASS = new TctItemCompass();
     public static final CustomSpecialItem CLOCK = new TctItemClock();
+    public static final CustomSpecialItem SEED = new TctItemSeed();
 
     public static final CustomItem SNOWBALL = new TctItemSnowball();
 
@@ -119,6 +117,7 @@ public final class CustomItems {
         registerItem(STICK);
         registerBlock(TORCH);
         registerBlock(SPONGE);
+        registerItem(SEED);
         registerItem(EMPTY_BOTTLE);
         registerItem(MILK);
         registerItem(HEAL_POTION);

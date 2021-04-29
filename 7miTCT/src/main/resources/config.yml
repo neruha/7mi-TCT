@@ -116,6 +116,7 @@ roles:
       speed-potion: true #俊敏ポーション (スピード)...全役職
       heal-splash-potion: true #回復スプラッシュポーション (回復)...全役職
       diamond-helmet: false #ダイヤのヘルメット (探偵の証明)...探偵
+      seed: false #種 (占い)...探偵
       snowball: false #雪玉 (爆発)...人狼
       milk: true #牛乳...全役職
       gun: false #銃...妖狐、人狼、探偵
@@ -143,6 +144,7 @@ roles:
       speed-potion: true #俊敏ポーション (スピード)...全役職
       heal-splash-potion: true #回復スプラッシュポーション (回復)...全役職
       diamond-helmet: true #ダイヤのヘルメット (探偵の証明)...探偵
+      seed: true #種 (占い)...探偵
       snowball: false #雪玉 (爆発)...人狼
       milk: true #牛乳...全役職
       gun: true #銃...妖狐、人狼、探偵
@@ -170,6 +172,7 @@ roles:
       speed-potion: true #俊敏ポーション (スピード)...全役職
       heal-splash-potion: true #回復スプラッシュポーション (回復)...全役職
       diamond-helmet: false #ダイヤのヘルメット (探偵の証明)...探偵
+      seed: false #種 (占い)...探偵
       snowball: false #雪玉 (爆発)...人狼
       milk: true #牛乳...全役職
       gun: false #銃...妖狐、人狼、探偵
@@ -197,6 +200,7 @@ roles:
       speed-potion: true #俊敏ポーション (スピード)...全役職
       heal-splash-potion: true #回復スプラッシュポーション (回復)...全役職
       diamond-helmet: false #ダイヤのヘルメット (探偵の証明)...探偵
+      seed: false #種 (占い)...探偵
       snowball: true #雪玉 (爆発)...人狼
       milk: true #牛乳...全役職
       gun: true #銃...妖狐、人狼、探偵
@@ -224,6 +228,7 @@ roles:
       speed-potion: true #俊敏ポーション (スピード)...全役職
       heal-splash-potion: true #回復スプラッシュポーション (回復)...全役職
       diamond-helmet: false #ダイヤのヘルメット (探偵の証明)...探偵
+      seed: false #種 (占い)...探偵
       snowball: false #雪玉 (爆発)...人狼
       milk: true #牛乳...全役職
       gun: false #銃...妖狐、人狼、探偵
@@ -251,6 +256,7 @@ roles:
       speed-potion: true #俊敏ポーション (スピード)...全役職
       heal-splash-potion: true #回復スプラッシュポーション (回復)...全役職
       diamond-helmet: false #ダイヤのヘルメット (探偵の証明)...探偵
+      seed: false #種 (占い)...探偵
       snowball: false #雪玉 (爆発)...人狼
       milk: true #牛乳...全役職
       gun: true #銃...妖狐、人狼、探偵
@@ -278,6 +284,7 @@ roles:
       speed-potion: true #俊敏ポーション (スピード)...全役職
       heal-splash-potion: true #回復スプラッシュポーション (回復)...全役職
       diamond-helmet: false #ダイヤのヘルメット (探偵の証明)...探偵
+      seed: false #種 (占い)...探偵
       snowball: false #雪玉 (爆発)...人狼
       milk: true #牛乳...全役職
       gun: false #銃...妖狐、人狼、探偵
@@ -309,6 +316,12 @@ landmine-range: 5 #地雷の範囲 (ブロック)
 fox-reveal-time-default: 70 #妖狐の正体がばれる時間 (秒)
 #デフォルト: 60秒
 fox-reveal-time: 60 #妖狐の正体がばれる時間 (秒)
+
+#デフォルト: 5秒
+heal-station-respawn-time: 5 #回復ステーションが元に戻るまでの時間 (秒)
+
+#デフォルト: 5
+seed-range: 5 #占いの範囲 (半径～ブロック)
 
 #デフォルト: 180秒後
 first-coin-time: 180 #コインが配られる時間 (秒後)

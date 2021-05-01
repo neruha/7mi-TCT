@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Arrays;
 import java.util.List;
 
-public class Reference {
+public final class Reference {
 
     //プラグイン設定
     public static final String TCT_CHATPREFIX = ChatColor.DARK_RED + "[7mi TCT]" + ChatColor.RESET;

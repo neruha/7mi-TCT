@@ -66,16 +66,6 @@ public class InventoryEvent implements Listener {
                                     if (meta.getDisplayName().equalsIgnoreCase(CustomItems.SPONGE.getItemStack().getItemMeta().getDisplayName())) {
                                         data.setSponge(true);
                                     }
-                                    p.getInventory().setHelmet(e.getCurrentItem());
-                                    new BukkitRunnable() {
-                                        @Override
-                                        public void run() {
-                                            Location loc = new Location(p.getLocation().getWorld(), p.getLocation().getX(), p.getLocation().getY() + 1, p.getLocation().getZ());
-                                            TNTPrimed tnt = (TNTPrimed) loc.getWorld().spawnEntity(loc, EntityType.PRIMED_TNT);
-                                            tnt.setYield(6.0F);
-                                            tnt.setFuseTicks(0);
-                                        }
-                                    }.runTaskLater(plugin, 60);
                                     if (i.getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.DIAMOND_HELMET.getItemStack().getItemMeta().getDisplayName())) {
                                         FileConfiguration config = plugin.getTctConfig().getConfig();
                                         int sec = config.getInt("detective-confirm-time", 180);

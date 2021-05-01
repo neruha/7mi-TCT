@@ -36,7 +36,7 @@ public class TctItemCoWolf implements CustomItem {
         this.displayName = Reference.TCT_CHAT_ROLE_CO_WOLF;
         this.title = Reference.TCT_CHAT_ROLE_CO_WOLF;
         this.description = ChatColor.AQUA + "TCT Item";
-        this.role = GameRoles.VILLAGER;
+        this.role = GameRoles.NONE;
         this.attackable = true;
         ItemStack item = new ItemStack(material);
         LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();

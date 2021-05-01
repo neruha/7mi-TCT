@@ -34,7 +34,7 @@ public class TctItemArrow implements CustomItem {
         this.displayName = "Arrow";
         this.title = "Arrow";
         this.description = ChatColor.AQUA + "TCT Item";
-        this.role = GameRoles.VILLAGER;
+        this.role = GameRoles.NONE;
         this.attackable = true;
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();

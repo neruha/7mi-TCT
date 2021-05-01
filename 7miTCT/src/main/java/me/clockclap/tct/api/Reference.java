@@ -136,6 +136,7 @@ public class Reference {
     public static final String TCT_CHAT_CANNOT_USE = ChatColor.RED + "このコマンドを使えない役職です";
     public static final String TCT_CHAT_CANCELLED_EXPLOSION = ChatColor.LIGHT_PURPLE + "爆発ダメージを無効化しました";
     public static final String TCT_CHAT_DIAMOND_HELMET = ChatColor.RED + "探偵の証明はゲームが開始されてから%SECOND%秒後に購入できます";
+    public static final String TCT_CHAT_EXPLODE_IN = ChatColor.GREEN + "3秒後に自爆します";
     public static final String TCT_CHAT_CANNOT_ATTACK_WOLF = ChatColor.RED + "仲間の人狼には攻撃できません。";
     public static final String TCT_CHAT_CANNOT_ATTACK_FOX = ChatColor.GOLD + "仲間の妖狐には攻撃できません。";
     //勝敗

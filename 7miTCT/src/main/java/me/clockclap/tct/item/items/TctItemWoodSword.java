@@ -39,7 +39,7 @@ public class TctItemWoodSword implements CustomWeaponItem {
         this.displayName = "Wood Sword";
         this.title = "Wood Sword";
         this.description = ChatColor.AQUA + "TCT Item";
-        this.role = GameRoles.VILLAGER;
+        this.role = GameRoles.NONE;
         this.damage = 5F;
         this.speed = 1.6F;
         this.attackable = true;

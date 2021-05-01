@@ -36,7 +36,7 @@ public class TctLogBook implements CustomItem {
         this.displayName = "Tct Logs";
         this.title = "Tct Logs";
         this.description = ChatColor.AQUA + "TCT Item";
-        this.role = GameRoles.VILLAGER;
+        this.role = GameRoles.NONE;
         this.attackable = true;
         ItemStack item = new ItemStack(material);
         BookMeta meta = (BookMeta) item.getItemMeta();

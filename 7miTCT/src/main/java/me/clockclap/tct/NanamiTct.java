@@ -12,6 +12,7 @@ import me.clockclap.tct.game.Game;
 import me.clockclap.tct.game.GameReference;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.data.TctPlayerData;
+import me.clockclap.tct.game.death.Killer;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.inventory.CustomInventory;
 import me.clockclap.tct.item.CustomItems;
@@ -122,6 +123,9 @@ public final class NanamiTct extends JavaPlugin {
                             pl.showPlayer(plugin, p);
                         }
                     }
+                    utilities.modifyName(p, name);
+                    data.setSponge(false);
+                    data.setKilledBy(new Killer("AIR", GameRoles.NONE, Killer.KillerCategory.AIR));
                 }
             }
         }

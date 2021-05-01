@@ -30,6 +30,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -166,6 +167,29 @@ public class ItemEvent implements Listener {
                             }
                         }
                     }
+                    if(i.getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.TNT.getItemStack().getItemMeta().getDisplayName())) {
+                        e.getPlayer().getInventory().setHelmet(i);
+                        e.getPlayer().sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_EXPLODE_IN);
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                Location loc = new Location(e.getPlayer().getLocation().getWorld(), e.getPlayer().getLocation().getX(), e.getPlayer().getLocation().getY() + 1, e.getPlayer().getLocation().getZ());
+                                TNTPrimed tnt = (TNTPrimed) loc.getWorld().spawnEntity(loc, EntityType.PRIMED_TNT);
+                                tnt.setYield(6.0F);
+                                tnt.setFuseTicks(0);
+                            }
+                        }.runTaskLater(plugin, 60);
+                        for (int j = 0; j < e.getPlayer().getInventory().getSize(); j++) {
+                            ItemStack item = e.getPlayer().getInventory().getItem(j);
+                            if (item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().equalsIgnoreCase(e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName())) {
+                                int amt = item.getAmount() - 1;
+                                item.setAmount(amt);
+                                e.getPlayer().getInventory().setItem(j, amt > 0 ? item : null);
+                                e.getPlayer().updateInventory();
+                                break;
+                            }
+                        }
+                    }
                 }
             }
         } else {
@@ -190,14 +214,12 @@ public class ItemEvent implements Listener {
                 Player q = (Player) e.getRightClicked();
                 PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(q.getName()));
                 if(!data.isSpectator() && !data.isInvisible()) {
-                    if ((p.getInventory().getItemInMainHand() == null) || (p.getInventory().getItemInMainHand() != null && p.getInventory().getItemInMainHand().getType() == Material.AIR)) {
-                        p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_NAME + ": " + NanamiTct.utilities.resetColor(q.getName()));
-                        p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_HP + ": " + ChatColor.RED + q.getHealth());
-                        p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_TOGETHER + ": " + ChatColor.GREEN + data.getTogether()
-                                + ChatColor.AQUA + ", " + Reference.TCT_VILLAGER + ": " + ChatColor.GREEN + data.getVillager()
-                                + ChatColor.AQUA + ", " + Reference.TCT_SUS + ": " + ChatColor.GREEN + data.getSuspicious()
-                                + ChatColor.AQUA + ", " + Reference.TCT_WOLF + ": " + ChatColor.GREEN + data.getWolf());
-                    }
+                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_NAME + ": " + NanamiTct.utilities.resetColor(q.getName()));
+                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_HP + ": " + ChatColor.RED + q.getHealth());
+                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_TOGETHER + ": " + ChatColor.GREEN + data.getTogether()
+                            + ChatColor.AQUA + ", " + Reference.TCT_VILLAGER + ": " + ChatColor.GREEN + data.getVillager()
+                            + ChatColor.AQUA + ", " + Reference.TCT_SUS + ": " + ChatColor.GREEN + data.getSuspicious()
+                            + ChatColor.AQUA + ", " + Reference.TCT_WOLF + ": " + ChatColor.GREEN + data.getWolf());
                 }
             }
         } else {
@@ -242,21 +264,19 @@ public class ItemEvent implements Listener {
         }
         if(projectile instanceof Arrow) {
             if(e.getHitBlock() != null) {
-                if (e.getHitBlock().getType() == CustomItems.LANDMINE.getMaterial()) {
-                    Location loc = e.getHitBlock().getLocation();
-                    if (loc != null) {
-                        List<CustomBlockData> dataList = new ArrayList<>(CustomBlockInfo.blockDataList);
-                        for (CustomBlockData data : dataList) {
-                            if (data != null) {
-                                if (data.getLocation().getBlockX() == loc.getBlockX() &&
-                                        data.getLocation().getBlockY() == loc.getBlockY() &&
-                                        data.getLocation().getBlockZ() == loc.getBlockZ() &&
-                                        data.getCustomBlock().getItemStack().getItemMeta().getDisplayName().
-                                                equalsIgnoreCase(CustomItems.LANDMINE.getItemStack().getItemMeta().getDisplayName())) {
-                                    data.getBlock().setType(Material.AIR);
-                                    CustomBlockInfo.blockDataList.remove(data);
-                                    return;
-                                }
+                Location loc = e.getHitBlock().getLocation();
+                if (loc != null) {
+                    List<CustomBlockData> dataList = new ArrayList<>(CustomBlockInfo.blockDataList);
+                    for (CustomBlockData data : dataList) {
+                        if (data != null) {
+                            if (data.getLocation().getBlockX() == loc.getBlockX() &&
+                                    data.getLocation().getBlockY() == loc.getBlockY() &&
+                                    data.getLocation().getBlockZ() == loc.getBlockZ() &&
+                                    data.getCustomBlock().getItemStack().getItemMeta().getDisplayName().
+                                            equalsIgnoreCase(CustomItems.LANDMINE.getItemStack().getItemMeta().getDisplayName())) {
+                                data.getBlock().setType(Material.AIR);
+                                CustomBlockInfo.blockDataList.remove(dataList.indexOf(data));
+                                return;
                             }
                         }
                     }

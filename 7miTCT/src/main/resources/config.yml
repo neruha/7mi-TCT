@@ -381,6 +381,3 @@ fireworks:
   # - 0xFF0000
   fades: #花火のフェード
     - 0xFF0000
-
-#ここは変更しないでください
-version: ${version}

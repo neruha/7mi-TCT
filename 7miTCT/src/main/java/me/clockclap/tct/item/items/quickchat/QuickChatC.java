@@ -39,7 +39,7 @@ public class QuickChatC implements CustomSpecialItem {
         this.displayName = Reference.TCT_QUICK_CHAT_TITLE_2;
         this.title = Reference.TCT_QUICK_CHAT_TITLE_2;
         this.description = ChatColor.GREEN + "Quick Chat";
-        this.role = GameRoles.VILLAGER;
+        this.role = GameRoles.NONE;
         this.attackable = false;
         this.quickchat = true;
         ItemStack item = new ItemStack(material);

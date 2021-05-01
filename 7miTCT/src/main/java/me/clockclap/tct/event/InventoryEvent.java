@@ -8,9 +8,7 @@ import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomItem;
 import me.clockclap.tct.item.CustomItems;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -68,23 +66,16 @@ public class InventoryEvent implements Listener {
                                     if (meta.getDisplayName().equalsIgnoreCase(CustomItems.SPONGE.getItemStack().getItemMeta().getDisplayName())) {
                                         data.setSponge(true);
                                     }
-                                    if (i.getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.TNT.getItemStack().getItemMeta().getDisplayName())) {
-                                        data.setCoin(data.getCoin() - 1);
-                                        data.addBoughtItem(i.getName());
-                                        p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_BOUGHT_ITEM.replaceAll("%ITEM%", i.getName()));
-                                        p.getInventory().setHelmet(e.getCurrentItem());
-                                        new BukkitRunnable() {
-                                            @Override
-                                            public void run() {
-                                                Location loc = new Location(p.getLocation().getWorld(), p.getLocation().getX(), p.getLocation().getY() + 1, p.getLocation().getZ());
-                                                TNTPrimed tnt = (TNTPrimed) loc.getWorld().spawnEntity(loc, EntityType.PRIMED_TNT);
-                                                tnt.setYield(6.0F);
-                                                tnt.setFuseTicks(0);
-                                            }
-                                        }.runTaskLater(plugin, 60);
-                                        p.closeInventory();
-                                        return;
-                                    }
+                                    p.getInventory().setHelmet(e.getCurrentItem());
+                                    new BukkitRunnable() {
+                                        @Override
+                                        public void run() {
+                                            Location loc = new Location(p.getLocation().getWorld(), p.getLocation().getX(), p.getLocation().getY() + 1, p.getLocation().getZ());
+                                            TNTPrimed tnt = (TNTPrimed) loc.getWorld().spawnEntity(loc, EntityType.PRIMED_TNT);
+                                            tnt.setYield(6.0F);
+                                            tnt.setFuseTicks(0);
+                                        }
+                                    }.runTaskLater(plugin, 60);
                                     if (i.getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.DIAMOND_HELMET.getItemStack().getItemMeta().getDisplayName())) {
                                         FileConfiguration config = plugin.getTctConfig().getConfig();
                                         int sec = config.getInt("detective-confirm-time", 180);
@@ -96,6 +87,7 @@ public class InventoryEvent implements Listener {
                                     data.addBoughtItem(i.getName());
                                     data.setCoin(data.getCoin() - 1);
                                     p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_BOUGHT_ITEM.replaceAll("%ITEM%", i.getName()));
+                                    p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP,  1F, 1F);
                                     p.getInventory().addItem(e.getCurrentItem());
                                     p.closeInventory();
                                     return;

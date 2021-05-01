@@ -125,8 +125,9 @@ public class BlockEvent implements Listener {
                                     data.getCustomBlock().onLeftClick(e.getPlayer());
                                     if(data.getCustomBlock().getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.HEAL_STATION.getItemStack().getItemMeta().getDisplayName())) {
                                         int t = NanamiTct.plugin.getTctConfig().getConfig().getInt("heal-station-respawn-time", 5);
-                                        block.setType(Material.AIR);
-                                        block.getLocation().getWorld().spawnParticle(Particle.BLOCK_CRACK, block.getLocation().add(0.5,0.5,0.5), 1, 1, 0.1, 0.1, 0.1, new MaterialData(CustomItems.HEAL_STATION.getMaterial()));
+//                                        block.setType(Material.AIR);
+//                                        block.getLocation().getWorld().spawnParticle(Particle.BLOCK_CRACK, block.getLocation().add(0.5,0.5,0.5), 100, new MaterialData(CustomItems.HEAL_STATION.getMaterial()));
+                                        block.breakNaturally(new ItemStack(Material.AIR));
                                         final Location[] l = { block.getLocation() };
                                         Bukkit.getScheduler().runTaskLater(NanamiTct.plugin, () -> {
                                             l[0].getBlock().setType(CustomItems.HEAL_STATION.getMaterial());

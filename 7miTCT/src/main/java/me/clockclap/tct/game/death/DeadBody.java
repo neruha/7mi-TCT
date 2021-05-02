@@ -33,6 +33,7 @@ public class DeadBody {
     private BukkitRunnable runnable;
     private List<String> killedPlayers;
     private boolean damaged;
+    private boolean fake;
 
     public DeadBody(Game game, PlayerData data, TctDeathCause cause, Location loc) {
         this.game = game;
@@ -51,6 +52,7 @@ public class DeadBody {
         this.beforeBlockData1 = data.getPlayer().getWorld().getBlockAt(this.loc).getData();
         this.killedPlayers = new ArrayList<>();
         this.damaged = false;
+        this.fake = false;
     }
 
     public Game getGame() {
@@ -73,8 +75,16 @@ public class DeadBody {
         return this.damaged;
     }
 
+    public boolean isFake() {
+        return this.fake;
+    }
+
     public void setDamaged(boolean value) {
         this.damaged = value;
+    }
+
+    public void setFake(boolean value) {
+        this.fake = value;
     }
 
     public List<String> getKilledPlayers() {
@@ -152,7 +162,6 @@ public class DeadBody {
         sign.update();
         resetTimeAfterDeath();
         startCount();
-        Bukkit.broadcastMessage(String.valueOf(getGame().getReference().DEADBODIES.size()));
     }
 
     public void remove() {

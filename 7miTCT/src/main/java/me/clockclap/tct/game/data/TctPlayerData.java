@@ -41,6 +41,9 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
     private Player player;
     private boolean sponge;
     private boolean invisible;
+    private boolean clickable;
+    private boolean clickableB;
+    private boolean clickableE;
 
     public TctPlayerData(NanamiTct plugin, GameRole role, String name) {
         super(plugin, Bukkit.getPlayer(name), role);
@@ -57,6 +60,9 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
         sponge = false;
         invisible = false;
         profile = new TctPlayerProfile(name);
+        clickable = true;
+        clickableB = true;
+        clickableE = true;
         Player p = Bukkit.getPlayer(name);
         this.player = p;
         if(p != null) {
@@ -183,6 +189,36 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
     @Override
     public List<String> getKilledPlayers() {
         return this.killedPlayers;
+    }
+
+    @Override
+    public boolean isClickableItem() {
+        return clickable;
+    }
+
+    @Override
+    public boolean isClickableBlock() {
+        return clickableB;
+    }
+
+    @Override
+    public boolean isClickableEntity() {
+        return clickableE;
+    }
+
+    @Override
+    public void setClickableItem(boolean value) {
+        this.clickable = value;
+    }
+
+    @Override
+    public void setClickableBlock(boolean value) {
+        this.clickableB = value;
+    }
+
+    @Override
+    public void setClickableEntity(boolean value) {
+        this.clickableE = value;
     }
 
     @Override

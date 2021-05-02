@@ -44,6 +44,18 @@ public interface PlayerData extends EntityData {
 
     public List<String> getKilledPlayers();
 
+    public boolean isClickableItem();
+
+    public boolean isClickableBlock();
+
+    public boolean isClickableEntity();
+
+    public void setClickableItem(boolean value);
+
+    public void setClickableBlock(boolean value);
+
+    public void setClickableEntity(boolean value);
+
     public boolean hasSponge();
 
     public boolean isInvisible();

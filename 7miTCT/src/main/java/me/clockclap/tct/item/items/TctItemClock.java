@@ -71,6 +71,7 @@ public class TctItemClock implements CustomSpecialItem {
             Location blockLoc = new Location(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
             DeadBody deadBody = new DeadBody(game, data, TctDeathCause.AIR, blockLoc);
             deadBody.setKilledPlayers(data.getKilledPlayers());
+            deadBody.setFake(true);
             NanamiTct.plugin.getGame().getReference().DEADBODIES.add(deadBody);
             deadBody.process();
             int tick = 2000;

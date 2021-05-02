@@ -103,46 +103,49 @@ public class BlockEvent implements Listener {
 
     @EventHandler
     public void playerInteract(PlayerInteractEvent e) {
-        if(clickable) {
-            Block block = e.getClickedBlock();
-            clickable = false;
-            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
-                clickable = true;
-            }, 2);
-            if(e.getPlayer().getGameMode() == GameMode.SPECTATOR) {
-                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName()));
-                if(e.getAction() == Action.RIGHT_CLICK_AIR) {
-                    block = data.getTargetBlock(5);
-                    processDeadBody(e.getPlayer(), block);
+        PlayerData d = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName()));
+        if(d != null) {
+            if (d.isClickableBlock()) {
+                Block block = e.getClickedBlock();
+                d.setClickableBlock(false);
+                Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
+                    d.setClickableBlock(true);
+                }, 2);
+                if (e.getPlayer().getGameMode() == GameMode.SPECTATOR) {
+                    PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName()));
+                    if (e.getAction() == Action.RIGHT_CLICK_AIR) {
+                        block = data.getTargetBlock(5);
+                        processDeadBody(e.getPlayer(), block);
+                    }
                 }
-            }
-            if(!plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName())).isSpectator()) {
-                if (CustomItems.generalBlocks.size() != 0) {
-                    if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_BLOCK) {
-                        for (CustomBlockData data : CustomBlockInfo.blockDataList) {
-                            if (data.getLocation().getBlockX() == block.getLocation().getBlockX() && data.getLocation().getBlockY() == block.getLocation().getBlockY() && data.getLocation().getBlockZ() == block.getLocation().getBlockZ()) {
-                                if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
-                                    data.getCustomBlock().onLeftClick(e.getPlayer());
-                                    if(data.getCustomBlock().getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.HEAL_STATION.getItemStack().getItemMeta().getDisplayName())) {
-                                        int t = NanamiTct.plugin.getTctConfig().getConfig().getInt("heal-station-respawn-time", 5);
+                if (!plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName())).isSpectator()) {
+                    if (CustomItems.generalBlocks.size() != 0) {
+                        if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_BLOCK) {
+                            for (CustomBlockData data : CustomBlockInfo.blockDataList) {
+                                if (data.getLocation().getBlockX() == block.getLocation().getBlockX() && data.getLocation().getBlockY() == block.getLocation().getBlockY() && data.getLocation().getBlockZ() == block.getLocation().getBlockZ()) {
+                                    if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
+                                        data.getCustomBlock().onLeftClick(e.getPlayer());
+                                        if (data.getCustomBlock().getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.HEAL_STATION.getItemStack().getItemMeta().getDisplayName())) {
+                                            int t = NanamiTct.plugin.getTctConfig().getConfig().getInt("heal-station-respawn-time", 5);
 //                                        block.setType(Material.AIR);
 //                                        block.getLocation().getWorld().spawnParticle(Particle.BLOCK_CRACK, block.getLocation().add(0.5,0.5,0.5), 100, new MaterialData(CustomItems.HEAL_STATION.getMaterial()));
-                                        block.breakNaturally(new ItemStack(Material.AIR));
-                                        final Location[] l = { block.getLocation() };
-                                        Bukkit.getScheduler().runTaskLater(NanamiTct.plugin, () -> {
-                                            l[0].getBlock().setType(CustomItems.HEAL_STATION.getMaterial());
-                                        }, t * 20L);
+                                            block.breakNaturally(new ItemStack(Material.AIR));
+                                            final Location[] l = {block.getLocation()};
+                                            Bukkit.getScheduler().runTaskLater(NanamiTct.plugin, () -> {
+                                                l[0].getBlock().setType(CustomItems.HEAL_STATION.getMaterial());
+                                            }, t * 20L);
+                                        }
                                     }
-                                }
-                                if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                                    String cooldownMsg = Reference.TCT_CHATPREFIX + " " + Reference.TCT_QUICK_CHAT_CURRENTLY_COOLDOWN;
-                                    if (data.getCooldown() > 0) {
-                                        e.getPlayer().sendMessage(cooldownMsg);
-                                        break;
-                                    } else {
-                                        data.getCustomBlock().onRightClick(e.getPlayer());
-                                        if (data.getCustomBlock().getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.HEAL_STATION.getItemStack().getItemMeta().getDisplayName())) {
-                                            data.runTimer(CooldownTypes.HEAL_STATION);
+                                    if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                                        String cooldownMsg = Reference.TCT_CHATPREFIX + " " + Reference.TCT_QUICK_CHAT_CURRENTLY_COOLDOWN;
+                                        if (data.getCooldown() > 0) {
+                                            e.getPlayer().sendMessage(cooldownMsg);
+                                            break;
+                                        } else {
+                                            data.getCustomBlock().onRightClick(e.getPlayer());
+                                            if (data.getCustomBlock().getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.HEAL_STATION.getItemStack().getItemMeta().getDisplayName())) {
+                                                data.runTimer(CooldownTypes.HEAL_STATION);
+                                            }
                                         }
                                     }
                                 }
@@ -150,12 +153,12 @@ public class BlockEvent implements Listener {
                         }
                     }
                 }
+                if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                    processDeadBody(e.getPlayer(), block);
+                }
+            } else {
+                d.setClickableBlock(true);
             }
-            if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                processDeadBody(e.getPlayer(), block);
-            }
-        } else {
-            clickable = true;
         }
     }
 
@@ -165,7 +168,6 @@ public class BlockEvent implements Listener {
             if(block.getLocation().getBlockX() == loc.getBlockX() &&
                     block.getLocation().getBlockY() == loc.getBlockY() &&
                     block.getLocation().getBlockZ() == loc.getBlockZ()) {
-                clickable = true;
                 boolean visible = true;
                 boolean can = true;
                 if(deadBody.isDamaged()) {
@@ -222,7 +224,7 @@ public class BlockEvent implements Listener {
                         }
                     } else {
                         if (visible) {
-                            if (!plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(player.getName())).isSpectator()) {
+                            if (!plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(player.getName())).isSpectator() && !deadBody.isFake()) {
                                 Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_DEADBODY_FOUND.replaceAll("%PLAYER%", deadBody.getPlayer().getDisplayName()));
                                 deadBody.setFound(true);
                                 TctLog log = plugin.getGame().getLog();

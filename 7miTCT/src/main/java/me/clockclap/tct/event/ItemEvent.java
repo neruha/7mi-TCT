@@ -149,51 +149,59 @@ public class ItemEvent implements Listener {
         }
     }
 
-    private boolean clickable = true;
-
     @EventHandler
     public void playerInteract(PlayerInteractEvent e) {
-        if(clickable) {
-            if (e.getPlayer().getInventory().getItemInMainHand().getType() != Material.AIR) {
-                ItemStack i = e.getPlayer().getInventory().getItemInMainHand();
-                if (i.hasItemMeta()) {
-                    for (CustomSpecialItem item : CustomItems.specialItems) {
-                        if (i.getItemMeta().getDisplayName().equalsIgnoreCase(item.getItemStack().getItemMeta().getDisplayName())) {
-                            if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                                item.onRightClick(e.getPlayer());
-                            }
-                            if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK) {
-                                item.onLeftClick(e.getPlayer());
+        PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName()));
+        if(data != null) {
+            if (data.isClickableItem()) {
+                data.setClickableItem(false);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        data.setClickableItem(true);
+                    }
+                }.runTaskLater(plugin, 2);
+                if (e.getPlayer().getInventory().getItemInMainHand().getType() != Material.AIR) {
+                    ItemStack i = e.getPlayer().getInventory().getItemInMainHand();
+                    if (i.hasItemMeta()) {
+                        for (CustomSpecialItem item : CustomItems.specialItems) {
+                            if (i.getItemMeta().getDisplayName().equalsIgnoreCase(item.getItemStack().getItemMeta().getDisplayName())) {
+                                if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                                    item.onRightClick(e.getPlayer());
+                                }
+                                if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK) {
+                                    item.onLeftClick(e.getPlayer());
+                                }
                             }
                         }
-                    }
-                    if(i.getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.TNT.getItemStack().getItemMeta().getDisplayName())) {
-                        e.getPlayer().getInventory().setHelmet(i);
-                        e.getPlayer().sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_EXPLODE_IN);
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                Location loc = new Location(e.getPlayer().getLocation().getWorld(), e.getPlayer().getLocation().getX(), e.getPlayer().getLocation().getY() + 1, e.getPlayer().getLocation().getZ());
-                                TNTPrimed tnt = (TNTPrimed) loc.getWorld().spawnEntity(loc, EntityType.PRIMED_TNT);
-                                tnt.setYield(6.0F);
-                                tnt.setFuseTicks(0);
-                            }
-                        }.runTaskLater(plugin, 60);
-                        for (int j = 0; j < e.getPlayer().getInventory().getSize(); j++) {
-                            ItemStack item = e.getPlayer().getInventory().getItem(j);
-                            if (item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().equalsIgnoreCase(e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName())) {
-                                int amt = item.getAmount() - 1;
-                                item.setAmount(amt);
-                                e.getPlayer().getInventory().setItem(j, amt > 0 ? item : null);
-                                e.getPlayer().updateInventory();
-                                break;
+                        if (i.getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.TNT.getItemStack().getItemMeta().getDisplayName())) {
+                            e.getPlayer().getInventory().setHelmet(i);
+                            e.getPlayer().sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_EXPLODE_IN);
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    Location loc = new Location(e.getPlayer().getLocation().getWorld(), e.getPlayer().getLocation().getX(), e.getPlayer().getLocation().getY() + 1, e.getPlayer().getLocation().getZ());
+                                    TNTPrimed tnt = (TNTPrimed) loc.getWorld().spawnEntity(loc, EntityType.PRIMED_TNT);
+                                    tnt.setYield(6.0F);
+                                    tnt.setFuseTicks(0);
+                                }
+                            }.runTaskLater(plugin, 60);
+                            for (int j = 0; j < e.getPlayer().getInventory().getSize(); j++) {
+                                ItemStack item = e.getPlayer().getInventory().getItem(j);
+                                if (item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().equalsIgnoreCase(e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName())) {
+                                    int amt = item.getAmount() - 1;
+                                    item.setAmount(amt);
+                                    e.getPlayer().getInventory().setItem(j, amt > 0 ? item : null);
+                                    e.getPlayer().updateInventory();
+                                    break;
+                                }
                             }
                         }
                     }
                 }
+            } else {
+                data.setClickableItem(true);
             }
-        } else {
-            clickable = true;
         }
     }
 
@@ -201,29 +209,32 @@ public class ItemEvent implements Listener {
 
     @EventHandler
     public void playerInteractAtPlayer(PlayerInteractAtEntityEvent e) {
-        if(clickable_) {
-            clickable_ = false;
-            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
-                clickable_ = true;
-            }, 2);
-            if (e.getRightClicked() == null) {
-                return;
-            }
-            if (e.getRightClicked() instanceof Player) {
-                Player p = e.getPlayer();
-                Player q = (Player) e.getRightClicked();
-                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(q.getName()));
-                if(!data.isSpectator() && !data.isInvisible()) {
-                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_NAME + ": " + NanamiTct.utilities.resetColor(q.getName()));
-                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_HP + ": " + ChatColor.RED + q.getHealth());
-                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_TOGETHER + ": " + ChatColor.GREEN + data.getTogether()
-                            + ChatColor.AQUA + ", " + Reference.TCT_VILLAGER + ": " + ChatColor.GREEN + data.getVillager()
-                            + ChatColor.AQUA + ", " + Reference.TCT_SUS + ": " + ChatColor.GREEN + data.getSuspicious()
-                            + ChatColor.AQUA + ", " + Reference.TCT_WOLF + ": " + ChatColor.GREEN + data.getWolf());
+        PlayerData d = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName()));
+        if(d != null) {
+            if (d.isClickableEntity()) {
+                d.setClickableEntity(false);
+                Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
+                    d.setClickableEntity(true);
+                }, 2);
+                if (e.getRightClicked() == null) {
+                    return;
                 }
+                if (e.getRightClicked() instanceof Player) {
+                    Player p = e.getPlayer();
+                    Player q = (Player) e.getRightClicked();
+                    PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(q.getName()));
+                    if (!data.isSpectator() && !data.isInvisible()) {
+                        p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_NAME + ": " + NanamiTct.utilities.resetColor(q.getName()));
+                        p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_HP + ": " + ChatColor.RED + q.getHealth());
+                        p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_TOGETHER + ": " + ChatColor.GREEN + data.getTogether()
+                                + ChatColor.AQUA + ", " + Reference.TCT_VILLAGER + ": " + ChatColor.GREEN + data.getVillager()
+                                + ChatColor.AQUA + ", " + Reference.TCT_SUS + ": " + ChatColor.GREEN + data.getSuspicious()
+                                + ChatColor.AQUA + ", " + Reference.TCT_WOLF + ": " + ChatColor.GREEN + data.getWolf());
+                    }
+                }
+            } else {
+                d.setClickableEntity(true);
             }
-        } else {
-
         }
     }
 

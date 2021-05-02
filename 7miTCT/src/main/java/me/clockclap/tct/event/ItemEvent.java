@@ -180,6 +180,10 @@ public class ItemEvent implements Listener {
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
+                                    PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName()));
+                                    if(data != null) {
+                                        data.setSponge(false);
+                                    }
                                     Location loc = new Location(e.getPlayer().getLocation().getWorld(), e.getPlayer().getLocation().getX(), e.getPlayer().getLocation().getY() + 1, e.getPlayer().getLocation().getZ());
                                     TNTPrimed tnt = (TNTPrimed) loc.getWorld().spawnEntity(loc, EntityType.PRIMED_TNT);
                                     tnt.setYield(6.0F);

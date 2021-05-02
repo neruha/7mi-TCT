@@ -136,15 +136,6 @@ public class DamageEvent implements Listener {
                             foxes.add(d);
                         }
                     }
-                    if (villagers.size() > 0 && wolves.size() <= 0) {
-                        plugin.getGame().getTimer().cancel();
-                        if (foxes.size() > 0) {
-                            plugin.getGame().stop(GameTeams.FOXES);
-                            return;
-                        }
-                        plugin.getGame().stop(GameTeams.VILLAGERS);
-                        return;
-                    }
                     if (wolves.size() > 0 && villagers.size() <= 0) {
                         plugin.getGame().getTimer().cancel();
                         if (foxes.size() > 0) {
@@ -152,6 +143,15 @@ public class DamageEvent implements Listener {
                             return;
                         }
                         plugin.getGame().stop(GameTeams.WOLVES);
+                        return;
+                    }
+                    if (villagers.size() > 0 && wolves.size() <= 0) {
+                        plugin.getGame().getTimer().cancel();
+                        if (foxes.size() > 0) {
+                            plugin.getGame().stop(GameTeams.FOXES);
+                            return;
+                        }
+                        plugin.getGame().stop(GameTeams.VILLAGERS);
                         return;
                     }
                     if (villagers.size() <= 0 && wolves.size() <= 0) {

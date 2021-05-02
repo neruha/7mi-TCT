@@ -51,6 +51,8 @@ public final class NanamiTct extends JavaPlugin {
         // Plugin startup logic
         plugin = this;
         utilities = new Utilities(this);
+        teamRegisterer = new CustomTeams();
+        roleRegisterer = new CustomRoles();
         game = new Game(this);
         configuration = new TctConfiguration(this);
         try {
@@ -58,9 +60,6 @@ public final class NanamiTct extends JavaPlugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        teamRegisterer = new CustomTeams();
-        roleRegisterer = new CustomRoles();
 
         getLogger().info("Starting up...");
         PluginManager pm = Bukkit.getServer().getPluginManager();

@@ -20,10 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Game {
 
@@ -50,6 +47,7 @@ public class Game {
     public List<String> fanatics = new ArrayList<>();
     public List<String> foxes = new ArrayList<>();
     public List<String> immoral = new ArrayList<>();
+    public Map<GameRole, List<String>> customRoles = new HashMap<>();
 
     public Game(NanamiTct plugin) {
         this.plugin = plugin;
@@ -174,6 +172,12 @@ public class Game {
             immoralMin = num;
         }
         int resultCount = villagersMin + healersMin + detectivesMin + wolvesMin + fanaticsMin + foxesMin + immoralMin;
+        if(!NanamiTct.roleRegisterer.isEmpty()) {
+            for(GameRole r : NanamiTct.roleRegisterer.getRegisteredRoles()) {
+                int count = config.getInt("roles.count.custom." + r.getName().toLowerCase(), 1);
+                resultCount += count;
+            }
+        }
         neededPlayers = resultCount;
         if(resultCount > Bukkit.getOnlinePlayers().size()) {
             return false;
@@ -384,6 +388,7 @@ public class Game {
                             healers.add(NanamiTct.utilities.resetColor(p.getName()));
                             continue;
                         }
+                        role++;
                     }
                     if (role == GameRoles.DETECTIVE.getIndex()) {
                         if (getRoleCount().getDetectivesCount() < detectivesMax) {
@@ -394,6 +399,7 @@ public class Game {
                             detectives.add(NanamiTct.utilities.resetColor(p.getName()));
                             continue;
                         }
+                        role++;
                     }
                     if (role == GameRoles.WOLF.getIndex()) {
                         if (getRoleCount().getWolvesCount() < wolvesMax) {
@@ -404,6 +410,7 @@ public class Game {
                             wolves.add(NanamiTct.utilities.resetColor(p.getName()));
                             continue;
                         }
+                        role++;
                     }
                     if (role == GameRoles.FANATIC.getIndex()) {
                         if (getRoleCount().getFanaticsCount() < fanaticsMax) {
@@ -414,6 +421,7 @@ public class Game {
                             fanatics.add(NanamiTct.utilities.resetColor(p.getName()));
                             continue;
                         }
+                        role++;
                     }
                     if (role == GameRoles.FOX.getIndex()) {
                         if (getRoleCount().getFoxesCount() < foxesMax) {
@@ -424,6 +432,7 @@ public class Game {
                             foxes.add(NanamiTct.utilities.resetColor(p.getName()));
                             continue;
                         }
+                        role++;
                     }
                     if (role == GameRoles.IMMORAL.getIndex()) {
                         if (getRoleCount().getImmoralCount() < immoralMax) {
@@ -445,6 +454,44 @@ public class Game {
                     canStart = true;
                 }
                 i++;
+            }
+            boolean canStart_ = false;
+            if(!NanamiTct.roleRegisterer.isEmpty()) {
+                while (!canStart_) {
+                    if (getReference().getGameState() != GameState.GAMING) {
+                        break;
+                    }
+                    getRoleCount().getCustomRoleCount().initialize();
+                    customRoles.clear();
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        if (p != null) {
+                            PlayerData data = getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
+                            if (data != null) {
+                                if (data.getRole() == GameRoles.VILLAGER) {
+                                    Random rand = new Random();
+                                    int role = rand.nextInt(NanamiTct.roleRegisterer.size() - 1) + 1;
+                                    for (GameRole r : NanamiTct.roleRegisterer.getRegisteredRoles()) {
+                                        int count = config.getInt("roles.count.custom." + r.getName().toLowerCase(), 1);
+                                        if (role == r.getIndex()) {
+                                            if(getRoleCount().getCustomRoleCount().get(r) < count) {
+                                                int coin = plugin.getTctConfig().getConfig().getInt("roles.coin.custom." + r.getName().toLowerCase(), 0);
+                                                data.setRole(r);
+                                                data.setCoin(coin);
+                                                getRoleCount().getCustomRoleCount().set(r, getRoleCount().getCustomRoleCount().get(r) + 1);
+                                                if(!customRoles.containsKey(r)) {
+                                                    customRoles.put(r, new ArrayList<>());
+                                                }
+                                                customRoles.get(r).add(NanamiTct.utilities.resetColor(p.getName()));
+                                                break;
+                                            }
+                                            role++;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -626,6 +673,7 @@ public class Game {
                 }.runTaskLater(getPlugin(), 10);
             }
         }
+        String str = "";
         String trvi = "";
         String trhe = "";
         String trde = "";
@@ -635,31 +683,50 @@ public class Game {
         String trim = "";
         if(getRoleCount().getVillagersCount() > 0) {
             trvi = Reference.TCT_ROLE_VILLAGER + ": " + getRoleCount().getVillagersCount() + " / ";
+            str += trvi;
         }
         if(getRoleCount().getHealersCount() > 0) {
             trhe = Reference.TCT_ROLE_HEALER + ": " + getRoleCount().getHealersCount() + " / ";
+            str += trhe;
         }
         if(getRoleCount().getDetectivesCount() > 0) {
             trde = Reference.TCT_ROLE_DETECTIVE + ": " + getRoleCount().getDetectivesCount() + " / ";
+            str += trde;
         }
         if(getRoleCount().getWolvesCount() > 0) {
             trwo = Reference.TCT_ROLE_WOLF + ": " + getRoleCount().getWolvesCount() + " / ";
+            str += trwo;
         }
         if(getRoleCount().getFanaticsCount() > 0) {
             trfa = Reference.TCT_ROLE_FANATIC + ": " + getRoleCount().getFanaticsCount() + " / ";
+            str += trfa;
         }
         if(getRoleCount().getFoxesCount() > 0) {
             trfo = Reference.TCT_ROLE_FOX + ": " + getRoleCount().getFoxesCount() + " / ";
+            str += trfo;
         }
         if(getRoleCount().getImmoralCount() > 0) {
             trim = Reference.TCT_ROLE_IMMORAL + ": " + getRoleCount().getFoxesCount() + " / ";
+            str += trim;
+        }
+        if(!NanamiTct.roleRegisterer.isEmpty()) {
+            for(GameRole r : NanamiTct.roleRegisterer.getRegisteredRoles()) {
+                str += r.getDisplayName() + ": " + getRoleCount().getCustomRoleCount().get(r) + " / ";
+            }
         }
         Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_GAME_PLAYERS.replaceAll("%COUNT%", String.valueOf(playersCount)));
-        Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_GAME_ROLE_SORTING + ": " + ChatColor.GOLD + trvi + trde + trhe + trwo + trfa + trfo + trim);
+        Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_GAME_ROLE_SORTING + ": " + ChatColor.GOLD + str);
 
         // Update Log Book
         getLog().addLine(Reference.TCT_LOGBOOK_GAME_STARTED);
         getLog().addLine(Reference.TCT_LOGBOOK_ROLES);
+        if(!NanamiTct.roleRegisterer.isEmpty()) {
+            List<GameRole> roleList = new ArrayList<>(NanamiTct.roleRegisterer.getRegisteredRoles());
+            Collections.reverse(roleList);
+            for (GameRole r : roleList) {
+                getLog().addLine(" " + " " + r.getDisplayName() + ": " + ChatColor.GREEN + getRoleCount().getCustomRoleCount().get(r));
+            }
+        }
         getLog().addLine(" " + " " + Reference.TCT_ROLE_IMMORAL + ": " + ChatColor.GREEN + getRoleCount().getImmoralCount());
         getLog().addLine(" " + " " + Reference.TCT_ROLE_FOX + ": " + ChatColor.GREEN + getRoleCount().getFoxesCount());
         getLog().addLine(" " + " " + Reference.TCT_ROLE_FANATIC + ": " + ChatColor.GREEN + getRoleCount().getFanaticsCount());
@@ -785,6 +852,20 @@ public class Game {
                     p.sendTitle(Reference.TCT_TITLE_MAIN_WOLVES_VICTORY, Reference.TCT_TITLE_SUB_WOLVES_VICTORY, 5, 40, 5);
                     p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_WOLVES_VICTORY);
                 }
+                if(!NanamiTct.teamRegisterer.isEmpty()) {
+                    for(GameTeam t : NanamiTct.teamRegisterer.getRegisteredTeams()) {
+                        if(winners == t) {
+                            if(t instanceof TctTeam) {
+                                TctTeam tt = (TctTeam) t;
+                                tt.onVictory(p);
+                            } else {
+                                p.playSound(p.getLocation(), Sound.ENTITY_FIREWORK_SHOOT, 1.0F, 1.0F);
+                                p.sendTitle(Reference.TCT_TITLE_MAIN_VICTORY.replaceAll("%COLOR%", ChatColor.RESET.toString()).replaceAll("%TEAM%", t.getDisplayName()), Reference.TCT_TITLE_SUB_VICTORY, 5, 40, 5);
+                                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_VICTORY.replaceAll("%COLOR%", t.getColor().toString()).replaceAll("%TEAM%", t.getDisplayName()));
+                            }
+                        }
+                    }
+                }
                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_GAMEEND_ROLE_RESULT);
             }
             if(villagers.size() > 0) {
@@ -815,13 +896,21 @@ public class Game {
                 String str = String.join(", ", immoral);
                 Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.DARK_GRAY + Reference.TCT_ROLE_IMMORAL + ": [" + str + "]");
             }
-            villagers = new ArrayList<>();
-            healers = new ArrayList<>();
-            detectives = new ArrayList<>();
-            wolves = new ArrayList<>();
-            fanatics = new ArrayList<>();
-            foxes = new ArrayList<>();
-            immoral = new ArrayList<>();
+            if(customRoles.size() > 0) {
+                for(Map.Entry<GameRole, List<String>> entry : customRoles.entrySet()) {
+                    GameRole r = entry.getKey();
+                    String str = String.join(", ", entry.getValue());
+                    Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + r.getColor() + r.getDisplayName() + ": [" + str + "]");
+                }
+            }
+            villagers.clear();
+            healers.clear();
+            detectives.clear();
+            wolves.clear();
+            fanatics.clear();
+            foxes.clear();
+            immoral.clear();
+            customRoles.clear();
         }
         for(Player p : Bukkit.getOnlinePlayers()) {
             PlayerData data = getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));

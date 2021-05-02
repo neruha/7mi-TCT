@@ -13,7 +13,9 @@ import me.clockclap.tct.game.GameReference;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.data.TctPlayerData;
 import me.clockclap.tct.game.death.Killer;
+import me.clockclap.tct.game.role.CustomRoles;
 import me.clockclap.tct.game.role.GameRoles;
+import me.clockclap.tct.game.role.CustomTeams;
 import me.clockclap.tct.inventory.CustomInventory;
 import me.clockclap.tct.item.CustomItems;
 import org.bukkit.Bukkit;
@@ -37,6 +39,8 @@ public final class NanamiTct extends JavaPlugin {
 
     public static NanamiTct plugin;
     public static Utilities utilities;
+    public static CustomTeams teamRegisterer;
+    public static CustomRoles roleRegisterer;
 
     private Game game;
     private TctConfiguration configuration;
@@ -54,6 +58,9 @@ public final class NanamiTct extends JavaPlugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        teamRegisterer = new CustomTeams();
+        roleRegisterer = new CustomRoles();
 
         getLogger().info("Starting up...");
         PluginManager pm = Bukkit.getServer().getPluginManager();

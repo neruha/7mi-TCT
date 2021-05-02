@@ -99,36 +99,16 @@ public class Japanizer {
                 msg = msg.replaceAll("&K", "%COLOR_CHR4175912001%");
                 msg = msg.replaceAll("&R", "%COLOR_CHRESET%");
             }
-            if(jpn) {
-                for (Player p : Bukkit.getOnlinePlayers()) {
-                    msg = msg.replaceAll(p.getName(), "@" + p.getName().toUpperCase());
-                }
-                result = KanaConverter.conv(msg);
-            } else {
-                result = KanaConverter.conv(msg);
-            }
+            result = KanaConverter.conv(msg);
             if(ime) {
                 result = GoogleIME.convByGoogleIME(result);
             }
             if(jpn) {
                 for (Player p : Bukkit.getOnlinePlayers()) {
-                    String str = p.getName().toUpperCase();
-                    str = str.replaceAll("0", "０");
-                    str = str.replaceAll("1", "１");
-                    str = str.replaceAll("2", "２");
-                    str = str.replaceAll("3", "３");
-                    str = str.replaceAll("4", "４");
-                    str = str.replaceAll("5", "５");
-                    str = str.replaceAll("6", "６");
-                    str = str.replaceAll("7", "７");
-                    str = str.replaceAll("8", "８");
-                    str = str.replaceAll("9", "９");
-                    result = result.replaceAll("@" + p.getName().toUpperCase(), p.getName());
-                    result = result.replaceAll("@" + str, p.getName());
-                    result = result.replaceAll("＠" + p.getName().toUpperCase(), p.getName());
-                    result = result.replaceAll("＠" + str, p.getName());
-                    msg = msg.replaceAll("@" + p.getName().toUpperCase(), p.getName());
-                    msg = msg.replaceAll("＠" + p.getName().toUpperCase(), p.getName());
+                    String name = NanamiTct.utilities.resetColor(p.getName());
+                    String japanizedName = KanaConverter.conv(name);
+                    if(ime) japanizedName = GoogleIME.convByGoogleIME(japanizedName);
+                    result = result.replaceAll(japanizedName, name);
                 }
             }
             if(color) {
@@ -143,7 +123,6 @@ public class Japanizer {
                 result = result.replaceAll("§８", "§8");
                 result = result.replaceAll("§９", "§9");
             }
-            //result = result + " " + TextColor.DARK_GRAY + "(" + TextColor.GRAY + beforeconvert + TextColor.DARK_GRAY + ")";
             String format = NanamiTct.plugin.getTctConfig().getChat().getString("japanize-format", Reference.JAPANIZE_FORMAT);
             format = ChatColor.translateAlternateColorCodes('&', format);
             result = format.replaceAll("%MESSAGE%", beforeconvert).replaceAll("%JAPANIZE%", result);

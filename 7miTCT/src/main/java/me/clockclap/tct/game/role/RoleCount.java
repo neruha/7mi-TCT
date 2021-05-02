@@ -5,6 +5,7 @@ import me.clockclap.tct.game.Game;
 public class RoleCount {
 
     private Game game;
+    private CustomRoleCount customRoleCount;
     private int villagersCount;
     private int healersCount;
     private int detectivesCount;
@@ -15,6 +16,7 @@ public class RoleCount {
 
     public RoleCount(Game game) {
         this.game = game;
+        customRoleCount = new CustomRoleCount(game);
         villagersCount = 0;
         healersCount = 0;
         detectivesCount = 0;
@@ -22,6 +24,10 @@ public class RoleCount {
         fanaticsCount = 0;
         foxesCount = 0;
         immoralCount = 0;
+    }
+
+    public CustomRoleCount getCustomRoleCount() {
+        return customRoleCount;
     }
 
     public int getVillagersCount() {

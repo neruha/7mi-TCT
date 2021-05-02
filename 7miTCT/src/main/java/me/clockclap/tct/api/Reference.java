@@ -146,6 +146,7 @@ public final class Reference {
     public static final String TCT_CHAT_FOX_VICTORY_A = ChatColor.GOLD + "人狼陣営は全滅し、妖狐が生き残りました";
     public static final String TCT_CHAT_FOX_VICTORY_B = ChatColor.GOLD + "村人陣営は全滅し、妖狐が生き残りました";
     public static final String TCT_CHAT_NO_VICTORY = ChatColor.GRAY + "運営によって強制終了されたため、引き分けになります";
+    public static final String TCT_CHAT_VICTORY = "%COLOR%%TEAM%が勝利しました";
     //ゲーム終了
     public static final String TCT_CHAT_GAMEEND_ROLE_RESULT = ChatColor.GREEN + "=-=-プレイヤーの役職結果-=-=";
     public static final String TCT_CHAT_GAMEEND_YOU_ARE_KILLED_BY = ChatColor.RED + "あなたは" + ChatColor.GOLD + "%PLAYER%" + ChatColor.RED + "に殺害されました " + ChatColor.GREEN + "(%ROLE%)";
@@ -165,6 +166,7 @@ public final class Reference {
     public static final String TCT_CHAT_ROLE_DESCRIPTION_FOX = ChatColor.LIGHT_PURPLE + "一定時間毎に誰かにダメージを与えないと、正体がばれてしまいます";
     public static final String TCT_CHAT_ROLE_YOU_ARE_IMMORAL = ChatColor.DARK_GRAY + "あなたの役職は背徳者です";
     public static final String TCT_CHAT_ROLE_DESCRIPTION_IMMORAL = ChatColor.LIGHT_PURPLE + "妖狐の補助をしましょう、間違えて妖狐を倒さないようにしましょう";
+    public static final String TCT_CHAT_ROLE_YOU_ARE = "%COLOR%あなたの役職は%ROLE%です";
 
     //全般
     public static final String TCT_SECOND = "秒";
@@ -200,6 +202,8 @@ public final class Reference {
     public static final String TCT_TITLE_SUB_FOX_VICTORY_B = ChatColor.GRAY + "村人陣営全滅時に生き残っていた妖狐陣営の勝利";
     public static final String TCT_TITLE_MAIN_NO_VICTORY = ChatColor.DARK_GRAY + "引き分け";
     public static final String TCT_TITLE_SUB_NO_VICTORY = ChatColor.GRAY + "ゲームが強制終了されました";
+    public static final String TCT_TITLE_MAIN_VICTORY = "%COLOR%%TEAM%が勝利しました";
+    public static final String TCT_TITLE_SUB_VICTORY = "";
 
     //インベントリメニュー (GUI)
     public static final String TCT_GUI_TITLE_GENERAL_SHOP = "村人ショップ";

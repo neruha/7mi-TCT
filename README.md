@@ -31,18 +31,27 @@
     <dependency>
         <groupId>me.clockclap</groupId>
         <artifactId>nanami-tct-api</artifactId>
-        <version>3.3.0</version>
+        <version>VERSION</version>
         <scope>system</scope>
-        <systemPath>C:/Users/tutorial/nanamitct/nanami-tct-api-3.3.0.jar</systemPath>
+        <systemPath>C:/Users/tutorial/nanamitct/nanami-tct-api-VERSION.jar</systemPath>
     </dependency>
 </dependencies>
 ```
 
 ##Gradle
-**build.gradleにこれを追加**
+**build.gradleにこれらを追加**
+
+```
+repositories {
+    mavenLocal()
+    maven {
+        url = 'C:/Users/tutorial/nanamitct/'
+    }
+}
+```
 
 ```
 dependencies {
-    compile files("C:/Users/tutorial/nanamitct/nanami-tct-api-3.3.0.jar")
+    compileOnly 'compileOnly 'me.clockclap:nanami-tct-api:VERSION'
 }
 ```

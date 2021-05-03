@@ -19,6 +19,8 @@
 
 
 # 取得
+[![Generic badge](https://img.shields.io/badge/Download-v3.4.1>-green.svg)]()
+
 プラグインのバージョンは必ず1.12.2にしてください
 
 まずは7mi-TCTをダウンロードして、どこかに保存しておきましょう。

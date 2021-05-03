@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Collection;
 
 public class Japanizer {
 
@@ -101,10 +102,18 @@ public class Japanizer {
             }
             result = KanaConverter.conv(msg);
             if(ime) {
+                result = result.replaceAll("むらびと", "村人");
+                result = result.replaceAll("いしゃ", "医者");
+                result = result.replaceAll("たんてい", "探偵");
+                result = result.replaceAll("じんろう", "人狼");
+                result = result.replaceAll("きょうじん", "狂人");
+                result = result.replaceAll("ようこ", "妖狐");
+                result = result.replaceAll("はいとくしゃ", "背徳者");
                 result = GoogleIME.convByGoogleIME(result);
             }
             if(jpn) {
-                for (Player p : Bukkit.getOnlinePlayers()) {
+                Collection<? extends Player> players = Bukkit.getOnlinePlayers();
+                for (Player p : players) {
                     String name = NanamiTct.utilities.resetColor(p.getName());
                     String japanizedName = KanaConverter.conv(name);
                     if(ime) japanizedName = GoogleIME.convByGoogleIME(japanizedName);

@@ -349,7 +349,7 @@ public class Game {
         int resultCount = villagersMin + healersMin + detectivesMin + wolvesMin + fanaticsMin + foxesMin + immoralMin;
         if(playersCount >= resultCount) {
             Collection<? extends Player> players = Bukkit.getOnlinePlayers();
-            for(Player p : Bukkit.getOnlinePlayers()) {
+            for(Player p : players) {
                 if (getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName())).getRole() != GameRoles.VILLAGER) {
                     players.remove(p);
                 }
@@ -463,7 +463,7 @@ public class Game {
                     }
                     getRoleCount().getCustomRoleCount().initialize();
                     customRoles.clear();
-                    for (Player p : Bukkit.getOnlinePlayers()) {
+                    for (Player p : players) {
                         if (p != null) {
                             PlayerData data = getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
                             if (data != null) {
@@ -497,7 +497,8 @@ public class Game {
     }
 
     public void giveItem() {
-        for(Player p : Bukkit.getOnlinePlayers()) {
+        Collection<? extends Player> players = Bukkit.getOnlinePlayers();
+        for(Player p : players) {
             PlayerData data = getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
             if(!data.isSpectator()) {
                 p.getInventory().setItem(4, getLog().getItem());

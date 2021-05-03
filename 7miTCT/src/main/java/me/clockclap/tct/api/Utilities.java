@@ -254,4 +254,24 @@ public class Utilities {
         return result;
     }
 
+    public PlayerData getPlayerData(String coloredName) {
+        String name = resetColor(coloredName);
+        return NanamiTct.plugin.getGame().getReference().PLAYERDATA.get(name);
+    }
+
+    public Collection<? extends PlayerData> getOnlinePlayersData() {
+        Collection<? extends Player> players = Bukkit.getOnlinePlayers();
+        Collection<PlayerData> datas = new ArrayList<>();
+        for(Player p : players) {
+            if(p != null) {
+                String name = resetColor(p.getName());
+                PlayerData data = getPlayerData(name);
+                if (data != null) {
+                    datas.add(data);
+                }
+            }
+        }
+        return datas;
+    }
+
 }

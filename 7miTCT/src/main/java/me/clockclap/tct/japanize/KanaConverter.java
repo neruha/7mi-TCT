@@ -21,24 +21,6 @@ public class KanaConverter {
     static {
         ImmutableSortedMap.Builder<String, String> builder = ImmutableSortedMap.reverseOrder();
 
-        // 単語
-        builder.put("kyoujin", "狂人");
-        builder.put("kyoujinn", "狂人");
-        builder.put("kyouzin", "狂人");
-        builder.put("kyouzinn", "狂人");
-        builder.put("youko", "妖狐");
-        builder.put("jinrou", "人狼");
-        builder.put("jinnrou", "人狼");
-        builder.put("zinrou", "人狼");
-        builder.put("zinnrou", "人狼");
-        builder.put("tantei", "探偵");
-        builder.put("tanntei", "探偵");
-        builder.put("murabito", "村人");
-        builder.put("kuro", "黒");
-        builder.put("siro", "白");
-        builder.put("isya", "医者");
-        builder.put("isha", "医者");
-
         // ひらがな
         builder.put("a", "あ");
         builder.put("i", "い").put("yi", "い");

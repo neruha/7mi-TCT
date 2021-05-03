@@ -229,7 +229,12 @@ public class DamageEvent implements Listener {
             } else {
                 respawnLoc = e.getEntity().getLocation();
             }
-            p.spigot().respawn();
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    p.spigot().respawn();
+                }
+            }.runTaskLater(plugin, 3);
         }
 
     }

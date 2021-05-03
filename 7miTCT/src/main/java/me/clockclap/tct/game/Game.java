@@ -469,7 +469,7 @@ public class Game {
                             if (data != null) {
                                 if (data.getRole() == GameRoles.VILLAGER) {
                                     Random rand = new Random();
-                                    int role = rand.nextInt(NanamiTct.roleRegisterer.size() - 1) + 1;
+                                    int role = rand.nextInt(NanamiTct.roleRegisterer.size());
                                     for (GameRole r : NanamiTct.roleRegisterer.getRegisteredRoles()) {
                                         int count = config.getInt("roles.count.custom." + r.getName().toLowerCase(), 1);
                                         if (role == r.getIndex()) {

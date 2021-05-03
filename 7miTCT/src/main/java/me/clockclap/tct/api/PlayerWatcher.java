@@ -17,6 +17,7 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -247,7 +248,8 @@ public class PlayerWatcher {
                 if(getPlayer().getGameMode() == GameMode.SURVIVAL || getPlayer().getGameMode() == GameMode.ADVENTURE) {
                     if (!getPlayerData().isSpectator()) {
                         if(getPlayerData().getRole() != GameRoles.WOLF) {
-                            for (CustomBlockData data : CustomBlockInfo.blockDataList) {
+                            List<CustomBlockData> dataList = new ArrayList<>(CustomBlockInfo.blockDataList);
+                            for (CustomBlockData data : dataList) {
                                 if (data.getCustomBlock().getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.LANDMINE.getItemStack().getItemMeta().getDisplayName())) {
                                     if(data.isEnabled()) {
                                         double maxFar = NanamiTct.plugin.getTctConfig().getConfig().getInt("landmine-range", 5);
@@ -255,6 +257,8 @@ public class PlayerWatcher {
                                         if (far <= maxFar) {
                                             getPlayer().damage(getPlayer().getHealth() + 1);
                                             getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1F, 1F);
+                                            data.getLocation().getBlock().setType(Material.AIR);
+                                            CustomBlockInfo.blockDataList.remove(dataList.indexOf(data));
                                         }
                                     }
                                 }

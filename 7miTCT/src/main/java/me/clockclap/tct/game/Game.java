@@ -472,7 +472,7 @@ public class Game {
                                     int role = rand.nextInt(NanamiTct.roleRegisterer.size());
                                     for (GameRole r : NanamiTct.roleRegisterer.getRegisteredRoles()) {
                                         int count = config.getInt("roles.count.custom." + r.getName().toLowerCase(), 1);
-                                        if (role == r.getIndex()) {
+                                        if (role == NanamiTct.roleRegisterer.indexOf(r)) {
                                             if(getRoleCount().getCustomRoleCount().get(r) < count) {
                                                 int coin = plugin.getTctConfig().getConfig().getInt("roles.coin.custom." + r.getName().toLowerCase(), 0);
                                                 data.setRole(r);

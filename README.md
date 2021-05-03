@@ -19,7 +19,7 @@
 
 
 # 取得
-[![Generic badge](https://img.shields.io/badge/Download-v3.4.1>-green.svg)]()
+[![Generic badge](https://img.shields.io/badge/Download-v3.4.1-green.svg)](https://github.com/nanami-network/7mi-TCT/releases/download/v3.4.1/nanami-tct-api-3.4.1.jar)
 
 プラグインのバージョンは必ず1.12.2にしてください
 

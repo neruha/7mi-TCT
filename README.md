@@ -20,42 +20,29 @@
 
 # 取得
 
-[![](https://jitpack.io/v/nanami-network/7mi-TCT.svg)](https://jitpack.io/#nanami-network/7mi-TCT)
-
-※まだできません。
+まずは7mi-TCTをダウンロードして、どこかに保存しておきましょう。
+(今回は例として ~/nanamitct/ にjarファイルを置きます)
 
 ##Maven
-**pom.xmlにこれらを追加**
-```xml
-<repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
-</repositories>
-```
+**pom.xmlにこれを追加**
 
 ```xml
 <dependencies>
     <dependency>
-        <groupId>com.github.nanami-network</groupId>
-        <artifactId>7mi-TCT</artifactId>
-        <version>v3.3.0</version>
-        <scope>compile</scope>
+        <groupId>me.clockclap</groupId>
+        <artifactId>nanami-tct-api</artifactId>
+        <version>3.3.0</version>
+        <scope>system</scope>
+        <systemPath>~/nanamitct/nanami-tct-api-3.3.0.jar</systemPath>
     </dependency>
 </dependencies>
 ```
 
 ##Gradle
-**build.gradleにこれらを追加**
-```
-repositories {
-    maven { url 'https://jitpack.io' }
-}
-```
+**build.gradleにこれを追加**
 
 ```
 dependencies {
-    compile 'com.github.nanami-network:7mi-TCT:v3.3.0'
+    compile files("~/nanamitct/nanami-tct-api-3.3.0.jar")
 }
 ```

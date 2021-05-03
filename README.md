@@ -55,6 +55,6 @@ repositories {
 
 ```
 dependencies {
-    compileOnly 'compileOnly 'me.clockclap:nanami-tct-api:VERSION'
+    compileOnly 'me.clockclap:nanami-tct-api:VERSION'
 }
 ```

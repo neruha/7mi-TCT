@@ -22,6 +22,8 @@
 
 [![](https://jitpack.io/v/nanami-network/7mi-TCT.svg)](https://jitpack.io/#nanami-network/7mi-TCT)
 
+※まだできません。
+
 ##Maven
 **pom.xmlにこれらを追加**
 ```xml

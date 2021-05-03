@@ -21,7 +21,7 @@
 # 取得
 
 まずは7mi-TCTをダウンロードして、どこかに保存しておきましょう。
-(今回は例として `~/nanamitct/` にjarファイルを置きます)
+(今回は例として `C:/Users/tutorial/nanamitct/` にjarファイルを置きます)
 
 ##Maven
 **pom.xmlにこれを追加**
@@ -33,7 +33,7 @@
         <artifactId>nanami-tct-api</artifactId>
         <version>3.3.0</version>
         <scope>system</scope>
-        <systemPath>~/nanamitct/nanami-tct-api-3.3.0.jar</systemPath>
+        <systemPath>C:/Users/tutorial/nanamitct/nanami-tct-api-3.3.0.jar</systemPath>
     </dependency>
 </dependencies>
 ```
@@ -43,6 +43,6 @@
 
 ```
 dependencies {
-    compile files("~/nanamitct/nanami-tct-api-3.3.0.jar")
+    compile files("C:/Users/tutorial/nanamitct/nanami-tct-api-3.3.0.jar")
 }
 ```

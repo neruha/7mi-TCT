@@ -42,19 +42,10 @@
 ```
 
 ##Gradle
-**build.gradleにこれらを追加**
-
-```
-repositories {
-    mavenLocal()
-    maven {
-        url = 'C:/Users/tutorial/nanamitct/'
-    }
-}
-```
+**build.gradleにこれを追加**
 
 ```
 dependencies {
-    compileOnly 'me.clockclap:nanami-tct-api:VERSION'
+    compileOnly fileTree(dir: 'C:/Users/tutorial/nanamitct', include: ['nanami-tct-api-VERSION.jar'])
 }
 ```

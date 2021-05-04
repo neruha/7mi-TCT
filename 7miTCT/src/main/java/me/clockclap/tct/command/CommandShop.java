@@ -2,8 +2,10 @@ package me.clockclap.tct.command;
 
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
+import me.clockclap.tct.api.event.ShopOpenEvent;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.role.GameRoles;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -24,12 +26,23 @@ public class CommandShop implements CommandExecutor {
             PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
             if(!data.isSpectator()) {
                 plugin.getCustomInventory().initialize();
-                if(data.getRole() == GameRoles.WOLF) {
-                    p.openInventory(plugin.getCustomInventory().getWolfShop());
+                if(data.getRole() == GameRoles.VILLAGER) {
+                    p.openInventory(plugin.getCustomInventory().getGeneralShop());
+                } else if(data.getRole() == GameRoles.HEALER) {
+                    p.openInventory(plugin.getCustomInventory().getHealerShop());
                 } else if(data.getRole() == GameRoles.DETECTIVE) {
                     p.openInventory(plugin.getCustomInventory().getDetectiveShop());
+                } else if(data.getRole() == GameRoles.WOLF) {
+                    p.openInventory(plugin.getCustomInventory().getWolfShop());
+                } else if(data.getRole() == GameRoles.FANATIC) {
+                    p.openInventory(plugin.getCustomInventory().getFanaticShop());
+                } else if(data.getRole() == GameRoles.FOX) {
+                    p.openInventory(plugin.getCustomInventory().getFoxShop());
+                } else if(data.getRole() == GameRoles.IMMORAL) {
+                    p.openInventory(plugin.getCustomInventory().getImmoralShop());
                 } else {
-                    p.openInventory(plugin.getCustomInventory().getGeneralShop());
+                    ShopOpenEvent shopOpenEvent = new ShopOpenEvent(plugin.getGame(), p);
+                    Bukkit.getPluginManager().callEvent(shopOpenEvent);
                 }
                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_YOUR_COIN.replaceAll("%COUNT%", String.valueOf(data.getCoin())));
                 return true;

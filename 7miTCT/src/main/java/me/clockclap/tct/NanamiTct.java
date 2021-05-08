@@ -6,6 +6,9 @@ import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.api.TctConfiguration;
 import me.clockclap.tct.api.Utilities;
 import me.clockclap.tct.api.event.ArmorListener;
+import me.clockclap.tct.api.sql.MySQLConnection;
+import me.clockclap.tct.api.sql.MySQLPlayerStats;
+import me.clockclap.tct.api.sql.MySQLStatus;
 import me.clockclap.tct.command.*;
 import me.clockclap.tct.event.*;
 import me.clockclap.tct.game.Game;
@@ -34,6 +37,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.sql.SQLException;
 
 public final class NanamiTct extends JavaPlugin {
 
@@ -41,6 +45,8 @@ public final class NanamiTct extends JavaPlugin {
     public static Utilities utilities;
     public static CustomTeams teamRegisterer;
     public static CustomRoles roleRegisterer;
+    public static MySQLConnection sqlConnection;
+    public static MySQLPlayerStats playerStats;
 
     private Game game;
     private TctConfiguration configuration;
@@ -59,6 +65,23 @@ public final class NanamiTct extends JavaPlugin {
             configuration.init();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        sqlConnection = new MySQLConnection(configuration.getConfig().getString("mysql.hostname", "localhost"),
+                configuration.getConfig().getInt("mysql.port", 3306),
+                configuration.getConfig().getString("mysql.database", ""),
+                configuration.getConfig().getString("mysql.username", ""),
+                configuration.getConfig().getString("mysql.password", ""),
+                configuration.getConfig().getString("mysql.option", "?allowPublicKeyRetrieval=true&useSSL=false"));
+
+        try {
+            sqlConnection.openConnection();
+            MySQLStatus.setSqlEnabled(true);
+        } catch (SQLException ex) {
+            MySQLStatus.setSqlEnabled(false);
+        }
+
+        if(MySQLStatus.isSqlEnabled()) {
+            playerStats = new MySQLPlayerStats(sqlConnection, game);
         }
 
         getLogger().info("Starting up...");

@@ -2,6 +2,17 @@
 
 ### コンフィグを編集したら、必ず /tctreload をしてください。
 
+## データベースの設定
+#この設定を変更したら、コンフィグ再読み込みではなくサーバーを再起動してください。
+#接続に失敗したら自動的に統計の記録が無効化されます。
+mysql:
+  hostname: 'localhost'
+  port: 3306
+  database: ''
+  username: ''
+  password: ''
+  option: '?allowPublicKeyRetrieval=true&useSSL=false'
+
 ## ゲームのスタートなどができるプレイヤーを設定します。
 # 例
 # admin:

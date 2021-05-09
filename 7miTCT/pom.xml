@@ -156,7 +156,7 @@
             <artifactId>paper-server</artifactId>
             <version>1.12.2-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${user.home}/Minecraft Server/7mi TCT Paper/cache/patched_1.12.2.jar</systemPath>
+            <systemPath>${user.home}/Paper/patched_paper_1.12.2.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>

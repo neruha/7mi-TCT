@@ -7,6 +7,7 @@ import me.clockclap.tct.api.event.GamePreStartEvent;
 import me.clockclap.tct.api.event.GameStartEvent;
 import me.clockclap.tct.api.event.GameStopEvent;
 import me.clockclap.tct.game.data.PlayerData;
+import me.clockclap.tct.game.data.PlayerStat;
 import me.clockclap.tct.game.death.DeadBody;
 import me.clockclap.tct.game.death.Killer;
 import me.clockclap.tct.game.role.*;
@@ -581,6 +582,9 @@ public class Game {
                 p.getInventory().setItem(2, CustomItems.ARROW.getItemStack());
                 p.setFoodLevel(1);
                 villagers.add(NanamiTct.utilities.resetColor(p.getName()));
+                PlayerStat stat = NanamiTct.playerStats.getStat(p.getUniqueId());
+                stat.setCountVillager(stat.getCountVillager() + 1);
+                stat.setTotalPlayingCount(stat.getTotalPlayingCount() + 1);
             }
             if(data.getRole() == GameRoles.HEALER) {
                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_HEALER);
@@ -590,6 +594,9 @@ public class Game {
                 p.getInventory().setItem(2, CustomItems.BOW.getItemStack());
                 p.getInventory().setItem(3, CustomItems.ARROW.getItemStack());
                 p.setFoodLevel(1);
+                PlayerStat stat = NanamiTct.playerStats.getStat(p.getUniqueId());
+                stat.setCountHealer(stat.getCountHealer() + 1);
+                stat.setTotalPlayingCount(stat.getTotalPlayingCount() + 1);
             }
             if(data.getRole() == GameRoles.DETECTIVE) {
                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_DETECTIVE);
@@ -598,6 +605,9 @@ public class Game {
                 p.getInventory().setItem(1, CustomItems.BOW.getItemStack());
                 p.getInventory().setItem(2, CustomItems.ARROW.getItemStack());
                 p.setFoodLevel(1);
+                PlayerStat stat = NanamiTct.playerStats.getStat(p.getUniqueId());
+                stat.setCountDetective(stat.getCountDetective() + 1);
+                stat.setTotalPlayingCount(stat.getTotalPlayingCount() + 1);
             }
             if(data.getRole() == GameRoles.WOLF) {
                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_WOLF);
@@ -612,6 +622,9 @@ public class Game {
                 if(getRoleCount().getFanaticsCount() > 0) {
                     p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_FANATIC_LIST + ": [" + str1 + "]");
                 }
+                PlayerStat stat = NanamiTct.playerStats.getStat(p.getUniqueId());
+                stat.setCountWolf(stat.getCountWolf() + 1);
+                stat.setTotalPlayingCount(stat.getTotalPlayingCount() + 1);
             }
             if(data.getRole() == GameRoles.FANATIC) {
                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_FANATIC);
@@ -620,6 +633,9 @@ public class Game {
                 p.getInventory().setItem(1, CustomItems.BOW.getItemStack());
                 p.getInventory().setItem(2, CustomItems.ARROW.getItemStack());
                 p.setFoodLevel(1);
+                PlayerStat stat = NanamiTct.playerStats.getStat(p.getUniqueId());
+                stat.setCountFanatic(stat.getCountFanatic() + 1);
+                stat.setTotalPlayingCount(stat.getTotalPlayingCount() + 1);
             }
             if(data.getRole() == GameRoles.FOX) {
                 List<String> foxesTeam = new ArrayList<>();
@@ -640,6 +656,9 @@ public class Game {
                 if(getRoleCount().getImmoralCount() > 0) {
                     p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_IMMORAL_LIST + ": [" + str1 + "]");
                 }
+                PlayerStat stat = NanamiTct.playerStats.getStat(p.getUniqueId());
+                stat.setCountFox(stat.getCountFox() + 1);
+                stat.setTotalPlayingCount(stat.getTotalPlayingCount() + 1);
             }
             if(data.getRole() == GameRoles.IMMORAL) {
                 List<String> foxesTeam = new ArrayList<>();
@@ -657,6 +676,9 @@ public class Game {
                     p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_FOX_LIST + ": [" + str0 + "]");
                 }
                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_IMMORAL_LIST + ": [" + str1 + "]");
+                PlayerStat stat = NanamiTct.playerStats.getStat(p.getUniqueId());
+                stat.setCountImmoral(stat.getCountImmoral() + 1);
+                stat.setTotalPlayingCount(stat.getTotalPlayingCount() + 1);
             }
             if(!data.isSpectator()) {
                 remainingPlayers.add(data);

@@ -3,8 +3,7 @@ package me.clockclap.tct.game;
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.game.data.CustomProjectileData;
 import me.clockclap.tct.game.data.PlayerData;
-import me.clockclap.tct.game.death.DeadBody;
-import org.bukkit.craftbukkit.libs.jline.console.KeyMap;
+import me.clockclap.tct.game.death.DeadBody;;
 import org.bukkit.entity.Projectile;
 
 import java.lang.reflect.Array;

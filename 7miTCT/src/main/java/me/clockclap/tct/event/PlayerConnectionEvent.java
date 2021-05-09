@@ -7,7 +7,9 @@ import me.clockclap.tct.api.Utilities;
 import me.clockclap.tct.api.sql.MySQLStatus;
 import me.clockclap.tct.game.GameState;
 import me.clockclap.tct.game.data.PlayerData;
+import me.clockclap.tct.game.data.PlayerStat;
 import me.clockclap.tct.game.data.TctPlayerData;
+import me.clockclap.tct.game.data.TctPlayerStat;
 import me.clockclap.tct.game.death.Killer;
 import me.clockclap.tct.game.death.TctDeathCause;
 import me.clockclap.tct.game.role.GameRoles;
@@ -27,6 +29,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,8 +54,14 @@ public class PlayerConnectionEvent implements Listener {
         plugin.getGame().getReference().PLAYERDATA.put(NanamiTct.utilities.resetColor(p.getName()), data);
         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_JOIN_MESSAGE_0.replaceAll("%VERSION%", plugin.getDescription().getVersion()));
         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_JOIN_MESSAGE_1);
-        if(MySQLStatus.isSqlEnabled() && NanamiTct.sqlConnection != null && NanamiTct.sqlConnection.getConnection() != null) {
-
+        if(MySQLStatus.isSqlEnabled() && NanamiTct.sqlConnection != null && NanamiTct.playerStats != null && NanamiTct.sqlConnection.getConnection() != null) {
+            PlayerStat stat = new TctPlayerStat(p.getUniqueId());
+            try {
+                NanamiTct.playerStats.insert(stat);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                MySQLStatus.setSqlEnabled(false);
+            }
         } else p.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "* データベースに接続できなかったため統計の表示、記録はできません *");
         String gameState,message = "";
         boolean isAdmin = data.getProfile().isAdmin();

@@ -7,7 +7,7 @@
     <groupId>me.clockclap</groupId>
     <artifactId>nanami-tct-parent</artifactId>
     <version>dev-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <name>7miTCT-Parent</name>
     <description>Parent project for all 7miTCT modules.</description>

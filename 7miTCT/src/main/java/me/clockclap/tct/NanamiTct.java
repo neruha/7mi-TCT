@@ -82,6 +82,11 @@ public final class NanamiTct extends JavaPlugin {
 
         if(MySQLStatus.isSqlEnabled()) {
             playerStats = new MySQLPlayerStats(sqlConnection, game);
+            try {
+                playerStats.createTable();
+            } catch (SQLException throwables) {
+                MySQLStatus.setSqlEnabled(false);
+            }
         }
 
         getLogger().info("Starting up...");

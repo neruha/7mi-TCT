@@ -27,6 +27,8 @@ public interface PlayerStat {
 
     public int getCountDeath();
 
+    public int getCountKill();
+
     public int getTotalFoundDeadBodies();
 
     public int getCountUsedItem();
@@ -60,6 +62,8 @@ public interface PlayerStat {
     public void setCountCustomRole(GameRole role, int count);
 
     public void setCountDeath(int count);
+
+    public void setCountKill(int count);
 
     public void setTotalFoundDeadBodies(int count);
 

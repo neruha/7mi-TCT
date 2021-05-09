@@ -356,7 +356,7 @@ public class Game {
             }
             boolean canStart = false;
             int i = 0;
-            while(!canStart) {
+            while(true) {
                 if(getReference().getGameState() != GameState.GAMING) {
                     break;
                 }
@@ -451,13 +451,13 @@ public class Game {
                         getRoleCount().getFanaticsCount() >= fanaticsMin && getRoleCount().getFanaticsCount() <= fanaticsMax &&
                         getRoleCount().getFoxesCount() >= foxesMin && getRoleCount().getFoxesCount() <= foxesMax &&
                         getRoleCount().getImmoralCount() >= immoralMin && getRoleCount().getImmoralCount() <= immoralMax) {
-                    canStart = true;
+                    break;
                 }
                 i++;
             }
             boolean canStart_ = false;
             if(!NanamiTct.roleRegisterer.isEmpty()) {
-                while (!canStart_) {
+                while (true) {
                     if (getReference().getGameState() != GameState.GAMING) {
                         break;
                     }
@@ -491,6 +491,7 @@ public class Game {
                             }
                         }
                     }
+                    break;
                 }
             }
         }
@@ -671,7 +672,7 @@ public class Game {
                         NanamiTct.utilities.showPlayer(pl, p);
                         data.setInvisible(false);
                     }
-                }.runTaskLater(getPlugin(), 10);
+                }.runTaskLater(getPlugin(), 15);
             }
         }
         String str = "";

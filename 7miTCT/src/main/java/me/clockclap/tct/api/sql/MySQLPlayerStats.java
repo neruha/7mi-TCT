@@ -1,5 +1,6 @@
 package me.clockclap.tct.api.sql;
 
+import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.game.Game;
 import me.clockclap.tct.game.data.PlayerStat;
 import me.clockclap.tct.game.role.GameRoles;
@@ -34,31 +35,31 @@ public class MySQLPlayerStats {
         return game;
     }
 
+    public void createTable() throws SQLException {
+        if(connection.getConnection() != null && MySQLStatus.isSqlEnabled()) {
+            connection.openConnection();
+            PreparedStatement statement = connection.getConnection().prepareStatement("" +
+                    "CREATE TABLE IF NOT EXISTS tct_stats (uuid VARCHAR(50),vil INT,hea INT,det INT,wol INT,fan INT,fox INT,imm INT,death INT,kill INT,found_deadbody INT," +
+                    "use_item INT,victory INT,defeat INT,use_heal_station INT,place_heal_station INT,bought_item INT,play_count INT)");
+            statement.execute();
+            statement.close();
+            NanamiTct.sqlConnection.getConnection().close();
+        }
+    }
+
     public void insert(PlayerStat stat) throws SQLException {
         if(connection.getConnection() != null) {
             connection.openConnection();
-            PreparedStatement statement = connection.getConnection().prepareStatement("INSERT INTO tct_stats (uuid,vil,hea,det,wol,fan,fox,imm,death," +
+            String sql = "INSERT INTO tct_stats (uuid,vil,hea,det,wol,fan,fox,imm,death,kill," +
                     "found_deadbody,use_item,victory,defeat,use_heal_station,place_heal_station,bought_item,play_count) " +
-                    "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                    "SELECT * FROM (SELECT ?,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) AS tmp WHERE NOT EXISTS (" +
+                    "SELECT uuid FROM tct_stats WHERE uuid=?" +
+                    ") LIMIT 1;";
+            PreparedStatement statement = connection.getConnection().prepareStatement(sql);
             statement.setString(1, stat.getUUID().toString());
-            statement.setInt(2, stat.getCountVillager());
-            statement.setInt(3, stat.getCountHealer());
-            statement.setInt(4, stat.getCountDetective());
-            statement.setInt(5, stat.getCountWolf());
-            statement.setInt(6, stat.getCountFanatic());
-            statement.setInt(7, stat.getCountFox());
-            statement.setInt(8, stat.getCountImmoral());
-            statement.setInt(9, stat.getCountDeath());
-            statement.setInt(10, stat.getTotalFoundDeadBodies());
-            statement.setInt(11, stat.getCountUsedItem());
-            statement.setInt(12, stat.getTotalVictories());
-            statement.setInt(13, stat.getTotalDefeats());
-            statement.setInt(14, stat.getTotalUseHealStation());
-            statement.setInt(15, stat.getTotalPlaceHealStation());
-            statement.setInt(16, stat.getTotalBoughtItems());
-            statement.setInt(17, stat.getTotalPlayingCount());
+            statement.setString(2, stat.getUUID().toString());
             statement.execute();
-            playerStatMap.put(stat.getUUID(), stat);
+            if(playerStatMap.containsKey(stat.getUUID())) playerStatMap.put(stat.getUUID(), stat);
             statement.close();
             connection.getConnection().close();
         }

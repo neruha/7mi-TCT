@@ -4,6 +4,7 @@ import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.PlayerWatcher;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.api.Utilities;
+import me.clockclap.tct.api.sql.MySQLStatus;
 import me.clockclap.tct.game.GameState;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.data.TctPlayerData;
@@ -50,8 +51,10 @@ public class PlayerConnectionEvent implements Listener {
         plugin.getGame().getReference().PLAYERDATA.put(NanamiTct.utilities.resetColor(p.getName()), data);
         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_JOIN_MESSAGE_0.replaceAll("%VERSION%", plugin.getDescription().getVersion()));
         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_JOIN_MESSAGE_1);
-        String gameState = "";
-        String message = "";
+        if(MySQLStatus.isSqlEnabled() && NanamiTct.sqlConnection != null && NanamiTct.sqlConnection.getConnection() != null) {
+
+        } else p.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "* データベースに接続できなかったため統計の表示、記録はできません *");
+        String gameState,message = "";
         boolean isAdmin = data.getProfile().isAdmin();
         if(plugin.getGame().getReference().getGameState() == GameState.GAMING) {
             gameState = Reference.TCT_CHAT_STATE_PLAYING;

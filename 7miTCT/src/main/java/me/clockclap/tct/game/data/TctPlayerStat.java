@@ -5,6 +5,8 @@ import me.clockclap.tct.api.sql.MySQLStatus;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.item.CustomItem;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +25,7 @@ public class TctPlayerStat implements PlayerStat {
     private int immoral;
     private Map<GameRole, Integer> customRole;
     private int death;
+    private int kill;
     private int totalFoundDeadBodies;
     private int usedItem;
     private int totalVictories;
@@ -43,6 +46,7 @@ public class TctPlayerStat implements PlayerStat {
         this.immoral = 0;
         this.customRole = new HashMap<>();
         this.death = 0;
+        this.kill = 0;
         this.totalFoundDeadBodies = 0;
         this.usedItem = 0;
         this.totalVictories = 0;
@@ -60,37 +64,163 @@ public class TctPlayerStat implements PlayerStat {
 
     @Override
     public int getCountVillager() {
-        return villager;
+        if(NanamiTct.sqlConnection.getConnection() != null && MySQLStatus.isSqlEnabled()) {
+            try {
+                NanamiTct.sqlConnection.openConnection();
+                PreparedStatement statement = NanamiTct.sqlConnection.getConnection().prepareStatement("SELECT * FROM tct_stats");
+                ResultSet set = statement.executeQuery();
+                int result = 0;
+                while(set.next()) {
+                    result = set.getInt("vil");
+                }
+                set.close();
+                statement.close();
+                NanamiTct.sqlConnection.getConnection().close();
+                return result;
+            } catch (SQLException ex) {
+                MySQLStatus.setSqlEnabled(false);
+                return 0;
+            }
+        }
+        return 0;
     }
 
     @Override
     public int getCountHealer() {
-        return healer;
+        if(NanamiTct.sqlConnection.getConnection() != null && MySQLStatus.isSqlEnabled()) {
+            try {
+                NanamiTct.sqlConnection.openConnection();
+                PreparedStatement statement = NanamiTct.sqlConnection.getConnection().prepareStatement("SELECT * FROM tct_stats");
+                ResultSet set = statement.executeQuery();
+                int result = 0;
+                while(set.next()) {
+                    result = set.getInt("hea");
+                }
+                set.close();
+                statement.close();
+                NanamiTct.sqlConnection.getConnection().close();
+                return result;
+            } catch (SQLException ex) {
+                MySQLStatus.setSqlEnabled(false);
+                return 0;
+            }
+        }
+        return 0;
     }
 
     @Override
     public int getCountDetective() {
-        return detective;
+        if(NanamiTct.sqlConnection.getConnection() != null && MySQLStatus.isSqlEnabled()) {
+            try {
+                NanamiTct.sqlConnection.openConnection();
+                PreparedStatement statement = NanamiTct.sqlConnection.getConnection().prepareStatement("SELECT * FROM tct_stats");
+                ResultSet set = statement.executeQuery();
+                int result = 0;
+                while(set.next()) {
+                    result = set.getInt("det");
+                }
+                set.close();
+                statement.close();
+                NanamiTct.sqlConnection.getConnection().close();
+                return result;
+            } catch (SQLException ex) {
+                MySQLStatus.setSqlEnabled(false);
+                return 0;
+            }
+        }
+        return 0;
     }
 
     @Override
     public int getCountWolf() {
-        return wolf;
+        if(NanamiTct.sqlConnection.getConnection() != null && MySQLStatus.isSqlEnabled()) {
+            try {
+                NanamiTct.sqlConnection.openConnection();
+                PreparedStatement statement = NanamiTct.sqlConnection.getConnection().prepareStatement("SELECT * FROM tct_stats");
+                ResultSet set = statement.executeQuery();
+                int result = 0;
+                while(set.next()) {
+                    result = set.getInt("wol");
+                }
+                set.close();
+                statement.close();
+                NanamiTct.sqlConnection.getConnection().close();
+                return result;
+            } catch (SQLException ex) {
+                MySQLStatus.setSqlEnabled(false);
+                return 0;
+            }
+        }
+        return 0;
     }
 
     @Override
     public int getCountFanatic() {
-        return fanatic;
+        if(NanamiTct.sqlConnection.getConnection() != null && MySQLStatus.isSqlEnabled()) {
+            try {
+                NanamiTct.sqlConnection.openConnection();
+                PreparedStatement statement = NanamiTct.sqlConnection.getConnection().prepareStatement("SELECT * FROM tct_stats");
+                ResultSet set = statement.executeQuery();
+                int result = 0;
+                while(set.next()) {
+                    result = set.getInt("fan");
+                }
+                set.close();
+                statement.close();
+                NanamiTct.sqlConnection.getConnection().close();
+                return result;
+            } catch (SQLException ex) {
+                MySQLStatus.setSqlEnabled(false);
+                return 0;
+            }
+        }
+        return 0;
     }
 
     @Override
     public int getCountFox() {
-        return fox;
+        if(NanamiTct.sqlConnection.getConnection() != null && MySQLStatus.isSqlEnabled()) {
+            try {
+                NanamiTct.sqlConnection.openConnection();
+                PreparedStatement statement = NanamiTct.sqlConnection.getConnection().prepareStatement("SELECT * FROM tct_stats");
+                ResultSet set = statement.executeQuery();
+                int result = 0;
+                while(set.next()) {
+                    result = set.getInt("fox");
+                }
+                set.close();
+                statement.close();
+                NanamiTct.sqlConnection.getConnection().close();
+                return result;
+            } catch (SQLException ex) {
+                MySQLStatus.setSqlEnabled(false);
+                return 0;
+            }
+        }
+        return 0;
     }
 
     @Override
     public int getCountImmoral() {
-        return immoral;
+        if(NanamiTct.sqlConnection.getConnection() != null && MySQLStatus.isSqlEnabled()) {
+            try {
+                NanamiTct.sqlConnection.openConnection();
+                PreparedStatement statement = NanamiTct.sqlConnection.getConnection().prepareStatement("SELECT * FROM tct_stats");
+                ResultSet set = statement.executeQuery();
+                int result = 0;
+                while(set.next()) {
+                    result = set.getInt("imm");
+                }
+                set.close();
+                statement.close();
+                NanamiTct.sqlConnection.getConnection().close();
+                return result;
+            } catch (SQLException ex) {
+                MySQLStatus.setSqlEnabled(false);
+                return 0;
+            }
+        }
+        return 0;
     }
 
     @Override
@@ -101,47 +231,232 @@ public class TctPlayerStat implements PlayerStat {
 
     @Override
     public int getCountDeath() {
-        return death;
+        if(NanamiTct.sqlConnection.getConnection() != null && MySQLStatus.isSqlEnabled()) {
+            try {
+                NanamiTct.sqlConnection.openConnection();
+                PreparedStatement statement = NanamiTct.sqlConnection.getConnection().prepareStatement("SELECT * FROM tct_stats");
+                ResultSet set = statement.executeQuery();
+                int result = 0;
+                while(set.next()) {
+                    result = set.getInt("death");
+                }
+                set.close();
+                statement.close();
+                NanamiTct.sqlConnection.getConnection().close();
+                return result;
+            } catch (SQLException ex) {
+                MySQLStatus.setSqlEnabled(false);
+                return 0;
+            }
+        }
+        return 0;
+    }
+
+    @Override
+    public int getCountKill() {
+        if(NanamiTct.sqlConnection.getConnection() != null && MySQLStatus.isSqlEnabled()) {
+            try {
+                NanamiTct.sqlConnection.openConnection();
+                PreparedStatement statement = NanamiTct.sqlConnection.getConnection().prepareStatement("SELECT * FROM tct_stats");
+                ResultSet set = statement.executeQuery();
+                int result = 0;
+                while(set.next()) {
+                    result = set.getInt("kill");
+                }
+                set.close();
+                statement.close();
+                NanamiTct.sqlConnection.getConnection().close();
+                return result;
+            } catch (SQLException ex) {
+                MySQLStatus.setSqlEnabled(false);
+                return 0;
+            }
+        }
+        return 0;
     }
 
     @Override
     public int getTotalFoundDeadBodies() {
-        return totalFoundDeadBodies;
+        if(NanamiTct.sqlConnection.getConnection() != null && MySQLStatus.isSqlEnabled()) {
+            try {
+                NanamiTct.sqlConnection.openConnection();
+                PreparedStatement statement = NanamiTct.sqlConnection.getConnection().prepareStatement("SELECT * FROM tct_stats");
+                ResultSet set = statement.executeQuery();
+                int result = 0;
+                while(set.next()) {
+                    result = set.getInt("found_deadbody");
+                }
+                set.close();
+                statement.close();
+                NanamiTct.sqlConnection.getConnection().close();
+                return result;
+            } catch (SQLException ex) {
+                MySQLStatus.setSqlEnabled(false);
+                return 0;
+            }
+        }
+        return 0;
     }
 
     @Override
     public int getCountUsedItem() {
-        return usedItem;
+        if(NanamiTct.sqlConnection.getConnection() != null && MySQLStatus.isSqlEnabled()) {
+            try {
+                NanamiTct.sqlConnection.openConnection();
+                PreparedStatement statement = NanamiTct.sqlConnection.getConnection().prepareStatement("SELECT * FROM tct_stats");
+                ResultSet set = statement.executeQuery();
+                int result = 0;
+                while(set.next()) {
+                    result = set.getInt("use_item");
+                }
+                set.close();
+                statement.close();
+                NanamiTct.sqlConnection.getConnection().close();
+                return result;
+            } catch (SQLException ex) {
+                MySQLStatus.setSqlEnabled(false);
+                return 0;
+            }
+        }
+        return 0;
     }
 
     @Override
     public int getTotalVictories() {
-        return totalVictories;
+        if(NanamiTct.sqlConnection.getConnection() != null && MySQLStatus.isSqlEnabled()) {
+            try {
+                NanamiTct.sqlConnection.openConnection();
+                PreparedStatement statement = NanamiTct.sqlConnection.getConnection().prepareStatement("SELECT * FROM tct_stats");
+                ResultSet set = statement.executeQuery();
+                int result = 0;
+                while(set.next()) {
+                    result = set.getInt("victory");
+                }
+                set.close();
+                statement.close();
+                NanamiTct.sqlConnection.getConnection().close();
+                return result;
+            } catch (SQLException ex) {
+                MySQLStatus.setSqlEnabled(false);
+                return 0;
+            }
+        }
+        return 0;
     }
 
     @Override
     public int getTotalDefeats() {
-        return totalDefeats;
+        if(NanamiTct.sqlConnection.getConnection() != null && MySQLStatus.isSqlEnabled()) {
+            try {
+                NanamiTct.sqlConnection.openConnection();
+                PreparedStatement statement = NanamiTct.sqlConnection.getConnection().prepareStatement("SELECT * FROM tct_stats");
+                ResultSet set = statement.executeQuery();
+                int result = 0;
+                while(set.next()) {
+                    result = set.getInt("defeat");
+                }
+                set.close();
+                statement.close();
+                NanamiTct.sqlConnection.getConnection().close();
+                return result;
+            } catch (SQLException ex) {
+                MySQLStatus.setSqlEnabled(false);
+                return 0;
+            }
+        }
+        return 0;
     }
 
     @Override
     public int getTotalUseHealStation() {
-        return totalUseHealStation;
+        if(NanamiTct.sqlConnection.getConnection() != null && MySQLStatus.isSqlEnabled()) {
+            try {
+                NanamiTct.sqlConnection.openConnection();
+                PreparedStatement statement = NanamiTct.sqlConnection.getConnection().prepareStatement("SELECT * FROM tct_stats");
+                ResultSet set = statement.executeQuery();
+                int result = 0;
+                while(set.next()) {
+                    result = set.getInt("use_heal_station");
+                }
+                set.close();
+                statement.close();
+                NanamiTct.sqlConnection.getConnection().close();
+                return result;
+            } catch (SQLException ex) {
+                MySQLStatus.setSqlEnabled(false);
+                return 0;
+            }
+        }
+        return 0;
     }
 
     @Override
     public int getTotalPlaceHealStation() {
-        return totalPlaceHealStation;
+        if(NanamiTct.sqlConnection.getConnection() != null && MySQLStatus.isSqlEnabled()) {
+            try {
+                NanamiTct.sqlConnection.openConnection();
+                PreparedStatement statement = NanamiTct.sqlConnection.getConnection().prepareStatement("SELECT * FROM tct_stats");
+                ResultSet set = statement.executeQuery();
+                int result = 0;
+                while(set.next()) {
+                    result = set.getInt("place_heal_station");
+                }
+                set.close();
+                statement.close();
+                NanamiTct.sqlConnection.getConnection().close();
+                return result;
+            } catch (SQLException ex) {
+                MySQLStatus.setSqlEnabled(false);
+                return 0;
+            }
+        }
+        return 0;
     }
 
     @Override
     public int getTotalBoughtItems() {
-        return totalBoughtItems;
+        if(NanamiTct.sqlConnection.getConnection() != null && MySQLStatus.isSqlEnabled()) {
+            try {
+                NanamiTct.sqlConnection.openConnection();
+                PreparedStatement statement = NanamiTct.sqlConnection.getConnection().prepareStatement("SELECT * FROM tct_stats");
+                ResultSet set = statement.executeQuery();
+                int result = 0;
+                while(set.next()) {
+                    result = set.getInt("bought_item");
+                }
+                set.close();
+                statement.close();
+                NanamiTct.sqlConnection.getConnection().close();
+                return result;
+            } catch (SQLException ex) {
+                MySQLStatus.setSqlEnabled(false);
+                return 0;
+            }
+        }
+        return 0;
     }
 
     @Override
     public int getTotalPlayingCount() {
-        return totalPlayCount;
+        if(NanamiTct.sqlConnection.getConnection() != null && MySQLStatus.isSqlEnabled()) {
+            try {
+                NanamiTct.sqlConnection.openConnection();
+                PreparedStatement statement = NanamiTct.sqlConnection.getConnection().prepareStatement("SELECT * FROM tct_stats");
+                ResultSet set = statement.executeQuery();
+                int result = 0;
+                while(set.next()) {
+                    result = set.getInt("play_count");
+                }
+                set.close();
+                statement.close();
+                NanamiTct.sqlConnection.getConnection().close();
+                return result;
+            } catch (SQLException ex) {
+                MySQLStatus.setSqlEnabled(false);
+                return 0;
+            }
+        }
+        return 0;
     }
 
     @Override
@@ -150,7 +465,7 @@ public class TctPlayerStat implements PlayerStat {
         try {
             NanamiTct.playerStats.update(uuid, "vil", count);
         } catch (SQLException ex) {
-            MySQLStatus.setSqlEnabled(false);
+            //MySQLStatus.setSqlEnabled(false);
         }
     }
 
@@ -160,7 +475,7 @@ public class TctPlayerStat implements PlayerStat {
         try {
             NanamiTct.playerStats.update(uuid, "hea", count);
         } catch (SQLException ex) {
-            MySQLStatus.setSqlEnabled(false);
+            //MySQLStatus.setSqlEnabled(false);
         }
     }
 
@@ -170,7 +485,7 @@ public class TctPlayerStat implements PlayerStat {
         try {
             NanamiTct.playerStats.update(uuid, "det", count);
         } catch (SQLException ex) {
-            MySQLStatus.setSqlEnabled(false);
+            //MySQLStatus.setSqlEnabled(false);
         }
     }
 
@@ -180,7 +495,7 @@ public class TctPlayerStat implements PlayerStat {
         try {
             NanamiTct.playerStats.update(uuid, "wol", count);
         } catch (SQLException ex) {
-            MySQLStatus.setSqlEnabled(false);
+            //MySQLStatus.setSqlEnabled(false);
         }
     }
 
@@ -190,7 +505,7 @@ public class TctPlayerStat implements PlayerStat {
         try {
             NanamiTct.playerStats.update(uuid, "fan", count);
         } catch (SQLException ex) {
-            MySQLStatus.setSqlEnabled(false);
+            //MySQLStatus.setSqlEnabled(false);
         }
     }
 
@@ -200,7 +515,7 @@ public class TctPlayerStat implements PlayerStat {
         try {
             NanamiTct.playerStats.update(uuid, "fox", count);
         } catch (SQLException ex) {
-            MySQLStatus.setSqlEnabled(false);
+            //MySQLStatus.setSqlEnabled(false);
         }
     }
 
@@ -210,7 +525,7 @@ public class TctPlayerStat implements PlayerStat {
         try {
             NanamiTct.playerStats.update(uuid, "imm", count);
         } catch (SQLException ex) {
-            MySQLStatus.setSqlEnabled(false);
+            //MySQLStatus.setSqlEnabled(false);
         }
     }
 
@@ -225,7 +540,17 @@ public class TctPlayerStat implements PlayerStat {
         try {
             NanamiTct.playerStats.update(uuid, "death", count);
         } catch (SQLException ex) {
-            MySQLStatus.setSqlEnabled(false);
+            //MySQLStatus.setSqlEnabled(false);
+        }
+    }
+
+    @Override
+    public void setCountKill(int count) {
+        this.kill = count;
+        try {
+            NanamiTct.playerStats.update(uuid, "kill", count);
+        } catch (SQLException ex) {
+            //MySQLStatus.setSqlEnabled(false);
         }
     }
 
@@ -235,7 +560,7 @@ public class TctPlayerStat implements PlayerStat {
         try {
             NanamiTct.playerStats.update(uuid, "found_deadbody", count);
         } catch (SQLException ex) {
-            MySQLStatus.setSqlEnabled(false);
+            //MySQLStatus.setSqlEnabled(false);
         }
     }
 
@@ -245,7 +570,7 @@ public class TctPlayerStat implements PlayerStat {
         try {
             NanamiTct.playerStats.update(uuid, "use_item", count);
         } catch (SQLException ex) {
-            MySQLStatus.setSqlEnabled(false);
+            //MySQLStatus.setSqlEnabled(false);
         }
     }
 
@@ -255,7 +580,7 @@ public class TctPlayerStat implements PlayerStat {
         try {
             NanamiTct.playerStats.update(uuid, "victory", count);
         } catch (SQLException ex) {
-            MySQLStatus.setSqlEnabled(false);
+            //MySQLStatus.setSqlEnabled(false);
         }
     }
 
@@ -265,7 +590,7 @@ public class TctPlayerStat implements PlayerStat {
         try {
             NanamiTct.playerStats.update(uuid, "defeat", count);
         } catch (SQLException ex) {
-            MySQLStatus.setSqlEnabled(false);
+            //MySQLStatus.setSqlEnabled(false);
         }
     }
 
@@ -275,7 +600,7 @@ public class TctPlayerStat implements PlayerStat {
         try {
             NanamiTct.playerStats.update(uuid, "use_heal_station", count);
         } catch (SQLException ex) {
-            MySQLStatus.setSqlEnabled(false);
+            //MySQLStatus.setSqlEnabled(false);
         }
     }
 
@@ -285,7 +610,7 @@ public class TctPlayerStat implements PlayerStat {
         try {
             NanamiTct.playerStats.update(uuid, "place_heal_station", count);
         } catch (SQLException ex) {
-            MySQLStatus.setSqlEnabled(false);
+            //MySQLStatus.setSqlEnabled(false);
         }
     }
 
@@ -295,7 +620,7 @@ public class TctPlayerStat implements PlayerStat {
         try {
             NanamiTct.playerStats.update(uuid, "bought_item", count);
         } catch (SQLException ex) {
-            MySQLStatus.setSqlEnabled(false);
+            //MySQLStatus.setSqlEnabled(false);
         }
     }
 
@@ -305,7 +630,7 @@ public class TctPlayerStat implements PlayerStat {
         try {
             NanamiTct.playerStats.update(uuid, "play_count", count);
         } catch (SQLException ex) {
-            MySQLStatus.setSqlEnabled(false);
+            //MySQLStatus.setSqlEnabled(false);
         }
     }
 }

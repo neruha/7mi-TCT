@@ -21,7 +21,7 @@ public class CancelHunger implements Listener {
         if(e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
             if(p != null) {
-                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
+                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId());
                 if(data != null) {
                     if (data.isSpectator() || (data.isInvisible() && plugin.getGame().getElapsedTime() > 1)) {
                         e.setFoodLevel(20);

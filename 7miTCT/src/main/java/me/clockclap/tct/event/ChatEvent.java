@@ -33,10 +33,10 @@ public class ChatEvent implements Listener {
         if(japanize) { result = Japanizer.japanize(result); }
         String role_chatprefix;
 
-        GameRole role = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName())).getRole();
+        GameRole role = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId()).getRole();
         boolean visible = true;
-        GameRole co = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName())).getCO();
-        if(role == GameRoles.SPEC || plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName())).isSpectator()) {
+        GameRole co = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId()).getCO();
+        if(role == GameRoles.SPEC || plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId()).isSpectator()) {
             role_chatprefix = Reference.TCT_CHAT_ROLE_SPEC_P;
             if(plugin.getGame().getReference().getGameState() == GameState.GAMING) {
                 visible = false;
@@ -70,7 +70,7 @@ public class ChatEvent implements Listener {
             }
         } else {
             for(Player q : Bukkit.getOnlinePlayers()) {
-                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(q.getName()));
+                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(q.getUniqueId());
                 if(data.getRole() == GameRoles.SPEC || data.isSpectator()) {
                     String format = plugin.getTctConfig().getChat().getString("format", Reference.TCT_CHAT_FORMAT);
                     format = ChatColor.translateAlternateColorCodes('&', format);

@@ -52,7 +52,7 @@ public class DamageEvent implements Listener {
     public void onDamage(EntityDamageEvent e) {
         if(e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
-            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
+            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId());
             if(data.isSpectator()) {
                 e.setCancelled(true);
                 return;
@@ -67,7 +67,7 @@ public class DamageEvent implements Listener {
                 double damage = e.getDamage();
                 e.setDamage(0.0D);
                 Player p = (Player) e.getEntity();
-                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
+                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId());
                 Location loc = p.getLocation();
                 p.setVelocity(new Vector());
                 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
@@ -114,7 +114,7 @@ public class DamageEvent implements Listener {
             ItemStack[] contents = p.getInventory().getContents();
             e.getDrops().clear();
             Location loc = p.getLocation();
-            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
+            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId());
             if (plugin.getGame().getReference().getGameState() == GameState.GAMING) {
                 respawnLoc = plugin.getGame().getLocation();
                 if (!data.isSpectator()) {
@@ -174,9 +174,9 @@ public class DamageEvent implements Listener {
                     if(damageCause == EntityDamageEvent.DamageCause.ENTITY_ATTACK || damageCause == EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK) {
                         cause = TctDeathCause.KILL;
                         if(p.getKiller() != null) {
-                            PlayerData killer = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getKiller().getName()));
+                            PlayerData killer = plugin.getGame().getReference().PLAYERDATA.get(p.getKiller().getUniqueId());
                             killer.addKilledPlayer(NanamiTct.utilities.resetColor(p.getName()));
-                            data.setKilledBy(new Killer(p.getKiller(), plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getKiller().getName())).getRole()));
+                            data.setKilledBy(new Killer(p.getKiller(), plugin.getGame().getReference().PLAYERDATA.get(p.getKiller().getUniqueId()).getRole()));
                             for(ItemStack item : contents) {
                                 if(item != null) {
                                     if(item.hasItemMeta() && item.getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.EMPTY_BOTTLE.getItemStack().getItemMeta().getDisplayName())) {
@@ -247,7 +247,7 @@ public class DamageEvent implements Listener {
     @EventHandler
     public void onRespawn(PlayerRespawnEvent e) {
         e.setRespawnLocation(respawnLoc);
-        PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName()));
+        PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(e.getPlayer().getUniqueId());
         if(data.isSpectator() && data.getRole() != GameRoles.SPEC && plugin.getGame().getReference().getGameState() == GameState.GAMING) {
             if(data.getKilledBy().getCategory() != Killer.KillerCategory.AIR) {
                 e.getPlayer().sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_YOU_ARE_KILLED_BY.replaceAll("%PLAYER%", data.getKilledBy().getName()));

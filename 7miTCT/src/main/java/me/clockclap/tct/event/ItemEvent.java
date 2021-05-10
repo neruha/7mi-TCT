@@ -52,7 +52,7 @@ public class ItemEvent implements Listener {
         }
         if(e.getDamager() instanceof Player) {
             Player p = (Player) e.getDamager();
-            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
+            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId());
             if(data.isSpectator()) {
                 e.setCancelled(true);
             }
@@ -86,8 +86,8 @@ public class ItemEvent implements Listener {
                                 if (item.isAttackable() == false) {
                                     e.setCancelled(true);
                                 } else {
-                                    PlayerData data_ = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
-                                    PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(q.getName()));
+                                    PlayerData data_ = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId());
+                                    PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(q.getUniqueId());
                                     if (data.getRole() == GameRoles.WOLF && data_.getRole() == GameRoles.WOLF) {
                                         q.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_CANNOT_ATTACK_WOLF);
                                         e.setCancelled(true);
@@ -112,7 +112,7 @@ public class ItemEvent implements Listener {
                                 if (!item.isQuickChatItem()) {
                                     return;
                                 }
-                                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(q.getName()));
+                                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(q.getUniqueId());
                                 if (data.getQuickChatCooldown() <= 0) {
                                     item.onAttackPlayerWithCooldown(q, p);
                                     data.startQCCCountdown();
@@ -124,8 +124,8 @@ public class ItemEvent implements Listener {
                         }
                     }
                 }
-                PlayerData data_ = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
-                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(q.getName()));
+                PlayerData data_ = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId());
+                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(q.getUniqueId());
                 if (data.getRole() == GameRoles.WOLF && data_.getRole() == GameRoles.WOLF) {
                     q.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_CANNOT_ATTACK_WOLF);
                     e.setCancelled(true);
@@ -151,7 +151,7 @@ public class ItemEvent implements Listener {
 
     @EventHandler
     public void playerInteract(PlayerInteractEvent e) {
-        PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName()));
+        PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(e.getPlayer().getUniqueId());
         if(data != null) {
             if (data.isClickableItem()) {
                 data.setClickableItem(false);
@@ -180,7 +180,7 @@ public class ItemEvent implements Listener {
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName()));
+                                    PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(e.getPlayer().getUniqueId());
                                     if(data != null) {
                                         data.setSponge(false);
                                     }
@@ -213,7 +213,7 @@ public class ItemEvent implements Listener {
 
     @EventHandler
     public void playerInteractAtPlayer(PlayerInteractAtEntityEvent e) {
-        PlayerData d = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName()));
+        PlayerData d = plugin.getGame().getReference().PLAYERDATA.get(e.getPlayer().getUniqueId());
         if(d != null) {
             if (d.isClickableEntity()) {
                 d.setClickableEntity(false);
@@ -226,7 +226,7 @@ public class ItemEvent implements Listener {
                 if (e.getRightClicked() instanceof Player) {
                     Player p = e.getPlayer();
                     Player q = (Player) e.getRightClicked();
-                    PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(q.getName()));
+                    PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(e.getPlayer().getUniqueId());
                     if (!data.isSpectator() && !data.isInvisible()) {
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_NAME + ": " + NanamiTct.utilities.resetColor(q.getName()));
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_HP + ": " + ChatColor.RED + q.getHealth());
@@ -249,7 +249,7 @@ public class ItemEvent implements Listener {
         GameRole role = GameRoles.NONE;
         if(source instanceof Player) {
             Player p = (Player) source;
-            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
+            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId());
             if(data.isSpectator() || data.isInvisible()) {
                 e.setCancelled(true);
                 return;

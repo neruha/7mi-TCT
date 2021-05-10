@@ -65,11 +65,11 @@ public class TctItemSeed implements CustomSpecialItem {
     public void onRightClick(Player player) {
         if(player != null) {
             Game game = NanamiTct.plugin.getGame();
-            PlayerData data = game.getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(player.getName()));
+            PlayerData data = game.getReference().PLAYERDATA.get(player.getUniqueId());
             boolean foundWolf = false;
             for(Player pl : Bukkit.getOnlinePlayers()) {
                 if(pl != null) {
-                    PlayerData dat = game.getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(pl.getName()));
+                    PlayerData dat = game.getReference().PLAYERDATA.get(pl.getUniqueId());
                     if(dat != null) {
                         if(!dat.isSpectator() && !dat.isInvisible()) {
                             double maxFar = NanamiTct.plugin.getTctConfig().getConfig().getInt("seed-range", 5);

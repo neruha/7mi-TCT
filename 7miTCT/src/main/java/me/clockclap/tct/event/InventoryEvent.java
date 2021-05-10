@@ -52,7 +52,7 @@ public class InventoryEvent implements Listener {
                     if(e.getCurrentItem() != null) {
                         if (e.getCurrentItem().hasItemMeta()) {
                             ItemMeta meta = e.getCurrentItem().getItemMeta();
-                            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
+                            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId());
                             if (data.getCoin() <= 0) {
                                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_NOT_ENOUGH_COINS);
                                 return;
@@ -115,7 +115,7 @@ public class InventoryEvent implements Listener {
     @EventHandler
     public void onDropItem(PlayerDropItemEvent e) {
         Player p = e.getPlayer();
-        PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
+        PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId());
         if(data.isSpectator()) {
             e.setCancelled(true);
         }
@@ -125,7 +125,7 @@ public class InventoryEvent implements Listener {
     public void onPickUpItem(EntityPickupItemEvent e) {
         if(e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
-            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
+            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId());
             if(data.isSpectator()) {
                 e.setCancelled(true);
             }
@@ -135,7 +135,7 @@ public class InventoryEvent implements Listener {
     @EventHandler
     public void onPickUpArrow(PlayerPickupArrowEvent e) {
         Player p = e.getPlayer();
-        PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
+        PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId());
         if(data.isSpectator()) {
             e.setCancelled(true);
             
@@ -147,7 +147,7 @@ public class InventoryEvent implements Listener {
         if(plugin.getGame().getReference().getGameState() == GameState.GAMING) {
             if (e.getType() == ArmorEquipEvent.ArmorType.HELMET) {
                 if(e.getNewArmorPiece() == null) {
-                    plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName())).setCO(GameRoles.NONE);
+                    plugin.getGame().getReference().PLAYERDATA.get(e.getPlayer().getUniqueId()).setCO(GameRoles.NONE);
                     return;
                 }
                 if (e.getNewArmorPiece().hasItemMeta()) {
@@ -160,7 +160,7 @@ public class InventoryEvent implements Listener {
                                 if(e.getPlayer().getInventory().getHelmet() != null) {
                                     if(e.getPlayer().getInventory().getHelmet().hasItemMeta()) {
                                         if (CustomItems.CO_VILLAGER.getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(e.getPlayer().getInventory().getHelmet().getItemMeta().getDisplayName())) {
-                                            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName()));
+                                            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(e.getPlayer().getUniqueId());
                                             data.setCO(GameRoles.VILLAGER);
                                             Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_CO.replaceAll("%PLAYER%", NanamiTct.utilities.resetColor(e.getPlayer().getName())).replaceAll("%CO%", Reference.TCT_CHAT_ROLE_CO_VILLAGER));
                                             plugin.getGame().getLog().addLine(Reference.TCT_LOGBOOK_CO_VILLAGER);
@@ -179,7 +179,7 @@ public class InventoryEvent implements Listener {
                                 if(e.getPlayer().getInventory().getHelmet() != null) {
                                     if(e.getPlayer().getInventory().getHelmet().hasItemMeta()) {
                                         if (CustomItems.CO_DETECTIVE.getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(e.getPlayer().getInventory().getHelmet().getItemMeta().getDisplayName())) {
-                                            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName()));
+                                            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(e.getPlayer().getUniqueId());
                                             data.setCO(GameRoles.DETECTIVE);
                                             Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_CO.replaceAll("%PLAYER%", NanamiTct.utilities.resetColor(e.getPlayer().getName())).replaceAll("%CO%", Reference.TCT_CHAT_ROLE_CO_DETECTIVE));
                                             plugin.getGame().getLog().addLine(Reference.TCT_LOGBOOK_CO_DETECTIVE);
@@ -198,7 +198,7 @@ public class InventoryEvent implements Listener {
                                 if(e.getPlayer().getInventory().getHelmet() != null) {
                                     if(e.getPlayer().getInventory().getHelmet().hasItemMeta()) {
                                         if (CustomItems.CO_HEALER.getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(e.getPlayer().getInventory().getHelmet().getItemMeta().getDisplayName())) {
-                                            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName()));
+                                            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(e.getPlayer().getUniqueId());
                                             data.setCO(GameRoles.HEALER);
                                             Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_CO.replaceAll("%PLAYER%", NanamiTct.utilities.resetColor(e.getPlayer().getName())).replaceAll("%CO%", Reference.TCT_CHAT_ROLE_CO_HEALER));
                                             plugin.getGame().getLog().addLine(Reference.TCT_LOGBOOK_CO_HEALER);
@@ -217,7 +217,7 @@ public class InventoryEvent implements Listener {
                                 if(e.getPlayer().getInventory().getHelmet() != null) {
                                     if(e.getPlayer().getInventory().getHelmet().hasItemMeta()) {
                                         if (CustomItems.CO_WOLF.getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(e.getPlayer().getInventory().getHelmet().getItemMeta().getDisplayName())) {
-                                            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName()));
+                                            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(e.getPlayer().getUniqueId());
                                             data.setCO(GameRoles.WOLF);
                                             Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_CO.replaceAll("%PLAYER%", NanamiTct.utilities.resetColor(e.getPlayer().getName())).replaceAll("%CO%", Reference.TCT_CHAT_ROLE_CO_WOLF));
                                             plugin.getGame().getLog().addLine(Reference.TCT_LOGBOOK_CO_WOLF);
@@ -236,7 +236,7 @@ public class InventoryEvent implements Listener {
                                 if(e.getPlayer().getInventory().getHelmet() != null) {
                                     if(e.getPlayer().getInventory().getHelmet().hasItemMeta()) {
                                         if (CustomItems.CO_FANATIC.getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(e.getPlayer().getInventory().getHelmet().getItemMeta().getDisplayName())) {
-                                            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName()));
+                                            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(e.getPlayer().getUniqueId());
                                             data.setCO(GameRoles.FANATIC);
                                             Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_CO.replaceAll("%PLAYER%", NanamiTct.utilities.resetColor(e.getPlayer().getName())).replaceAll("%CO%", Reference.TCT_CHAT_ROLE_CO_FANATIC));
                                             plugin.getGame().getLog().addLine(Reference.TCT_LOGBOOK_CO_FANATIC);
@@ -255,7 +255,7 @@ public class InventoryEvent implements Listener {
                                 if(e.getPlayer().getInventory().getHelmet() != null) {
                                     if(e.getPlayer().getInventory().getHelmet().hasItemMeta()) {
                                         if (CustomItems.CO_FOX.getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(e.getPlayer().getInventory().getHelmet().getItemMeta().getDisplayName())) {
-                                            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName()));
+                                            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(e.getPlayer().getUniqueId());
                                             data.setCO(GameRoles.FOX);
                                             Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_CO.replaceAll("%PLAYER%", NanamiTct.utilities.resetColor(e.getPlayer().getName())).replaceAll("%CO%", Reference.TCT_CHAT_ROLE_CO_FOX));
                                             plugin.getGame().getLog().addLine(Reference.TCT_LOGBOOK_CO_FOX);
@@ -274,7 +274,7 @@ public class InventoryEvent implements Listener {
                                 if(e.getPlayer().getInventory().getHelmet() != null) {
                                     if(e.getPlayer().getInventory().getHelmet().hasItemMeta()) {
                                         if (CustomItems.CO_IMMORAL.getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(e.getPlayer().getInventory().getHelmet().getItemMeta().getDisplayName())) {
-                                            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName()));
+                                            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(e.getPlayer().getUniqueId());
                                             data.setCO(GameRoles.IMMORAL);
                                             Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_CO.replaceAll("%PLAYER%", NanamiTct.utilities.resetColor(e.getPlayer().getName())).replaceAll("%CO%", Reference.TCT_CHAT_ROLE_CO_IMMORAL));
                                             plugin.getGame().getLog().addLine(Reference.TCT_LOGBOOK_CO_IMMORAL);
@@ -293,7 +293,7 @@ public class InventoryEvent implements Listener {
                                 if(e.getPlayer().getInventory().getHelmet() != null) {
                                     if(e.getPlayer().getInventory().getHelmet().hasItemMeta()) {
                                         if (CustomItems.DIAMOND_HELMET.getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(e.getPlayer().getInventory().getHelmet().getItemMeta().getDisplayName())) {
-                                            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName()));
+                                            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(e.getPlayer().getUniqueId());
                                             data.setCO(GameRoles.CONFIRM_DETECTIVE);
                                             Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_DETECTIVE.replaceAll("%PLAYER%", NanamiTct.utilities.resetColor(e.getPlayer().getName())));
                                             plugin.getGame().getLog().addLine(Reference.TCT_LOGBOOK_CONFIRM_DETECTIVE);
@@ -307,7 +307,7 @@ public class InventoryEvent implements Listener {
                     }
                 }
                 if (e.getNewArmorPiece().getType() == Material.AIR) {
-                    plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName())).setCO(GameRoles.NONE);
+                    plugin.getGame().getReference().PLAYERDATA.get(e.getPlayer().getUniqueId()).setCO(GameRoles.NONE);
                 }
             }
         }

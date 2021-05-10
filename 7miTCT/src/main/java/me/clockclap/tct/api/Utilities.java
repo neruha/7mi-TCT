@@ -201,8 +201,8 @@ public class Utilities {
     public void showPlayer(Player player, Player target) {
         if(this.plugin instanceof NanamiTct) {
             NanamiTct tct = ((NanamiTct) this.plugin);
-            PlayerData d = tct.getGame().getReference().PLAYERDATA.get(resetColor(player.getName()));
-            PlayerData e = tct.getGame().getReference().PLAYERDATA.get(resetColor(target.getName()));
+            PlayerData d = tct.getGame().getReference().PLAYERDATA.get(player.getUniqueId());
+            PlayerData e = tct.getGame().getReference().PLAYERDATA.get(target.getUniqueId());
             modifyName(target, ChatColor.GREEN + resetColor(target.getName()));
             if (d != null && e != null) {
                 if(!e.isSpectator()) {
@@ -254,9 +254,16 @@ public class Utilities {
         return result;
     }
 
+    @Deprecated
     public PlayerData getPlayerData(String coloredName) {
         String name = resetColor(coloredName);
-        return NanamiTct.plugin.getGame().getReference().PLAYERDATA.get(name);
+        Player p = Bukkit.getPlayer(name);
+        if(p == null) return null;
+        return NanamiTct.plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId());
+    }
+
+    public PlayerData getPlayerData(Player player) {
+        return NanamiTct.plugin.getGame().getReference().PLAYERDATA.get(player.getUniqueId());
     }
 
     public Collection<? extends PlayerData> getOnlinePlayersData() {

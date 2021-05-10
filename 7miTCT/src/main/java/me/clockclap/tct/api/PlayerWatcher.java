@@ -17,10 +17,7 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class PlayerWatcher {
 
@@ -39,7 +36,7 @@ public class PlayerWatcher {
     public PlayerWatcher(Game game, Player player) {
         this.game = game;
         this.player = player;
-        this.data = this.game.getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(this.player.getName()));
+        this.data = this.game.getReference().PLAYERDATA.get(this.player.getUniqueId());
         this.count = 0;
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         this.objective = this.scoreboard.registerNewObjective(NanamiTct.utilities.resetColor(player.getName()), "dummy");
@@ -87,7 +84,7 @@ public class PlayerWatcher {
                 setObjective(getScoreboard().registerNewObjective(NanamiTct.utilities.resetColor(getPlayer().getName()), "dummy"));
                 getObjective().setDisplayName(Reference.TCT_SIDEBAR_TITLE);
                 getObjective().setDisplaySlot(DisplaySlot.SIDEBAR);
-                setPlayerData(getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(getPlayer().getName())));
+                setPlayerData(getGame().getReference().PLAYERDATA.get(getPlayer().getUniqueId()));
                 if(getGame().getReference().getGameState() == GameState.WAITING) {
                     Score line0 = getObjective().getScore(ChatColor.RESET + Reference.TCT_UI_SEPARATOR);
                     Score line1 = getObjective().getScore(Reference.TCT_UI_GAME_STATUS + ": " + Reference.TCT_STATE_WAITING);
@@ -208,7 +205,7 @@ public class PlayerWatcher {
             public void run() {
                 if(!data.isSpectator()) {
                     for(Player p : Bukkit.getOnlinePlayers()) {
-                        PlayerData data = game.getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
+                        PlayerData data = game.getReference().PLAYERDATA.get(p.getUniqueId());
                         if(!data.isInvisible()) {
                             if (data.isSpectator()) {
                                 player.hidePlayer(game.getPlugin(), p);
@@ -294,8 +291,10 @@ public class PlayerWatcher {
                         String str = String.join(", ", game.foxes);
                         Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_FOX_IS.replaceAll("%PLAYER%", str));
                         for(String name : game.foxes) {
-                            if(game.getReference().PLAYERDATA.containsKey(name)) {
-                                PlayerData data = game.getReference().PLAYERDATA.get(name);
+                            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(name);
+                            if(offlinePlayer != null && game.getReference().PLAYERDATA.containsKey(offlinePlayer.getUniqueId())) {
+                                UUID uuid = offlinePlayer.getUniqueId();
+                                PlayerData data = game.getReference().PLAYERDATA.get(uuid);
                                 if(data.getWatcher() != null) {
                                     data.getWatcher().setCountFox(-1);
                                 }

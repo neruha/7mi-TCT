@@ -23,7 +23,7 @@ public class CommandShop implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender instanceof Player) {
             Player p = (Player) sender;
-            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
+            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId());
             if(!data.isSpectator()) {
                 plugin.getCustomInventory().initialize();
                 if(data.getRole() == GameRoles.VILLAGER) {

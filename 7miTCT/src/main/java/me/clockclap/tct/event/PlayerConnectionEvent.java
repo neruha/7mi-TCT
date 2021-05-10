@@ -51,7 +51,7 @@ public class PlayerConnectionEvent implements Listener {
         data.setSpectator(true);
         data.setWatcher(watcher);
         data.getWatcher().startWatch();
-        plugin.getGame().getReference().PLAYERDATA.put(NanamiTct.utilities.resetColor(p.getName()), data);
+        plugin.getGame().getReference().PLAYERDATA.put(p.getUniqueId(), data);
         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_JOIN_MESSAGE_0.replaceAll("%VERSION%", plugin.getDescription().getVersion()));
         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_JOIN_MESSAGE_1);
         if(MySQLStatus.isSqlEnabled() && NanamiTct.sqlConnection != null && NanamiTct.playerStats != null && NanamiTct.sqlConnection.getConnection() != null) {
@@ -126,7 +126,7 @@ public class PlayerConnectionEvent implements Listener {
     public void onQuit(PlayerQuitEvent e) {
         Player p = e.getPlayer();
         e.setQuitMessage(Reference.TCT_CHAT_QUIT_MESSAGE.replaceAll("%PLAYER%",p.getDisplayName()));
-        PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName()));
+        PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId());
         if(data.getWatcher() != null) {
             data.getWatcher().cancelPlayerWatcher();
         }
@@ -184,7 +184,7 @@ public class PlayerConnectionEvent implements Listener {
                 data.kill(TctDeathCause.LOST_CONNECTION);
             }
         }
-        plugin.getGame().getReference().PLAYERDATA.remove(NanamiTct.utilities.resetColor(p.getName()));
+        plugin.getGame().getReference().PLAYERDATA.remove(p.getUniqueId());
     }
 
 }

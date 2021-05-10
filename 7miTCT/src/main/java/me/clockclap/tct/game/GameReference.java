@@ -7,10 +7,7 @@ import me.clockclap.tct.game.death.DeadBody;;
 import org.bukkit.entity.Projectile;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GameReference {
 
@@ -26,7 +23,7 @@ public class GameReference {
     }
 
     private GameState gameState;
-    public Map<String, PlayerData> PLAYERDATA = new HashMap<>();
+    public Map<UUID, PlayerData> PLAYERDATA = new HashMap<>();
     public Map<Projectile, CustomProjectileData> PROJECTILEDATA = new HashMap<>();
     public List<DeadBody> DEADBODIES = new ArrayList<>();
 

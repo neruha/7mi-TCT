@@ -7,6 +7,7 @@ import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.game.GameState;
 import me.clockclap.tct.game.data.CustomBlockData;
 import me.clockclap.tct.game.data.PlayerData;
+import me.clockclap.tct.game.data.PlayerStat;
 import me.clockclap.tct.game.death.DeadBody;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.*;
@@ -38,7 +39,7 @@ public class BlockEvent implements Listener {
 
     @EventHandler
     public void blockPlace(BlockPlaceEvent e) {
-        if(!plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName())).isSpectator()) {
+        if(!plugin.getGame().getReference().PLAYERDATA.get(e.getPlayer().getUniqueId()).isSpectator()) {
             if(CustomItems.generalBlocks.size() != 0) {
                 ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
                 if(item.hasItemMeta()) {
@@ -47,6 +48,10 @@ public class BlockEvent implements Listener {
                             if (block.isPlaceable()) {
                                 CustomBlockData data = new CustomBlockData(plugin.getGame(), block, e.getBlockPlaced());
                                 CustomBlockInfo.blockDataList.add(data);
+                                if(block == CustomItems.HEAL_STATION) {
+                                    PlayerStat stat = NanamiTct.playerStats.getStat(e.getPlayer().getUniqueId());
+                                    stat.setTotalPlaceHealStation(stat.getTotalPlaceHealStation());
+                                }
 
                                 if (block.getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.LANDMINE.getItemStack().getItemMeta().getDisplayName())) {
                                     data.runTimer(CooldownTypes.LANDMINE);
@@ -74,7 +79,7 @@ public class BlockEvent implements Listener {
 
     @EventHandler
     public void blockBreak(BlockBreakEvent e) {
-        if(!plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName())).isSpectator()) {
+        if(!plugin.getGame().getReference().PLAYERDATA.get(e.getPlayer().getUniqueId()).isSpectator()) {
             if(CustomItems.generalBlocks.size() != 0) {
                 for (CustomBlockData data : CustomBlockInfo.blockDataList) {
                     if (data.getLocation().getBlockX() == e.getBlock().getLocation().getBlockX() && data.getLocation().getBlockY() == e.getBlock().getLocation().getBlockY() && data.getLocation().getBlockZ() == e.getBlock().getLocation().getBlockZ()) {
@@ -103,7 +108,7 @@ public class BlockEvent implements Listener {
 
     @EventHandler
     public void playerInteract(PlayerInteractEvent e) {
-        PlayerData d = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName()));
+        PlayerData d = plugin.getGame().getReference().PLAYERDATA.get(e.getPlayer().getUniqueId());
         if(d != null) {
             if (d.isClickableBlock()) {
                 Block block = e.getClickedBlock();
@@ -112,13 +117,13 @@ public class BlockEvent implements Listener {
                     d.setClickableBlock(true);
                 }, 2);
                 if (e.getPlayer().getGameMode() == GameMode.SPECTATOR) {
-                    PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName()));
+                    PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(e.getPlayer().getUniqueId());
                     if (e.getAction() == Action.RIGHT_CLICK_AIR) {
                         block = data.getTargetBlock(5);
                         processDeadBody(e.getPlayer(), block);
                     }
                 }
-                if (!plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(e.getPlayer().getName())).isSpectator()) {
+                if (!plugin.getGame().getReference().PLAYERDATA.get(e.getPlayer().getUniqueId()).isSpectator()) {
                     if (CustomItems.generalBlocks.size() != 0) {
                         if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_BLOCK) {
                             for (CustomBlockData data : CustomBlockInfo.blockDataList) {
@@ -145,6 +150,8 @@ public class BlockEvent implements Listener {
                                             data.getCustomBlock().onRightClick(e.getPlayer());
                                             if (data.getCustomBlock().getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.HEAL_STATION.getItemStack().getItemMeta().getDisplayName())) {
                                                 data.runTimer(CooldownTypes.HEAL_STATION);
+                                                PlayerStat stat = NanamiTct.playerStats.getStat(e.getPlayer().getUniqueId());
+                                                stat.setTotalPlaceHealStation(stat.getTotalPlaceHealStation());
                                             }
                                         }
                                     }
@@ -172,7 +179,7 @@ public class BlockEvent implements Listener {
                 boolean can = true;
                 if(deadBody.isDamaged()) {
                     player.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_DEADBODY_DAMAGED);
-                    if(!plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(player.getName())).isSpectator()) {
+                    if(!plugin.getGame().getReference().PLAYERDATA.get(player.getUniqueId()).isSpectator()) {
                         can = false;
                     }
                 }
@@ -224,7 +231,9 @@ public class BlockEvent implements Listener {
                         }
                     } else {
                         if (visible) {
-                            if (!plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(player.getName())).isSpectator() && !deadBody.isFake()) {
+                            if (!plugin.getGame().getReference().PLAYERDATA.get(player.getUniqueId()).isSpectator() && !deadBody.isFake()) {
+                                PlayerStat stat = NanamiTct.playerStats.getStat(player.getUniqueId());
+                                stat.setTotalFoundDeadBodies(stat.getTotalFoundDeadBodies());
                                 Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_DEADBODY_FOUND.replaceAll("%PLAYER%", deadBody.getPlayer().getDisplayName()));
                                 deadBody.setFound(true);
                                 TctLog log = plugin.getGame().getLog();

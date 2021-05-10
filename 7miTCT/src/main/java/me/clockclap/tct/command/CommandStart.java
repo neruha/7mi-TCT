@@ -37,7 +37,7 @@ public class CommandStart implements CommandExecutor {
         if(sender instanceof Player) {
             Player p = (Player) sender;
             if(p != null) {
-                TctPlayerProfile profile = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName())).getProfile();
+                TctPlayerProfile profile = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId()).getProfile();
                 boolean isAdmin = profile.isAdmin();
 //              if(plugin.getTctConfig().getConfig().getStringList("admin").contains("op")) {
 //                  if(p.isOp()) {

@@ -145,7 +145,7 @@ public final class NanamiTct extends JavaPlugin {
                         isAdmin = true;
                     }
                     data.getProfile().modify().setBoolean("admin", isAdmin).save();
-                    getGame().getReference().PLAYERDATA.put(name, data);
+                    getGame().getReference().PLAYERDATA.put(p.getUniqueId(), data);
                     p.setFoodLevel(20);
                     p.setPlayerListName(ChatColor.GREEN + name);
                     bar.addPlayer(p);
@@ -201,7 +201,7 @@ public final class NanamiTct extends JavaPlugin {
         for(Player p : Bukkit.getOnlinePlayers()) {
             if(p != null) {
                 String name = NanamiTct.utilities.resetColor(p.getName());
-                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(name);
+                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId());
                 if(data == null) {
                     continue;
                 }

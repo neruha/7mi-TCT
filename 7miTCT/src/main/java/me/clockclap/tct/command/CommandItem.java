@@ -32,7 +32,7 @@ public class CommandItem implements TabExecutor {
         if(sender instanceof Player) {
             Player p = (Player) sender;
             if(p != null) {
-                TctPlayerProfile profile = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(p.getName())).getProfile();
+                TctPlayerProfile profile = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId()).getProfile();
                 boolean isAdmin = profile.isAdmin();
 //              if(plugin.getTctConfig().getConfig().getStringList("admin").contains("op")) {
 //                  if(p.isOp()) {
@@ -80,7 +80,7 @@ public class CommandItem implements TabExecutor {
         if(player != null) {
             if (item.hasItemMeta()) {
                 ItemMeta meta = item.getItemMeta();
-                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(player.getName()));
+                PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(player.getUniqueId());
                 if (meta.getDisplayName().equalsIgnoreCase(CustomItems.SPONGE.getItemStack().getItemMeta().getDisplayName())) {
                     data.setSponge(true);
                 }

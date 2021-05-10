@@ -66,7 +66,7 @@ public class TctItemClock implements CustomSpecialItem {
     public void onRightClick(Player player) {
         if(player != null) {
             Game game = NanamiTct.plugin.getGame();
-            PlayerData data = game.getReference().PLAYERDATA.get(NanamiTct.utilities.resetColor(player.getName()));
+            PlayerData data = game.getReference().PLAYERDATA.get(player.getUniqueId());
             Location loc = player.getLocation();
             Location blockLoc = new Location(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
             DeadBody deadBody = new DeadBody(game, data, TctDeathCause.AIR, blockLoc);

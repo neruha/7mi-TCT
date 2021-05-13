@@ -5,6 +5,7 @@ import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.data.profile.TctProperty;
 import me.clockclap.tct.game.role.GameRoles;
+import me.clockclap.tct.game.role.GameTeams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -251,9 +252,14 @@ public class Utilities {
                 continue;
 
             double distance = player.getLocation().distance(p.getLocation());
-            if(distance < lastDistance) {
-                lastDistance = distance;
-                result = p;
+            PlayerData data = NanamiTct.utilities.getPlayerData(p.getUniqueId());
+            if(data != null) {
+                if(data.getRole().getTeam() == GameTeams.VILLAGERS) {
+                    if(distance < lastDistance) {
+                        lastDistance = distance;
+                        result = p;
+                    }
+                }
             }
         }
         return result;

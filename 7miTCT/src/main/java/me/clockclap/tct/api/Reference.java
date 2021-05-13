@@ -125,6 +125,8 @@ public final class Reference {
     public static final String TCT_CHAT_LANDMINE_PLACED = ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "地雷を設置しました、%SECOND%秒後から効果が適応されます";
     public static final String TCT_CHAT_ISNT_WOLF = ChatColor.GREEN + "半径%DISTANCE%ブロック以内に人狼はいません";
     public static final String TCT_CHAT_IS_WOLF = ChatColor.RED + "半径%DISTANCE%ブロック以内に人狼がいます";
+    public static final String TCT_CHAT_NEAREST_PLAYER = ChatColor.GREEN + "一番近くにいる村人 %PLAYER% までの距離: %FAR%m";
+    public static final String TCT_CHAT_NO_NEAREST_PLAYER = ChatColor.RED + "村人プレイヤーがいません";
     public static final String TCT_CHAT_LANDMINE_REMOVED = ChatColor.LIGHT_PURPLE + "地雷を解体しました";
     public static final String TCT_CHAT_COIN_DISTRIBUTION = ChatColor.AQUA + "コインが配布されました /shopか/sでショップが開きます";
     public static final String TCT_CHAT_YOUR_COIN = ChatColor.AQUA + "あなたの所持コイン枚数は%COUNT%枚です";

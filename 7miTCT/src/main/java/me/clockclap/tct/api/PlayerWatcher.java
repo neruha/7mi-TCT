@@ -6,6 +6,7 @@ import me.clockclap.tct.game.GameState;
 import me.clockclap.tct.game.data.CustomBlockData;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.role.GameRoles;
+import me.clockclap.tct.game.role.GameTeams;
 import me.clockclap.tct.item.CustomBlockInfo;
 import me.clockclap.tct.item.CustomItems;
 import org.bukkit.*;
@@ -244,7 +245,7 @@ public class PlayerWatcher {
                 if(p != null) player.setCompassTarget(p.getLocation());
                 if(getPlayer().getGameMode() == GameMode.SURVIVAL || getPlayer().getGameMode() == GameMode.ADVENTURE) {
                     if (!getPlayerData().isSpectator()) {
-                        if(getPlayerData().getRole() != GameRoles.WOLF) {
+                        if(getPlayerData().getRole().getTeam() != GameTeams.WOLVES) {
                             List<CustomBlockData> dataList = new ArrayList<>(CustomBlockInfo.blockDataList);
                             for (CustomBlockData data : dataList) {
                                 if (data.getCustomBlock().getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.LANDMINE.getItemStack().getItemMeta().getDisplayName())) {

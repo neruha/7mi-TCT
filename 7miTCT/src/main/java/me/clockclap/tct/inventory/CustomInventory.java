@@ -102,10 +102,10 @@ public class CustomInventory {
         setGeneralShop(Bukkit.createInventory(null, 27, Reference.TCT_GUI_TITLE_GENERAL_SHOP));
         setDetectiveShop(Bukkit.createInventory(null, 27, Reference.TCT_GUI_TITLE_DETECTIVE_SHOP));
         setWolfShop(Bukkit.createInventory(null, 27, Reference.TCT_GUI_TITLE_WOLF_SHOP));
-        setFoxShop(Bukkit.createInventory(null, 27, Reference.TCT_GUI_TITLE_WOLF_SHOP));
-        setFanaticShop(Bukkit.createInventory(null, 27, Reference.TCT_GUI_TITLE_WOLF_SHOP));
-        setImmoralShop(Bukkit.createInventory(null, 27, Reference.TCT_GUI_TITLE_WOLF_SHOP));
-        setHealerShop(Bukkit.createInventory(null, 27, Reference.TCT_GUI_TITLE_WOLF_SHOP));
+        setFoxShop(Bukkit.createInventory(null, 27, Reference.TCT_GUI_TITLE_FOX_SHOP));
+        setFanaticShop(Bukkit.createInventory(null, 27, Reference.TCT_GUI_TITLE_FANATIC_SHOP));
+        setImmoralShop(Bukkit.createInventory(null, 27, Reference.TCT_GUI_TITLE_IMMORAL_SHOP));
+        setHealerShop(Bukkit.createInventory(null, 27, Reference.TCT_GUI_TITLE_HEALER_SHOP));
 
         Inventory inv0 = getGeneralShop();
         Inventory inv1 = getDetectiveShop();

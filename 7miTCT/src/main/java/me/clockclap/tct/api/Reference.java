@@ -10,6 +10,7 @@ public final class Reference {
 
     //プラグイン設定
     public static final String TCT_CHATPREFIX = ChatColor.DARK_RED + "[7mi TCT]" + ChatColor.RESET;
+    public static final String TCT_DEBUG_CHATPREFIX = ChatColor.DARK_RED + "[7mi TCT Debug]" + ChatColor.RESET;
     public static final String TCT_SIDEBAR_TITLE = ChatColor.DARK_RED + "[Trouble in Crafter Town]";
 
     //イベント
@@ -207,8 +208,14 @@ public final class Reference {
 
     //インベントリメニュー (GUI)
     public static final String TCT_GUI_TITLE_GENERAL_SHOP = "村人ショップ";
+    public static final String TCT_GUI_TITLE_HEALER_SHOP = "医者ショップ";
     public static final String TCT_GUI_TITLE_DETECTIVE_SHOP = "探偵ショップ";
     public static final String TCT_GUI_TITLE_WOLF_SHOP = "人狼ショップ";
+    public static final String TCT_GUI_TITLE_FANATIC_SHOP = "狂人ショップ";
+    public static final String TCT_GUI_TITLE_FOX_SHOP = "妖狐ショップ";
+    public static final String TCT_GUI_TITLE_IMMORAL_SHOP = "背徳者ショップ";
+    public static final String TCT_GUI_TITLE_SHOP = "ショップ";
+
 
     //役職 CO
     public static final String TCT_CHAT_CO = ChatColor.AQUA + "%PLAYER%が%CO%" + ChatColor.AQUA + "をしました";

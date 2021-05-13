@@ -114,6 +114,7 @@ public final class NanamiTct extends JavaPlugin {
         utilities.addCommand("stopgame", new CommandStopGame(this));
         utilities.addCommand("item", new CommandItem(this));
         utilities.addCommand("shop", new CommandShop(this));
+        utilities.addCommand("stat", new CommandStat(this));
 
         // Register items
         CustomItems.register();

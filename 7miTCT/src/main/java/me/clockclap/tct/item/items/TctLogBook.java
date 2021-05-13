@@ -33,8 +33,8 @@ public class TctLogBook implements CustomItem {
         this.isdefault = true;
         this.material = Material.WRITTEN_BOOK;
         this.name = "LOG_BOOK";
-        this.displayName = "Tct Logs";
-        this.title = "Tct Logs";
+        this.displayName = "Tct Log Book";
+        this.title = "Tct Log Book";
         this.description = ChatColor.AQUA + "TCT Item";
         this.role = GameRoles.NONE;
         this.attackable = true;

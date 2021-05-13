@@ -28,7 +28,12 @@ public class Utilities {
     }
 
     public void addCommand(String command, CommandExecutor executor) {
-        plugin.getCommand(command).setExecutor(executor);
+        try {
+            plugin.getCommand(command).setExecutor(executor);
+            plugin.getLogger().info(command);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Deprecated
@@ -258,12 +263,15 @@ public class Utilities {
     public PlayerData getPlayerData(String coloredName) {
         String name = resetColor(coloredName);
         Player p = Bukkit.getPlayer(name);
-        if(p == null) return null;
         return NanamiTct.plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId());
     }
 
     public PlayerData getPlayerData(Player player) {
         return NanamiTct.plugin.getGame().getReference().PLAYERDATA.get(player.getUniqueId());
+    }
+
+    public PlayerData getPlayerData(UUID uuid) {
+        return NanamiTct.plugin.getGame().getReference().PLAYERDATA.get(uuid);
     }
 
     public Collection<? extends PlayerData> getOnlinePlayersData() {
@@ -272,7 +280,7 @@ public class Utilities {
         for(Player p : players) {
             if(p != null) {
                 String name = resetColor(p.getName());
-                PlayerData data = getPlayerData(name);
+                PlayerData data = getPlayerData(p);
                 if (data != null) {
                     datas.add(data);
                 }

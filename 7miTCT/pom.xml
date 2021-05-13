@@ -6,7 +6,7 @@
 
     <groupId>io.github.ClockClap</groupId>
     <artifactId>7mi-TCT</artifactId>
-    <version>3.5.4</version>
+    <version>3.6.6</version>
     <packaging>jar</packaging>
 
     <name>7miTctApi</name>

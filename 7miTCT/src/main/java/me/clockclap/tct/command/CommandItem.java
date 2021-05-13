@@ -12,10 +12,12 @@ import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.sql.Ref;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,11 +31,13 @@ public class CommandItem implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(sender instanceof Player) {
-            Player p = (Player) sender;
-            if(p != null) {
-                TctPlayerProfile profile = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId()).getProfile();
-                boolean isAdmin = profile.isAdmin();
+        FileConfiguration config = plugin.getTctConfig().getConfig();
+        if(config.getBoolean("debug", false)) {
+            if (sender instanceof Player) {
+                Player p = (Player) sender;
+                if (p != null) {
+                    TctPlayerProfile profile = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId()).getProfile();
+                    boolean isAdmin = profile.isAdmin();
 //              if(plugin.getTctConfig().getConfig().getStringList("admin").contains("op")) {
 //                  if(p.isOp()) {
 //                      isAdmin = true;
@@ -47,32 +51,35 @@ public class CommandItem implements TabExecutor {
 //                      }
 //                  }
 //              }
-                if (isAdmin == false) {
-                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_PERMISSION);
-                    return true;
-                }
-                if (args.length >= 1) {
-                    if (args[0].equalsIgnoreCase("LOG_BOOK")) {
-                        p.getInventory().addItem(plugin.getGame().getLog().getItem());
-                        p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_SYSTEM_GAVE_ITEM.replaceAll("%ITEM%", "LOG_BOOK"));
+                    if (isAdmin == false) {
+                        p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_PERMISSION);
                         return true;
                     }
-                    for (CustomItem i : CustomItems.allItems) {
-                        if (i.getName().equalsIgnoreCase(args[0])) {
-                            process(p, i.getItemStack());
-                            p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_SYSTEM_GAVE_ITEM.replaceAll("%ITEM%", i.getName()));
+                    if (args.length >= 1) {
+                        if (args[0].equalsIgnoreCase("LOG_BOOK")) {
+                            p.getInventory().addItem(plugin.getGame().getLog().getItem());
+                            p.sendMessage(Reference.TCT_DEBUG_CHATPREFIX + " " + Reference.TCT_CHAT_SYSTEM_GAVE_ITEM.replaceAll("%ITEM%", "LOG_BOOK"));
                             return true;
                         }
+                        for (CustomItem i : CustomItems.allItems) {
+                            if (i.getName().equalsIgnoreCase(args[0])) {
+                                process(p, i.getItemStack());
+                                p.sendMessage(Reference.TCT_DEBUG_CHATPREFIX + " " + Reference.TCT_CHAT_SYSTEM_GAVE_ITEM.replaceAll("%ITEM%", i.getName()));
+                                return true;
+                            }
+                        }
+                        p.sendMessage(Reference.TCT_CHATPREFIX + ChatColor.RED + " Usage: /i <ITEM NAME>");
+                        return true;
                     }
                     p.sendMessage(Reference.TCT_CHATPREFIX + ChatColor.RED + " Usage: /i <ITEM NAME>");
                     return true;
                 }
-                p.sendMessage(Reference.TCT_CHATPREFIX + ChatColor.RED + " Usage: /i <ITEM NAME>");
                 return true;
             }
+            sender.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_PLAYER_ONLY);
             return true;
         }
-        sender.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_PLAYER_ONLY);
+        sender.sendMessage(Reference.TCT_DEBUG_CHATPREFIX + " " + ChatColor.RED + "デバッグモードが無効なので使用できません。");
         return true;
     }
 

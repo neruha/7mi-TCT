@@ -4,6 +4,7 @@ import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.game.GameState;
 import me.clockclap.tct.game.data.PlayerData;
+import me.clockclap.tct.game.data.PlayerStat;
 import me.clockclap.tct.game.data.TctEntityData;
 import me.clockclap.tct.game.death.DeadBody;
 import me.clockclap.tct.game.death.Killer;
@@ -18,10 +19,7 @@ import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.craftbukkit.v1_12_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Explosive;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.TNTPrimed;
+import org.bukkit.entity.*;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -119,6 +117,10 @@ public class DamageEvent implements Listener {
                 respawnLoc = plugin.getGame().getLocation();
                 if (!data.isSpectator()) {
                     plugin.getGame().removeRemainingPlayers(data, true);
+                    if(NanamiTct.playerStats != null) {
+                        PlayerStat playerStat = NanamiTct.playerStats.getStat(p.getUniqueId());
+                        playerStat.setCountDeath(playerStat.getCountDeath() + 1);
+                    }
                     p.getInventory().clear();
                     List<PlayerData> villagers = new ArrayList<>();
                     List<PlayerData> wolves = new ArrayList<>();
@@ -171,12 +173,20 @@ public class DamageEvent implements Listener {
                     if(data.getWatcher() != null && data.getRole() == GameRoles.FOX) {
                         data.getWatcher().cancelCountFox();
                     }
-                    if(damageCause == EntityDamageEvent.DamageCause.ENTITY_ATTACK || damageCause == EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK) {
+                    if(damageCause == EntityDamageEvent.DamageCause.ENTITY_ATTACK || damageCause == EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK || damageCause == EntityDamageEvent.DamageCause.PROJECTILE) {
+                        EntityDamageByEntityEvent ev = (EntityDamageByEntityEvent) p.getLastDamageCause();
                         cause = TctDeathCause.KILL;
-                        if(p.getKiller() != null) {
-                            PlayerData killer = plugin.getGame().getReference().PLAYERDATA.get(p.getKiller().getUniqueId());
+                        Player opkiller = p.getKiller();
+                        if(ev.getDamager() != null && ev.getDamager() instanceof Projectile && ((Projectile) ev.getDamager()).getShooter() instanceof Player)
+                            opkiller = ((Player)((Projectile) ev.getDamager()).getShooter());
+                        if(opkiller != null) {
+                            PlayerData killer = plugin.getGame().getReference().PLAYERDATA.get(opkiller.getUniqueId());
                             killer.addKilledPlayer(NanamiTct.utilities.resetColor(p.getName()));
                             data.setKilledBy(new Killer(p.getKiller(), plugin.getGame().getReference().PLAYERDATA.get(p.getKiller().getUniqueId()).getRole()));
+                            if(NanamiTct.playerStats != null) {
+                                PlayerStat killerStat = NanamiTct.playerStats.getStat(opkiller.getUniqueId());
+                                killerStat.setCountKill(killerStat.getCountKill() + 1);
+                            }
                             for(ItemStack item : contents) {
                                 if(item != null) {
                                     if(item.hasItemMeta() && item.getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.EMPTY_BOTTLE.getItemStack().getItemMeta().getDisplayName())) {
@@ -232,9 +242,9 @@ public class DamageEvent implements Listener {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    p.spigot().respawn();
+                    Bukkit.getScheduler().runTask(plugin, () -> p.spigot().respawn());
                 }
-            }.runTaskLater(plugin, 3);
+            }.runTaskLater(plugin, 5);
         }
 
     }

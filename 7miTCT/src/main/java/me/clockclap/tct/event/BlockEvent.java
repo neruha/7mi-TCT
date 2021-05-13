@@ -49,8 +49,10 @@ public class BlockEvent implements Listener {
                                 CustomBlockData data = new CustomBlockData(plugin.getGame(), block, e.getBlockPlaced());
                                 CustomBlockInfo.blockDataList.add(data);
                                 if(block == CustomItems.HEAL_STATION) {
-                                    PlayerStat stat = NanamiTct.playerStats.getStat(e.getPlayer().getUniqueId());
-                                    stat.setTotalPlaceHealStation(stat.getTotalPlaceHealStation());
+                                    if(NanamiTct.playerStats != null) {
+                                        PlayerStat stat = NanamiTct.playerStats.getStat(e.getPlayer().getUniqueId());
+                                        stat.setTotalPlaceHealStation(stat.getTotalPlaceHealStation() + 1);
+                                    }
                                 }
 
                                 if (block.getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.LANDMINE.getItemStack().getItemMeta().getDisplayName())) {
@@ -150,8 +152,10 @@ public class BlockEvent implements Listener {
                                             data.getCustomBlock().onRightClick(e.getPlayer());
                                             if (data.getCustomBlock().getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.HEAL_STATION.getItemStack().getItemMeta().getDisplayName())) {
                                                 data.runTimer(CooldownTypes.HEAL_STATION);
-                                                PlayerStat stat = NanamiTct.playerStats.getStat(e.getPlayer().getUniqueId());
-                                                stat.setTotalPlaceHealStation(stat.getTotalPlaceHealStation());
+                                                if(NanamiTct.playerStats != null) {
+                                                    PlayerStat stat = NanamiTct.playerStats.getStat(e.getPlayer().getUniqueId());
+                                                    stat.setTotalPlaceHealStation(stat.getTotalPlaceHealStation() + 1);
+                                                }
                                             }
                                         }
                                     }
@@ -232,8 +236,10 @@ public class BlockEvent implements Listener {
                     } else {
                         if (visible) {
                             if (!plugin.getGame().getReference().PLAYERDATA.get(player.getUniqueId()).isSpectator() && !deadBody.isFake()) {
-                                PlayerStat stat = NanamiTct.playerStats.getStat(player.getUniqueId());
-                                stat.setTotalFoundDeadBodies(stat.getTotalFoundDeadBodies());
+                                if(NanamiTct.playerStats != null) {
+                                    PlayerStat stat = NanamiTct.playerStats.getStat(player.getUniqueId());
+                                    stat.setTotalFoundDeadBodies(stat.getTotalFoundDeadBodies() + 1);
+                                }
                                 Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_DEADBODY_FOUND.replaceAll("%PLAYER%", deadBody.getPlayer().getDisplayName()));
                                 deadBody.setFound(true);
                                 TctLog log = plugin.getGame().getLog();

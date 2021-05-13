@@ -10,11 +10,7 @@ import me.clockclap.tct.item.CustomItem;
 import me.clockclap.tct.item.CustomItems;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowball;
-import org.bukkit.entity.TNTPrimed;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
@@ -26,8 +22,6 @@ import org.bukkit.event.player.PlayerPickupArrowEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.awt.*;
 
 public class InventoryEvent implements Listener {
 
@@ -44,7 +38,12 @@ public class InventoryEvent implements Listener {
         }
         if(e.getClickedInventory().getTitle().equalsIgnoreCase(plugin.getCustomInventory().getGeneralShop().getTitle()) ||
                 e.getClickedInventory().getTitle().equalsIgnoreCase(plugin.getCustomInventory().getDetectiveShop().getTitle()) ||
-                e.getClickedInventory().getTitle().equalsIgnoreCase(plugin.getCustomInventory().getWolfShop().getTitle())) {
+                e.getClickedInventory().getTitle().equalsIgnoreCase(plugin.getCustomInventory().getWolfShop().getTitle()) ||
+                e.getClickedInventory().getTitle().equalsIgnoreCase(plugin.getCustomInventory().getFanaticShop().getTitle()) ||
+                e.getClickedInventory().getTitle().equalsIgnoreCase(plugin.getCustomInventory().getFoxShop().getTitle()) ||
+                e.getClickedInventory().getTitle().equalsIgnoreCase(plugin.getCustomInventory().getImmoralShop().getTitle()) ||
+                e.getClickedInventory().getTitle().equalsIgnoreCase(plugin.getCustomInventory().getHealerShop().getTitle()) ||
+                e.getClickedInventory().getTitle().equalsIgnoreCase(Reference.TCT_GUI_TITLE_SHOP)) {
             if(e.getCurrentItem().getType() != Material.AIR) {
                 e.setCancelled(true);
                 if(e.getWhoClicked() instanceof Player) {

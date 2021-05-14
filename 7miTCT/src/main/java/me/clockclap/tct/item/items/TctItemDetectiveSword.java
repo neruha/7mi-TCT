@@ -2,7 +2,9 @@ package me.clockclap.tct.item.items;
 
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
+import me.clockclap.tct.api.sql.MySQLStatus;
 import me.clockclap.tct.game.data.PlayerData;
+import me.clockclap.tct.game.data.PlayerStat;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomSpecialItem;
@@ -91,6 +93,10 @@ public class TctItemDetectiveSword implements CustomSpecialItem {
                         target.damage(target.getHealth() + 1, attacker);
                     } else {
                         attacker.damage(attacker.getHealth() + 1);
+                    }
+                    if(MySQLStatus.isSqlEnabled() && NanamiTct.playerStats != null) {
+                        PlayerStat stat = NanamiTct.playerStats.getStat(attacker.getUniqueId());
+                        if(stat != null) stat.setCountUsedItem(stat.getCountUsedItem() + 1);
                     }
                 }
             }

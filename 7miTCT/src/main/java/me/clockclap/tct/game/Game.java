@@ -6,6 +6,7 @@ import me.clockclap.tct.api.event.GameItemDistributeEvent;
 import me.clockclap.tct.api.event.GamePreStartEvent;
 import me.clockclap.tct.api.event.GameStartEvent;
 import me.clockclap.tct.api.event.GameStopEvent;
+import me.clockclap.tct.api.sql.MySQLStatus;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.data.PlayerStat;
 import me.clockclap.tct.game.death.DeadBody;
@@ -870,6 +871,16 @@ public class Game {
                     if(data.getWatcher() != null) {
                         data.getWatcher().cancelCountFox();
                         data.getWatcher().setCountFox(getPlugin().getTctConfig().getConfig().getInt("fox-reveal-time-default", 70));
+                    }
+                }
+                if(NanamiTct.playerStats != null && MySQLStatus.isSqlEnabled()) {
+                    PlayerStat stat = NanamiTct.playerStats.getStat(p.getUniqueId());
+                    if(stat != null) {
+                        if (data.getRole().getTeam() == winners) {
+                            stat.setTotalVictories(stat.getTotalVictories() + 1);
+                        } else {
+                            stat.setTotalDefeats(stat.getTotalDefeats() + 1);
+                        }
                     }
                 }
                 if (winners == GameTeams.NONE || winners == GameTeams.SPEC) {

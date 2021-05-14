@@ -4,6 +4,7 @@ import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.CooldownTypes;
 import me.clockclap.tct.api.PlayerWatcher;
 import me.clockclap.tct.api.Reference;
+import me.clockclap.tct.api.sql.MySQLStatus;
 import me.clockclap.tct.game.GameState;
 import me.clockclap.tct.game.data.CustomBlockData;
 import me.clockclap.tct.game.data.PlayerData;
@@ -62,6 +63,12 @@ public class BlockEvent implements Listener {
                             } else {
                                 e.setCancelled(true);
                             }
+                            return;
+                        }
+                    }
+                    for (CustomSpecialItem item_ : CustomItems.specialItems) {
+                        if(item.getItemMeta().getDisplayName().equalsIgnoreCase(item_.getItemStack().getItemMeta().getDisplayName())) {
+                            e.setCancelled(true);
                             return;
                         }
                     }
@@ -154,7 +161,7 @@ public class BlockEvent implements Listener {
                                                 data.runTimer(CooldownTypes.HEAL_STATION);
                                                 if(NanamiTct.playerStats != null) {
                                                     PlayerStat stat = NanamiTct.playerStats.getStat(e.getPlayer().getUniqueId());
-                                                    stat.setTotalPlaceHealStation(stat.getTotalPlaceHealStation() + 1);
+                                                    stat.setTotalUseHealStation(stat.getTotalUseHealStation() + 1);
                                                 }
                                             }
                                         }
@@ -204,6 +211,11 @@ public class BlockEvent implements Listener {
                                     break;
                                 }
                             }
+                            if(MySQLStatus.isSqlEnabled() && NanamiTct.playerStats != null) {
+                                PlayerStat stat = NanamiTct.playerStats.getStat(player.getUniqueId());
+                                if(stat != null) stat.setCountUsedItem(stat.getCountUsedItem() + 1);
+                            }
+                            return;
                         } else if (player.getInventory().getItemInMainHand() != null &&
                                 player.getInventory().getItemInMainHand().hasItemMeta() &&
                                 player.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.STICK.getItemStack().getItemMeta().getDisplayName())) {
@@ -224,6 +236,11 @@ public class BlockEvent implements Listener {
                                         break;
                                     }
                                 }
+                                if(MySQLStatus.isSqlEnabled() && NanamiTct.playerStats != null) {
+                                    PlayerStat stat = NanamiTct.playerStats.getStat(player.getUniqueId());
+                                    if(stat != null) stat.setCountUsedItem(stat.getCountUsedItem() + 1);
+                                }
+                                return;
                             } else {
                                 player.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_DEADBODY_IS_NOT_WOLF);
                             }

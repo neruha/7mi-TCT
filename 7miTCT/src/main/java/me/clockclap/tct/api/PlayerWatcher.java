@@ -244,20 +244,18 @@ public class PlayerWatcher {
                 Player p = NanamiTct.utilities.getNearestPlayer(player);
                 if(p != null) player.setCompassTarget(p.getLocation());
                 if(getPlayer().getGameMode() == GameMode.SURVIVAL || getPlayer().getGameMode() == GameMode.ADVENTURE) {
-                    if (!getPlayerData().isSpectator()) {
-                        if(getPlayerData().getRole().getTeam() != GameTeams.WOLVES) {
-                            List<CustomBlockData> dataList = new ArrayList<>(CustomBlockInfo.blockDataList);
-                            for (CustomBlockData data : dataList) {
-                                if (data.getCustomBlock().getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.LANDMINE.getItemStack().getItemMeta().getDisplayName())) {
-                                    if(data.isEnabled()) {
-                                        double maxFar = NanamiTct.plugin.getTctConfig().getConfig().getInt("landmine-range", 5);
-                                        double far = data.getLocation().distance(getPlayer().getLocation());
-                                        if (far <= maxFar) {
-                                            getPlayer().damage(getPlayer().getHealth() + 1);
-                                            getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1F, 1F);
-                                            data.getLocation().getBlock().setType(Material.AIR);
-                                            CustomBlockInfo.blockDataList.remove(dataList.indexOf(data));
-                                        }
+                    if (!getPlayerData().isSpectator() && getPlayerData().getRole().getTeam() != GameTeams.WOLVES) {
+                        List<CustomBlockData> dataList = new ArrayList<>(CustomBlockInfo.blockDataList);
+                        for (CustomBlockData data : dataList) {
+                            if (data.getCustomBlock().getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.LANDMINE.getItemStack().getItemMeta().getDisplayName())) {
+                                if(data.isEnabled()) {
+                                    double maxFar = NanamiTct.plugin.getTctConfig().getConfig().getInt("landmine-range", 5);
+                                    double far = data.getLocation().distance(getPlayer().getLocation());
+                                    if (far <= maxFar) {
+                                        getPlayer().damage(getPlayer().getHealth() + 1);
+                                        getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1F, 1F);
+                                        data.getLocation().getBlock().setType(Material.AIR);
+                                        CustomBlockInfo.blockDataList.remove(dataList.indexOf(data));
                                     }
                                 }
                             }

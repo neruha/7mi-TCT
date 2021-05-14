@@ -2,9 +2,11 @@ package me.clockclap.tct.event;
 
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
+import me.clockclap.tct.api.sql.MySQLStatus;
 import me.clockclap.tct.game.data.CustomBlockData;
 import me.clockclap.tct.game.data.CustomProjectileData;
 import me.clockclap.tct.game.data.PlayerData;
+import me.clockclap.tct.game.data.PlayerStat;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomBlockInfo;
@@ -83,7 +85,7 @@ public class ItemEvent implements Listener {
                     if (i.hasItemMeta()) {
                         for (CustomSpecialItem item : CustomItems.specialItems) {
                             if (i.getItemMeta().getDisplayName().equalsIgnoreCase(item.getItemStack().getItemMeta().getDisplayName())) {
-                                if (item.isAttackable() == false) {
+                                if (!item.isAttackable()) {
                                     e.setCancelled(true);
                                 } else {
                                     PlayerData data_ = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId());
@@ -200,6 +202,10 @@ public class ItemEvent implements Listener {
                                     break;
                                 }
                             }
+                            if(MySQLStatus.isSqlEnabled() && NanamiTct.playerStats != null) {
+                                PlayerStat stat = NanamiTct.playerStats.getStat(e.getPlayer().getUniqueId());
+                                if(stat != null) stat.setCountUsedItem(stat.getCountUsedItem() + 1);
+                            }
                         }
                     }
                 }
@@ -260,6 +266,10 @@ public class ItemEvent implements Listener {
         if(projectile instanceof Snowball) {
             plugin.getGame().getReference().PROJECTILEDATA.put(projectile, new CustomProjectileData(plugin.getGame(), projectile, role));
             plugin.getGame().getReference().PROJECTILEDATA.get(projectile).startTimer();
+            if(MySQLStatus.isSqlEnabled() && NanamiTct.playerStats != null && source instanceof Player) {
+                PlayerStat stat = NanamiTct.playerStats.getStat(((Player)source).getUniqueId());
+                if(stat != null) stat.setCountUsedItem(stat.getCountUsedItem() + 1);
+            }
         }
     }
 

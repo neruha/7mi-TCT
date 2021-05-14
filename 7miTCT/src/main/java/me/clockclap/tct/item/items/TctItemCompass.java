@@ -2,6 +2,8 @@ package me.clockclap.tct.item.items;
 
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
+import me.clockclap.tct.api.sql.MySQLStatus;
+import me.clockclap.tct.game.data.PlayerStat;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomItem;
@@ -62,6 +64,10 @@ public class TctItemCompass implements CustomSpecialItem {
             }
             double far = player.getLocation().distance(p.getLocation());
             player.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_NEAREST_PLAYER.replaceAll("%PLAYER%", NanamiTct.utilities.resetColor(p.getName())).replaceAll("%FAR%", String.valueOf(far)));
+            if(MySQLStatus.isSqlEnabled() && NanamiTct.playerStats != null) {
+                PlayerStat stat = NanamiTct.playerStats.getStat(player.getUniqueId());
+                if(stat != null) stat.setCountUsedItem(stat.getCountUsedItem() + 1);
+            }
         }
     }
 

@@ -4,7 +4,9 @@ import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Range;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.api.exception.ValueOverflowException;
+import me.clockclap.tct.api.sql.MySQLStatus;
 import me.clockclap.tct.game.data.PlayerData;
+import me.clockclap.tct.game.data.PlayerStat;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.game.role.GameTeams;
@@ -102,6 +104,10 @@ public class TctItemWolfSword implements CustomSpecialItem {
                             }
                         }
                         target.damage(target.getHealth() + 1, attacker);
+                        if(MySQLStatus.isSqlEnabled() && NanamiTct.playerStats != null) {
+                            PlayerStat stat = NanamiTct.playerStats.getStat(attacker.getUniqueId());
+                            if(stat != null) stat.setCountUsedItem(stat.getCountUsedItem() + 1);
+                        }
                     } else {
                         attacker.damage(2.0D);
                     }

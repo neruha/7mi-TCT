@@ -6,6 +6,9 @@ import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.data.profile.TctProperty;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.game.role.GameTeams;
+import me.clockclap.tct.item.CustomItem;
+import me.clockclap.tct.item.CustomItems;
+import me.clockclap.tct.item.CustomSpecialItem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -13,6 +16,7 @@ import org.bukkit.World;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -254,7 +258,7 @@ public class Utilities {
             double distance = player.getLocation().distance(p.getLocation());
             PlayerData data = NanamiTct.utilities.getPlayerData(p.getUniqueId());
             if(data != null) {
-                if(data.getRole().getTeam() == GameTeams.VILLAGERS) {
+                if(!data.isSpectator() && data.getRole().getTeam() != GameTeams.WOLVES) {
                     if(distance < lastDistance) {
                         lastDistance = distance;
                         result = p;
@@ -293,6 +297,15 @@ public class Utilities {
             }
         }
         return datas;
+    }
+
+    public CustomItem getCustomItemByItemStack(ItemStack item) {
+        for (CustomItem item_ : CustomItems.allItems) {
+            if(item.getItemMeta().getDisplayName().equalsIgnoreCase(item_.getItemStack().getItemMeta().getDisplayName())) {
+                return item_;
+            }
+        }
+        return null;
     }
 
 }

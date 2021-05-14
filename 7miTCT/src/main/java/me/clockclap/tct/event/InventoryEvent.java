@@ -1,10 +1,14 @@
 package me.clockclap.tct.event;
 
+import com.mysql.cj.x.protobuf.MysqlxCrud;
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.api.event.ArmorEquipEvent;
+import me.clockclap.tct.api.sql.MySQLPlayerStats;
+import me.clockclap.tct.api.sql.MySQLStatus;
 import me.clockclap.tct.game.GameState;
 import me.clockclap.tct.game.data.PlayerData;
+import me.clockclap.tct.game.data.PlayerStat;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomItem;
 import me.clockclap.tct.item.CustomItems;
@@ -75,6 +79,12 @@ public class InventoryEvent implements Listener {
                                     }
                                     data.addBoughtItem(i.getName());
                                     data.setCoin(data.getCoin() - 1);
+                                    if(NanamiTct.playerStats != null && MySQLStatus.isSqlEnabled()) {
+                                        PlayerStat stat = NanamiTct.playerStats.getStat(p.getUniqueId());
+                                        if(stat != null) {
+                                            stat.setTotalBoughtItems(stat.getTotalBoughtItems() + 1);
+                                        }
+                                    }
                                     p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_BOUGHT_ITEM.replaceAll("%ITEM%", i.getName()));
                                     p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP,  1F, 1F);
                                     p.getInventory().addItem(e.getCurrentItem());

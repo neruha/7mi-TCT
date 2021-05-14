@@ -2,8 +2,10 @@ package me.clockclap.tct.item.items;
 
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
+import me.clockclap.tct.api.sql.MySQLStatus;
 import me.clockclap.tct.game.Game;
 import me.clockclap.tct.game.data.PlayerData;
+import me.clockclap.tct.game.data.PlayerStat;
 import me.clockclap.tct.game.death.DeadBody;
 import me.clockclap.tct.game.death.TctDeathCause;
 import me.clockclap.tct.game.role.GameRole;
@@ -98,6 +100,10 @@ public class TctItemSeed implements CustomSpecialItem {
                     player.updateInventory();
                     break;
                 }
+            }
+            if(MySQLStatus.isSqlEnabled() && NanamiTct.playerStats != null) {
+                PlayerStat stat = NanamiTct.playerStats.getStat(player.getUniqueId());
+                if(stat != null) stat.setCountUsedItem(stat.getCountUsedItem() + 1);
             }
         }
     }

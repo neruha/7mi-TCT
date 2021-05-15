@@ -35,8 +35,9 @@ public class Utilities {
     public void addCommand(String command, CommandExecutor executor) {
         try {
             plugin.getCommand(command).setExecutor(executor);
-            plugin.getLogger().info(command);
+            plugin.getLogger().info("Succeeded registering command: /" + command);
         } catch(Exception e) {
+            plugin.getLogger().warning("Failed to register command: /" + command);
             e.printStackTrace();
         }
     }

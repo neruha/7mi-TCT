@@ -62,7 +62,7 @@ public class PlayerConnectionEvent implements Listener {
                 ex.printStackTrace();
                 MySQLStatus.setSqlEnabled(false);
             }
-        } else p.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "* データベースに接続できなかったため統計の表示、記録はできません *");
+        }
         String gameState,message = "";
         boolean isAdmin = data.getProfile().isAdmin();
         if(plugin.getGame().getReference().getGameState() == GameState.GAMING) {
@@ -110,6 +110,7 @@ public class PlayerConnectionEvent implements Listener {
         }
         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_GAME_STATE.replaceAll("%STATE%", gameState));
         p.sendMessage(message);
+        if(!MySQLStatus.isSqlEnabled()) p.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "* データベースに接続できなかったため統計の表示、記録はできません *");
         for(Player pl : Bukkit.getOnlinePlayers()) {
             NanamiTct.utilities.hidePlayer(pl, p);
             new BukkitRunnable() {

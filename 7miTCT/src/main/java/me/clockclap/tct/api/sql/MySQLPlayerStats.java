@@ -3,6 +3,7 @@ package me.clockclap.tct.api.sql;
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.game.Game;
 import me.clockclap.tct.game.data.PlayerStat;
+import me.clockclap.tct.game.data.TctPlayerStat;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomItems;
 
@@ -39,7 +40,7 @@ public class MySQLPlayerStats {
         if(connection.getConnection() != null && MySQLStatus.isSqlEnabled()) {
             connection.openConnection();
             PreparedStatement statement = connection.getConnection().prepareStatement("" +
-                    "CREATE TABLE IF NOT EXISTS tct_stats (uuid VARCHAR(50),vil INT,hea INT,det INT,wol INT,fan INT,fox INT,imm INT,death INT,kill INT,found_deadbody INT," +
+                    "CREATE TABLE IF NOT EXISTS tct_stats (uuid VARCHAR(50),vil INT,hea INT,det INT,wol INT,fan INT,fox INT,imm INT,death INT,kills INT,found_deadbody INT," +
                     "use_item INT,victory INT,defeat INT,use_heal_station INT,place_heal_station INT,bought_item INT,play_count INT)");
             statement.execute();
             statement.close();
@@ -50,11 +51,10 @@ public class MySQLPlayerStats {
     public void insert(PlayerStat stat) throws SQLException {
         if(connection.getConnection() != null) {
             connection.openConnection();
-            String sql = "INSERT INTO tct_stats (uuid,vil,hea,det,wol,fan,fox,imm,death,kill," +
-                    "found_deadbody,use_item,victory,defeat,use_heal_station,place_heal_station,bought_item,play_count) " +
-                    "SELECT * FROM (SELECT ?,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) AS tmp WHERE NOT EXISTS (" +
-                    "SELECT uuid FROM tct_stats WHERE uuid=?" +
-                    ") LIMIT 1;";
+            //(uuid,vil,hea,det,wol,fan,fox,imm,death,kills,found_deadbody,use_item,victory,defeat,use_heal_station,place_heal_station,bought_item,play_count)
+            String sql = "INSERT INTO `tct_stats` (uuid,vil,hea,det,wol,fan,fox,imm,death,kills,found_deadbody,use_item,victory,defeat,use_heal_station,place_heal_station,bought_item,play_count)" +
+                    " SELECT * FROM (SELECT ? as uuid,0 as vil,0 as hea,0 as det,0 as fol,0 as fan,0 as fox,0 as imm,0 as death,0 as kills,0 as found_deadbody,0 as use_item," +
+                    "0 as victory,0 as defeat,0 as use_heal_station,0 as place_heal_station,0 as bought_item,0 as play_count) AS tmp WHERE NOT EXISTS (SELECT * FROM `tct_stats` WHERE `uuid`=?) LIMIT 1;";
             PreparedStatement statement = connection.getConnection().prepareStatement(sql);
             statement.setString(1, stat.getUUID().toString());
             statement.setString(2, stat.getUUID().toString());
@@ -68,10 +68,8 @@ public class MySQLPlayerStats {
     public void update(UUID uuid, String key, int value) throws SQLException {
         if(connection.getConnection() != null) {
             connection.openConnection();
-            PreparedStatement statement = connection.getConnection().prepareStatement("UPDATE tct_stats SET ? = ? WHERE uuid = ?");
-            statement.setString(1, key);
-            statement.setInt(2, value);
-            statement.setString(3, uuid.toString());
+            PreparedStatement statement = connection.getConnection().prepareStatement("UPDATE tct_stats SET `" + key + "`=" + value + " WHERE uuid=?");
+            statement.setString(1, uuid.toString());
             statement.execute();
             statement.close();
             connection.getConnection().close();
@@ -96,7 +94,7 @@ public class MySQLPlayerStats {
 
     public PlayerStat getStat(UUID uuid) {
         if(playerStatMap.containsKey(uuid)) return playerStatMap.get(uuid);
-        return null;
+        return new TctPlayerStat(uuid);
     }
 
 }

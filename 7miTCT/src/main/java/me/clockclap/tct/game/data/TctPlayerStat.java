@@ -261,7 +261,7 @@ public class TctPlayerStat implements PlayerStat {
                 ResultSet set = statement.executeQuery();
                 int result = 0;
                 while(set.next()) {
-                    result = set.getInt("kill");
+                    result = set.getInt("kills");
                 }
                 set.close();
                 statement.close();
@@ -466,6 +466,7 @@ public class TctPlayerStat implements PlayerStat {
             NanamiTct.playerStats.update(uuid, "vil", count);
         } catch (SQLException ex) {
             //MySQLStatus.setSqlEnabled(false);
+            ex.printStackTrace();
         }
     }
 
@@ -476,6 +477,7 @@ public class TctPlayerStat implements PlayerStat {
             NanamiTct.playerStats.update(uuid, "hea", count);
         } catch (SQLException ex) {
             //MySQLStatus.setSqlEnabled(false);
+            ex.printStackTrace();
         }
     }
 
@@ -486,6 +488,7 @@ public class TctPlayerStat implements PlayerStat {
             NanamiTct.playerStats.update(uuid, "det", count);
         } catch (SQLException ex) {
             //MySQLStatus.setSqlEnabled(false);
+            ex.printStackTrace();
         }
     }
 
@@ -496,6 +499,7 @@ public class TctPlayerStat implements PlayerStat {
             NanamiTct.playerStats.update(uuid, "wol", count);
         } catch (SQLException ex) {
             //MySQLStatus.setSqlEnabled(false);
+            ex.printStackTrace();
         }
     }
 
@@ -506,6 +510,7 @@ public class TctPlayerStat implements PlayerStat {
             NanamiTct.playerStats.update(uuid, "fan", count);
         } catch (SQLException ex) {
             //MySQLStatus.setSqlEnabled(false);
+            ex.printStackTrace();
         }
     }
 
@@ -516,6 +521,7 @@ public class TctPlayerStat implements PlayerStat {
             NanamiTct.playerStats.update(uuid, "fox", count);
         } catch (SQLException ex) {
             //MySQLStatus.setSqlEnabled(false);
+            ex.printStackTrace();
         }
     }
 
@@ -526,6 +532,7 @@ public class TctPlayerStat implements PlayerStat {
             NanamiTct.playerStats.update(uuid, "imm", count);
         } catch (SQLException ex) {
             //MySQLStatus.setSqlEnabled(false);
+            ex.printStackTrace();
         }
     }
 
@@ -541,6 +548,7 @@ public class TctPlayerStat implements PlayerStat {
             NanamiTct.playerStats.update(uuid, "death", count);
         } catch (SQLException ex) {
             //MySQLStatus.setSqlEnabled(false);
+            ex.printStackTrace();
         }
     }
 
@@ -548,9 +556,10 @@ public class TctPlayerStat implements PlayerStat {
     public void setCountKill(int count) {
         this.kill = count;
         try {
-            NanamiTct.playerStats.update(uuid, "kill", count);
+            NanamiTct.playerStats.update(uuid, "kills", count);
         } catch (SQLException ex) {
             //MySQLStatus.setSqlEnabled(false);
+            ex.printStackTrace();
         }
     }
 
@@ -561,6 +570,7 @@ public class TctPlayerStat implements PlayerStat {
             NanamiTct.playerStats.update(uuid, "found_deadbody", count);
         } catch (SQLException ex) {
             //MySQLStatus.setSqlEnabled(false);
+            ex.printStackTrace();
         }
     }
 
@@ -571,6 +581,7 @@ public class TctPlayerStat implements PlayerStat {
             NanamiTct.playerStats.update(uuid, "use_item", count);
         } catch (SQLException ex) {
             //MySQLStatus.setSqlEnabled(false);
+            ex.printStackTrace();
         }
     }
 
@@ -581,6 +592,7 @@ public class TctPlayerStat implements PlayerStat {
             NanamiTct.playerStats.update(uuid, "victory", count);
         } catch (SQLException ex) {
             //MySQLStatus.setSqlEnabled(false);
+            ex.printStackTrace();
         }
     }
 
@@ -591,6 +603,7 @@ public class TctPlayerStat implements PlayerStat {
             NanamiTct.playerStats.update(uuid, "defeat", count);
         } catch (SQLException ex) {
             //MySQLStatus.setSqlEnabled(false);
+            ex.printStackTrace();
         }
     }
 
@@ -601,6 +614,7 @@ public class TctPlayerStat implements PlayerStat {
             NanamiTct.playerStats.update(uuid, "use_heal_station", count);
         } catch (SQLException ex) {
             //MySQLStatus.setSqlEnabled(false);
+            ex.printStackTrace();
         }
     }
 
@@ -611,6 +625,7 @@ public class TctPlayerStat implements PlayerStat {
             NanamiTct.playerStats.update(uuid, "place_heal_station", count);
         } catch (SQLException ex) {
             //MySQLStatus.setSqlEnabled(false);
+            ex.printStackTrace();
         }
     }
 
@@ -621,6 +636,7 @@ public class TctPlayerStat implements PlayerStat {
             NanamiTct.playerStats.update(uuid, "bought_item", count);
         } catch (SQLException ex) {
             //MySQLStatus.setSqlEnabled(false);
+            ex.printStackTrace();
         }
     }
 
@@ -631,6 +647,7 @@ public class TctPlayerStat implements PlayerStat {
             NanamiTct.playerStats.update(uuid, "play_count", count);
         } catch (SQLException ex) {
             //MySQLStatus.setSqlEnabled(false);
+            ex.printStackTrace();
         }
     }
 }

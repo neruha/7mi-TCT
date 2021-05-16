@@ -123,11 +123,7 @@ public class InventoryEvent implements Listener {
 
     @EventHandler
     public void onDropItem(PlayerDropItemEvent e) {
-        Player p = e.getPlayer();
-        PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId());
-        if(data.isSpectator()) {
-            e.setCancelled(true);
-        }
+        e.setCancelled(true);
     }
 
     @EventHandler

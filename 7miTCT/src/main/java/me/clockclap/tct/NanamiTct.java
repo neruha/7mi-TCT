@@ -14,7 +14,9 @@ import me.clockclap.tct.event.*;
 import me.clockclap.tct.game.Game;
 import me.clockclap.tct.game.GameReference;
 import me.clockclap.tct.game.data.PlayerData;
+import me.clockclap.tct.game.data.PlayerStat;
 import me.clockclap.tct.game.data.TctPlayerData;
+import me.clockclap.tct.game.data.TctPlayerStat;
 import me.clockclap.tct.game.death.Killer;
 import me.clockclap.tct.game.role.CustomRoles;
 import me.clockclap.tct.game.role.GameRoles;
@@ -78,6 +80,7 @@ public final class NanamiTct extends JavaPlugin {
             MySQLStatus.setSqlEnabled(true);
         } catch (SQLException ex) {
             MySQLStatus.setSqlEnabled(false);
+            ex.printStackTrace();
         }
 
         if(MySQLStatus.isSqlEnabled()) {
@@ -86,6 +89,7 @@ public final class NanamiTct extends JavaPlugin {
                 playerStats.createTable();
             } catch (SQLException throwables) {
                 MySQLStatus.setSqlEnabled(false);
+                throwables.printStackTrace();
             }
         }
 
@@ -95,7 +99,7 @@ public final class NanamiTct extends JavaPlugin {
         // Register Events
         pm.registerEvents(new PlayerConnectionEvent(this), this);
         pm.registerEvents(new ChatEvent(this), this);
-        pm.registerEvents(new CancelHunger(this), this);
+        //pm.registerEvents(new CancelHunger(this), this);
         pm.registerEvents(new ItemEvent(this), this);
         pm.registerEvents(new BlockEvent(this), this);
         pm.registerEvents(new DamageEvent(this), this);
@@ -149,6 +153,15 @@ public final class NanamiTct extends JavaPlugin {
                     getGame().getReference().PLAYERDATA.put(p.getUniqueId(), data);
                     p.setFoodLevel(20);
                     p.setPlayerListName(ChatColor.GREEN + name);
+                    if(MySQLStatus.isSqlEnabled() && NanamiTct.sqlConnection != null && NanamiTct.playerStats != null && NanamiTct.sqlConnection.getConnection() != null) {
+                        PlayerStat stat = new TctPlayerStat(p.getUniqueId());
+                        try {
+                            NanamiTct.playerStats.insert(stat);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                            MySQLStatus.setSqlEnabled(false);
+                        }
+                    }
                     bar.addPlayer(p);
                     Utilities utilities = NanamiTct.utilities;
                     utilities.modifyName(p, ChatColor.GREEN + name);

@@ -188,7 +188,7 @@ public class ItemEvent implements Listener {
                                     }
                                     Location loc = new Location(e.getPlayer().getLocation().getWorld(), e.getPlayer().getLocation().getX(), e.getPlayer().getLocation().getY() + 1, e.getPlayer().getLocation().getZ());
                                     TNTPrimed tnt = (TNTPrimed) loc.getWorld().spawnEntity(loc, EntityType.PRIMED_TNT);
-                                    tnt.setYield(6.0F);
+                                    tnt.setYield(10F);
                                     tnt.setFuseTicks(0);
                                 }
                             }.runTaskLater(plugin, 60);
@@ -235,7 +235,7 @@ public class ItemEvent implements Listener {
                     PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(e.getPlayer().getUniqueId());
                     if (!data.isSpectator() && !data.isInvisible()) {
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_NAME + ": " + NanamiTct.utilities.resetColor(q.getName()));
-                        p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_HP + ": " + ChatColor.RED + q.getHealth());
+                        if(data.getRole() == GameRoles.HEALER) p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_HP + ": " + ChatColor.RED + q.getHealth());
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_TOGETHER + ": " + ChatColor.GREEN + data.getTogether()
                                 + ChatColor.AQUA + ", " + Reference.TCT_VILLAGER + ": " + ChatColor.GREEN + data.getVillager()
                                 + ChatColor.AQUA + ", " + Reference.TCT_SUS + ": " + ChatColor.GREEN + data.getSuspicious()
@@ -280,7 +280,7 @@ public class ItemEvent implements Listener {
             Location loc = projectile.getLocation();
             if(loc != null) {
                 TNTPrimed tnt = loc.getWorld().spawn(loc, TNTPrimed.class);
-                tnt.setYield(6.0F);
+                tnt.setYield(10F);
                 tnt.setFuseTicks(0);
 //                loc.getWorld().createExplosion(loc.getX(), loc.getY(), loc.getZ(), 5.4F, false, false);
                 plugin.getGame().getReference().PROJECTILEDATA.get(projectile).cancelTimer();

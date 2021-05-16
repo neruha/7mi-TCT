@@ -76,28 +76,28 @@ public class TctItemClock implements CustomSpecialItem {
             deadBody.setFake(true);
             NanamiTct.plugin.getGame().getReference().DEADBODIES.add(deadBody);
             deadBody.process();
-            int tick = 2000;
+            int tick = 200;
             FileConfiguration config = NanamiTct.plugin.getTctConfig().getConfig();
             try {
-                if (config.getString("effect.wolf-invisible.duration").endsWith("t")) {
-                    String str = config.getString("effect.wolf-invisible.duration");
+                if (config.getString("effect.wolf-invisible.duration", "200t").endsWith("t")) {
+                    String str = config.getString("effect.wolf-invisible.duration", "200t");
                     str = str.substring(0, str.length() - 1);
                     try {
                         tick = Integer.parseInt(str);
                     } catch (NumberFormatException e) {
-                        tick = 2000;
+                        tick = 200;
                     }
-                } else if (config.getString("effect.wolf-invisible.duration").endsWith("s")) {
-                    String str = config.getString("effect.wolf-invisible.duration");
+                } else if (config.getString("effect.wolf-invisible.duration", "10s").endsWith("s")) {
+                    String str = config.getString("effect.wolf-invisible.duration", "10s");
                     str = str.substring(0, str.length() - 1);
                     try {
                         tick = Integer.parseInt(str) * 20;
                     } catch (NumberFormatException e) {
-                        tick = 2000;
+                        tick = 200;
                     }
                 }
             } catch(NullPointerException e) {
-                tick = 2000;
+                tick = 200;
             }
             player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, tick, 1));
             data.setInvisible(true);

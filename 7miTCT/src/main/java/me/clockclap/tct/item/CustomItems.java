@@ -39,7 +39,7 @@ public final class CustomItems {
     public static final CustomItem MILK = new TctItemMilk();
     public static final CustomItem HEAL_POTION = new TctItemPotionSplashHeal();
     public static final CustomItem CRACKER = new TctItemCracker();
-    public static final CustomItem COMPASS = new TctItemCompass();
+    public static final CustomSpecialItem COMPASS = new TctItemCompass();
     public static final CustomSpecialItem CLOCK = new TctItemClock();
     public static final CustomSpecialItem SEED = new TctItemSeed();
 

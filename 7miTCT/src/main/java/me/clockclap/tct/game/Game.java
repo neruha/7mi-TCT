@@ -585,10 +585,9 @@ public class Game {
                 villagers.add(NanamiTct.utilities.resetColor(p.getName()));
                 if(NanamiTct.playerStats != null) {
                     PlayerStat stat = NanamiTct.playerStats.getStat(p.getUniqueId());
-                    if (stat != null) {
-                        stat.setCountVillager(stat.getCountVillager() + 1);
-                        stat.setTotalPlayingCount(stat.getTotalPlayingCount() + 1);
-                    }
+                    plugin.getLogger().info("vil");
+                    stat.setCountVillager(stat.getCountVillager() + 1);
+                    stat.setTotalPlayingCount(stat.getTotalPlayingCount() + 1);
                 }
             }
             if(data.getRole() == GameRoles.HEALER) {
@@ -873,7 +872,7 @@ public class Game {
                         data.getWatcher().setCountFox(getPlugin().getTctConfig().getConfig().getInt("fox-reveal-time-default", 70));
                     }
                 }
-                if(NanamiTct.playerStats != null && MySQLStatus.isSqlEnabled()) {
+                if(NanamiTct.playerStats != null && MySQLStatus.isSqlEnabled() && winners != GameTeams.NONE) {
                     PlayerStat stat = NanamiTct.playerStats.getStat(p.getUniqueId());
                     if(stat != null) {
                         if (data.getRole().getTeam() == winners) {
@@ -983,6 +982,7 @@ public class Game {
             p.setHealth(20.0D);
             data.setRole(GameRoles.SPEC);
             data.setSpectator(true);
+            data.setInvisible(false);
             data.setCoin(0);
             data.setSponge(false);
             RoleCount count = new RoleCount(this);

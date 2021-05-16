@@ -60,10 +60,10 @@ public class TctItemCompass implements CustomSpecialItem {
             Player p = NanamiTct.utilities.getNearestPlayer(player);
             if(p == null) {
                 player.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_NO_NEAREST_PLAYER);
-                return;
+            } else {
+                double far = player.getLocation().distance(p.getLocation());
+                player.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_NEAREST_PLAYER.replaceAll("%PLAYER%", NanamiTct.utilities.resetColor(p.getName())).replaceAll("%FAR%", String.valueOf(far)));
             }
-            double far = player.getLocation().distance(p.getLocation());
-            player.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_NEAREST_PLAYER.replaceAll("%PLAYER%", NanamiTct.utilities.resetColor(p.getName())).replaceAll("%FAR%", String.valueOf(far)));
             if(MySQLStatus.isSqlEnabled() && NanamiTct.playerStats != null) {
                 PlayerStat stat = NanamiTct.playerStats.getStat(player.getUniqueId());
                 if(stat != null) stat.setCountUsedItem(stat.getCountUsedItem() + 1);

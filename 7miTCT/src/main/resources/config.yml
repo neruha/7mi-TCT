@@ -369,8 +369,8 @@ effect:
     level: 3
   #探偵が置いた回復ブロックをクリックしたときに付与される再生エフェクト
   detective-regeneration:
-    #デフォルト: 2s
-    duration: 2s
+    #デフォルト: 5s
+    duration: 5s
     #デフォルト: 3
     level: 3
   #人狼の時計をクリックしたときに付与される透明化エフェクト

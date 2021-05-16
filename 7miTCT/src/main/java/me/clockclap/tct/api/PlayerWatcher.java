@@ -241,6 +241,11 @@ public class PlayerWatcher {
                         player.setLevel(0);
                     }
                 }
+                if(getPlayerData().isSpectator() || (getPlayerData().isInvisible() && getGame().getElapsedTime() > 1)) {
+                    player.setFoodLevel(20);
+                } else {
+                    player.setFoodLevel(1);
+                }
                 Player p = NanamiTct.utilities.getNearestPlayer(player);
                 if(p != null) player.setCompassTarget(p.getLocation());
                 if(getPlayer().getGameMode() == GameMode.SURVIVAL || getPlayer().getGameMode() == GameMode.ADVENTURE) {

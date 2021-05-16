@@ -19,14 +19,15 @@ public class CancelHunger implements Listener {
     @EventHandler
     public void onHunger(FoodLevelChangeEvent e) {
         if(e.getEntity() instanceof Player) {
+            e.setCancelled(true);
             Player p = (Player) e.getEntity();
             if(p != null) {
                 PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId());
                 if(data != null) {
-                    if (data.isSpectator() || (data.isInvisible() && plugin.getGame().getElapsedTime() > 1)) {
-                        e.setFoodLevel(20);
+                    if (data.isSpectator() || data.isInvisible()) {
+                        p.setFoodLevel(20);
                     } else {
-                        e.setFoodLevel(1);
+                        p.setFoodLevel(1);
                     }
                 }
             }

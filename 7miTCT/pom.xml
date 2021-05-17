@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.ClockClap</groupId>
-    <artifactId>7mi-TCT</artifactId>
-    <version>4.0.1</version>
+    <artifactId>nanami-tct</artifactId>
+    <version>4.0.5</version>
     <packaging>jar</packaging>
 
-    <name>7miTctApi</name>
+    <name>7miTct</name>
 
     <properties>
         <java.version>1.8</java.version>

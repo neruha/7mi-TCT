@@ -2,10 +2,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>nanami-tct-parent</artifactId>
+        <groupId>me.clockclap</groupId>
+        <version>dev-SNAPSHOT</version>
+    </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.ClockClap</groupId>
-    <artifactId>nanami-tct</artifactId>
+    <artifactId>7mi-TCT</artifactId>
     <version>4.0.5</version>
     <packaging>jar</packaging>
 

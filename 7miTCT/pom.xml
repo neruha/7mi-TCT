@@ -11,7 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>7mi-TCT</artifactId>
-    <version>4.0.7</version>
+    <version>4.0.8</version>
     <packaging>jar</packaging>
 
     <name>7miTct</name>
@@ -176,9 +176,15 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.9-RC1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>me.clockclap</groupId>
             <artifactId>7mi-TCT-API</artifactId>
-            <version>2.1-MC1.12.2</version>
+            <version>2.2-MC1.12.2</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

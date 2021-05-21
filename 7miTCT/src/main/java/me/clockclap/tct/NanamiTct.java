@@ -31,10 +31,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.reflections.Reflections;
-import org.reflections.scanners.MethodAnnotationsScanner;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -242,18 +238,6 @@ public final class NanamiTct extends JavaPlugin {
             }
         }
         isLoaded = true;
-        Reflections reflections = new Reflections(new ConfigurationBuilder()
-                .setUrls(ClasspathHelper.forJavaClassPath()).setScanners(
-                        new MethodAnnotationsScanner()));
-        Set<Method> methods = reflections.getMethodsAnnotatedWith(TctMain.class);
-
-        for (Method m : methods) {
-            try {
-                m.invoke(null); // for simplicity, invoking static methods without parameters
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     @Override

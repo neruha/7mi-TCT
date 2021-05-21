@@ -1,12 +1,13 @@
 package me.clockclap.tct.event;
 
 import me.clockclap.tct.NanamiTct;
+import me.clockclap.tct.NanamiTctApi;
 import me.clockclap.tct.api.CooldownTypes;
-import me.clockclap.tct.api.PlayerWatcher;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.api.sql.MySQLStatus;
 import me.clockclap.tct.game.GameState;
 import me.clockclap.tct.game.data.CustomBlockData;
+import me.clockclap.tct.game.data.TctCustomBlockData;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.data.PlayerStat;
 import me.clockclap.tct.game.death.DeadBody;
@@ -24,11 +25,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.MaterialData;
-import org.bukkit.scheduler.BukkitRunnable;
-
-import java.sql.Ref;
-import java.util.ArrayList;
 
 public class BlockEvent implements Listener {
 
@@ -47,7 +43,7 @@ public class BlockEvent implements Listener {
                     for (CustomBlock block : CustomItems.generalBlocks) {
                         if (item.getItemMeta().getDisplayName().equalsIgnoreCase(block.getItemStack().getItemMeta().getDisplayName())) {
                             if (block.isPlaceable()) {
-                                CustomBlockData data = new CustomBlockData(plugin.getGame(), block, e.getBlockPlaced());
+                                TctCustomBlockData data = new TctCustomBlockData(plugin.getGame(), block, e.getBlockPlaced());
                                 CustomBlockInfo.blockDataList.add(data);
                                 if(block == CustomItems.HEAL_STATION) {
                                     if(NanamiTct.playerStats != null) {
@@ -146,7 +142,8 @@ public class BlockEvent implements Listener {
                                             block.breakNaturally(new ItemStack(Material.AIR));
                                             final Location[] l = {block.getLocation()};
                                             Bukkit.getScheduler().runTaskLater(NanamiTct.plugin, () -> {
-                                                l[0].getBlock().setType(CustomItems.HEAL_STATION.getMaterial());
+                                                if(NanamiTctApi.game.getReference().getGameState() == GameState.GAMING)
+                                                    l[0].getBlock().setType(CustomItems.HEAL_STATION.getMaterial());
                                             }, t * 20L);
                                         }
                                     }

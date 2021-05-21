@@ -6,22 +6,14 @@ import me.clockclap.tct.api.sql.MySQLStatus;
 import me.clockclap.tct.game.GameState;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.data.PlayerStat;
-import me.clockclap.tct.game.data.TctEntityData;
-import me.clockclap.tct.game.death.DeadBody;
 import me.clockclap.tct.game.death.Killer;
 import me.clockclap.tct.game.death.TctDeathCause;
-import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.game.role.GameTeams;
 import me.clockclap.tct.item.CustomItems;
-import net.minecraft.server.v1_12_R1.Explosion;
-import org.apache.logging.log4j.util.ReflectionUtil;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.craftbukkit.v1_12_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.*;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -88,6 +80,7 @@ public class DamageEvent implements Listener {
                             continue;
                         }
                         if (item.hasItemMeta()) {
+                            if(item.getType() == Material.ARROW) return;
                             if (item.getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.SPONGE.getItemStack().getItemMeta().getDisplayName())) {
                                 int amt = item.getAmount() - 1;
                                 if(amt <= 0) {

@@ -1,10 +1,8 @@
 package me.clockclap.tct.event;
 
-import com.mysql.cj.x.protobuf.MysqlxCrud;
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.api.event.ArmorEquipEvent;
-import me.clockclap.tct.api.sql.MySQLPlayerStats;
 import me.clockclap.tct.api.sql.MySQLStatus;
 import me.clockclap.tct.game.GameState;
 import me.clockclap.tct.game.data.PlayerData;

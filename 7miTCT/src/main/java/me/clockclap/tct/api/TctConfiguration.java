@@ -6,7 +6,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
 
-public class TctConfiguration {
+public class TctConfiguration implements ITctConfiguration {
 
     private NanamiTct plugin;
     private FileConfiguration config;

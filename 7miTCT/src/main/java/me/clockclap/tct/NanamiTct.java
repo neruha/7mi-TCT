@@ -1,10 +1,7 @@
 package me.clockclap.tct;
 
 import com.google.common.base.Charsets;
-import me.clockclap.tct.api.PlayerWatcher;
-import me.clockclap.tct.api.Reference;
-import me.clockclap.tct.api.TctConfiguration;
-import me.clockclap.tct.api.Utilities;
+import me.clockclap.tct.api.*;
 import me.clockclap.tct.api.event.ArmorListener;
 import me.clockclap.tct.api.sql.MySQLConnection;
 import me.clockclap.tct.api.sql.MySQLPlayerStats;
@@ -12,7 +9,7 @@ import me.clockclap.tct.api.sql.MySQLStatus;
 import me.clockclap.tct.command.*;
 import me.clockclap.tct.event.*;
 import me.clockclap.tct.game.Game;
-import me.clockclap.tct.game.GameReference;
+import me.clockclap.tct.game.TctGame;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.data.PlayerStat;
 import me.clockclap.tct.game.data.TctPlayerData;
@@ -20,7 +17,7 @@ import me.clockclap.tct.game.data.TctPlayerStat;
 import me.clockclap.tct.game.death.Killer;
 import me.clockclap.tct.game.role.CustomRoles;
 import me.clockclap.tct.game.role.GameRoles;
-import me.clockclap.tct.game.role.CustomTeams;
+import me.clockclap.tct.item.CustomTeams;
 import me.clockclap.tct.inventory.CustomInventory;
 import me.clockclap.tct.item.CustomItems;
 import org.bukkit.Bukkit;
@@ -34,7 +31,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,30 +40,36 @@ import java.sql.SQLException;
 public final class NanamiTct extends JavaPlugin {
 
     public static NanamiTct plugin;
-    public static Utilities utilities;
+    public static TctUtilities utilities;
     public static CustomTeams teamRegisterer;
     public static CustomRoles roleRegisterer;
     public static MySQLConnection sqlConnection;
     public static MySQLPlayerStats playerStats;
 
-    private Game game;
-    private TctConfiguration configuration;
+    private TctGame game;
+    private ITctConfiguration configuration;
     private CustomInventory customInventory;
 
     @Override
     public void onEnable() {
         // Plugin startup logic
         plugin = this;
-        utilities = new Utilities(this);
+        NanamiTctApi.plugin = plugin;
+        utilities = new TctUtilities(this);
+        NanamiTctApi.utilities = utilities;
         teamRegisterer = new CustomTeams();
+        NanamiTctApi.teamRegistry = teamRegisterer;
         roleRegisterer = new CustomRoles();
+        NanamiTctApi.roleRegistry = roleRegisterer;
         game = new Game(this);
+        NanamiTctApi.game = game;
         configuration = new TctConfiguration(this);
         try {
             configuration.init();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        NanamiTctApi.config = configuration;
         sqlConnection = new MySQLConnection(configuration.getConfig().getString("mysql.hostname", "localhost"),
                 configuration.getConfig().getInt("mysql.port", 3306),
                 configuration.getConfig().getString("mysql.database", ""),
@@ -82,6 +84,7 @@ public final class NanamiTct extends JavaPlugin {
             MySQLStatus.setSqlEnabled(false);
             ex.printStackTrace();
         }
+        NanamiTctApi.connection = sqlConnection;
 
         if(MySQLStatus.isSqlEnabled()) {
             playerStats = new MySQLPlayerStats(sqlConnection, game);
@@ -92,6 +95,7 @@ public final class NanamiTct extends JavaPlugin {
                 throwables.printStackTrace();
             }
         }
+        NanamiTctApi.playerStats = playerStats;
 
         getLogger().info("Starting up...");
         PluginManager pm = Bukkit.getServer().getPluginManager();
@@ -163,7 +167,7 @@ public final class NanamiTct extends JavaPlugin {
                         }
                     }
                     bar.addPlayer(p);
-                    Utilities utilities = NanamiTct.utilities;
+                    TctUtilities utilities = NanamiTct.utilities;
                     utilities.modifyName(p, ChatColor.GREEN + name);
                     for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
                         if (pl != null) {
@@ -183,11 +187,11 @@ public final class NanamiTct extends JavaPlugin {
 
     }
 
-    public Game getGame() {
+    public TctGame getGame() {
         return this.game;
     }
 
-    public TctConfiguration getTctConfig() {
+    public ITctConfiguration getTctConfig() {
         return this.configuration;
     }
 

@@ -3,7 +3,7 @@ package me.clockclap.tct.event;
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.PlayerWatcher;
 import me.clockclap.tct.api.Reference;
-import me.clockclap.tct.api.Utilities;
+import me.clockclap.tct.api.TctUtilities;
 import me.clockclap.tct.api.sql.MySQLStatus;
 import me.clockclap.tct.game.GameState;
 import me.clockclap.tct.game.data.PlayerData;
@@ -14,14 +14,9 @@ import me.clockclap.tct.game.death.Killer;
 import me.clockclap.tct.game.death.TctDeathCause;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.game.role.GameTeams;
-import net.minecraft.server.v1_12_R1.CommandSay;
-import net.minecraft.server.v1_12_R1.ICommandListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BossBar;
-import org.bukkit.boss.BarStyle;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -67,7 +62,7 @@ public class PlayerConnectionEvent implements Listener {
         boolean isAdmin = data.getProfile().isAdmin();
         if(plugin.getGame().getReference().getGameState() == GameState.GAMING) {
             gameState = Reference.TCT_CHAT_STATE_PLAYING;
-            Utilities utilities = NanamiTct.utilities;
+            TctUtilities utilities = NanamiTct.utilities;
             for(Player pl : Bukkit.getOnlinePlayers()) {
                 NanamiTct.utilities.hidePlayer(p, pl);
                 NanamiTct.utilities.showPlayer(p, pl);
@@ -79,7 +74,7 @@ public class PlayerConnectionEvent implements Listener {
             message = Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_GAME_ALREADY_STARTED;
         } else if(plugin.getGame().getReference().getGameState() == GameState.STARTING) {
             gameState = Reference.TCT_CHAT_STATE_PREGAMING;
-            Utilities utilities = NanamiTct.utilities;
+            TctUtilities utilities = NanamiTct.utilities;
             utilities.modifyName(p, ChatColor.GREEN + utilities.resetColor(p.getName()));
             for(Player pl : Bukkit.getOnlinePlayers()) {
                 utilities.hidePlayer(p, pl);
@@ -92,7 +87,7 @@ public class PlayerConnectionEvent implements Listener {
             message = Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_GAME_READY_TIME;
         } else {
             gameState = Reference.TCT_CHAT_STATE_WAITING;
-            Utilities utilities = NanamiTct.utilities;
+            TctUtilities utilities = NanamiTct.utilities;
             utilities.modifyName(p, ChatColor.GREEN + utilities.resetColor(p.getName()));
             for(Player pl : Bukkit.getOnlinePlayers()) {
                 utilities.hidePlayer(p, pl);

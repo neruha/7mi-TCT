@@ -6,12 +6,12 @@
         <artifactId>nanami-tct-parent</artifactId>
         <groupId>me.clockclap</groupId>
         <version>dev-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.github.ClockClap</groupId>
     <artifactId>7mi-TCT</artifactId>
-    <version>4.0.5</version>
+    <version>4.0.6</version>
     <packaging>jar</packaging>
 
     <name>7miTct</name>
@@ -173,6 +173,13 @@
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>16.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>me.clockclap</groupId>
+            <artifactId>7mi-TCT-API</artifactId>
+            <version>1.0-MC1.12.2</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

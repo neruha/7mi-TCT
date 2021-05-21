@@ -2,8 +2,7 @@ package me.clockclap.tct.inventory;
 
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
-import me.clockclap.tct.api.TctConfiguration;
-import me.clockclap.tct.game.Game;
+import me.clockclap.tct.game.TctGame;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomItem;
 import me.clockclap.tct.item.CustomItems;
@@ -13,12 +12,11 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class CustomInventory {
 
-    private Game game;
+    private TctGame game;
     private Inventory generalShop;
     private Inventory detectiveShop;
     private Inventory wolfShop;
@@ -31,7 +29,7 @@ public class CustomInventory {
      * Needs to register more quickly than registering items.
      * @param game
      */
-    public CustomInventory(Game game) {
+    public CustomInventory(TctGame game) {
         this.game = game;
         this.generalShop = Bukkit.createInventory(null, 27, "null");
         this.detectiveShop = Bukkit.createInventory(null, 27, "null");

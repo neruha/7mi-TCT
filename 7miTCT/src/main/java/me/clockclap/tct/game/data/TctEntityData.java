@@ -2,7 +2,6 @@ package me.clockclap.tct.game.data;
 
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.game.role.GameRole;
-import me.clockclap.tct.game.role.GameRoles;
 import org.bukkit.entity.Entity;
 
 import java.util.UUID;

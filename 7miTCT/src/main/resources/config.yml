@@ -320,8 +320,8 @@ heal-station-cooldown: 20 #回復ステーションのクールタイム (秒)
 #デフォルト: 5秒
 landmine-cooldown: 5 #地雷のクールダウン (秒)
 
-#デフォルト: 5ブロック
-landmine-range: 5 #地雷の範囲 (ブロック)
+#デフォルト: 3ブロック
+landmine-range: 3 #地雷の範囲 (ブロック)
 
 #デフォルト: 70秒
 fox-reveal-time-default: 70 #妖狐の正体がばれる時間 (秒)

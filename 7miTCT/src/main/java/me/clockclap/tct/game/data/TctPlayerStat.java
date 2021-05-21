@@ -3,7 +3,6 @@ package me.clockclap.tct.game.data;
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.sql.MySQLStatus;
 import me.clockclap.tct.game.role.GameRole;
-import me.clockclap.tct.item.CustomItem;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

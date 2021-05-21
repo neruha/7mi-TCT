@@ -11,10 +11,14 @@ import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.data.PlayerStat;
 import me.clockclap.tct.game.death.DeadBody;
 import me.clockclap.tct.game.death.Killer;
-import me.clockclap.tct.game.role.*;
 import me.clockclap.tct.item.CustomItems;
+import me.clockclap.tct.game.role.RoleCount;
 import me.clockclap.tct.item.TctLog;
-import net.minecraft.server.v1_12_R1.CommandKill;
+import me.clockclap.tct.game.role.GameRole;
+import me.clockclap.tct.game.role.GameRoles;
+import me.clockclap.tct.game.role.GameTeam;
+import me.clockclap.tct.game.role.GameTeams;
+import me.clockclap.tct.item.TctTeam;
 import org.bukkit.*;
 import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -24,7 +28,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 
-public class Game {
+public class Game implements TctGame {
 
     private NanamiTct plugin;
     private GameReference reference;
@@ -53,7 +57,7 @@ public class Game {
 
     public Game(NanamiTct plugin) {
         this.plugin = plugin;
-        this.reference = new GameReference(plugin);
+        this.reference = new GameReference();
         this.remainingSeconds = 0;
         this.realRemainingSeconds = 0;
         this.remainingPlayers = new ArrayList<>();
@@ -1131,5 +1135,33 @@ public class Game {
     }
 
     public void setBar(BossBar bar) { this.bar = bar; }
+
+    public List<String> getVillagersList() {
+        return villagers;
+    }
+
+    public List<String> getHealersList() {
+        return healers;
+    }
+
+    public List<String> getDetectivesList() {
+        return detectives;
+    }
+
+    public List<String> getWolvesList() {
+        return wolves;
+    }
+
+    public List<String> getFanaticsList() {
+        return fanatics;
+    }
+
+    public List<String> getFoxesList() {
+        return foxes;
+    }
+
+    public List<String> getImmoralList() {
+        return immoral;
+    }
 
 }

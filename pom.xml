@@ -9,24 +9,15 @@
     <version>dev-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>7miTCT-Parent</name>
-    <description>Parent project for all 7miTCT modules.</description>
-    <url>https://github.com/nanami-network/7mi-TCT</url>
+    <name>nanami-tct-parent</name>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <modules>
         <module>7miTCT</module>
+        <module>7mi-TCT-API</module>
     </modules>
-
-    <profiles>
-        <profile>
-            <id>Impl</id>
-            <modules>
-                <module>7miTCT</module>
-            </modules>
-        </profile>
-    </profiles>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 </project>

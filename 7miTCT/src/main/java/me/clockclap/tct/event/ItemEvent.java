@@ -3,10 +3,7 @@ package me.clockclap.tct.event;
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.api.sql.MySQLStatus;
-import me.clockclap.tct.game.data.CustomBlockData;
-import me.clockclap.tct.game.data.CustomProjectileData;
-import me.clockclap.tct.game.data.PlayerData;
-import me.clockclap.tct.game.data.PlayerStat;
+import me.clockclap.tct.game.data.*;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomBlockInfo;
@@ -17,16 +14,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -35,7 +28,6 @@ import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ItemEvent implements Listener {
@@ -264,7 +256,7 @@ public class ItemEvent implements Listener {
             }
         }
         if(projectile instanceof Snowball) {
-            plugin.getGame().getReference().PROJECTILEDATA.put(projectile, new CustomProjectileData(plugin.getGame(), projectile, role));
+            plugin.getGame().getReference().PROJECTILEDATA.put(projectile, new TctCustomProjectileData(plugin.getGame(), projectile, role));
             plugin.getGame().getReference().PROJECTILEDATA.get(projectile).startTimer();
             if(MySQLStatus.isSqlEnabled() && NanamiTct.playerStats != null && source instanceof Player) {
                 PlayerStat stat = NanamiTct.playerStats.getStat(((Player)source).getUniqueId());

@@ -1,28 +1,15 @@
 package me.clockclap.tct.command;
 
-import com.google.common.base.Charsets;
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
-import me.clockclap.tct.game.Game;
 import me.clockclap.tct.game.GameState;
 import me.clockclap.tct.game.data.profile.TctPlayerProfile;
 import me.clockclap.tct.game.role.GameTeams;
-import me.clockclap.tct.item.TctLog;
-import net.minecraft.server.v1_12_R1.CommandGamerule;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 public class CommandStart implements CommandExecutor {
 

@@ -45,6 +45,7 @@ public final class NanamiTct extends JavaPlugin {
     public static CustomRoles roleRegisterer;
     public static MySQLConnection sqlConnection;
     public static MySQLPlayerStats playerStats;
+    public static boolean isLoaded = false;
 
     private TctGame game;
     private ITctConfiguration configuration;
@@ -233,6 +234,7 @@ public final class NanamiTct extends JavaPlugin {
                 data.getProfile().modify().setBoolean("admin", isAdmin).save();
             }
         }
+        isLoaded = true;
     }
 
     @Override

@@ -54,4 +54,6 @@ public interface Utilities {
 
     public PlayerStat getPlayerStat(UUID uuid);
 
+    public void runAfterLoad(Runnable runnable);
+
 }

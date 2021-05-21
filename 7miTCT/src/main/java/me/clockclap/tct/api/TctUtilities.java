@@ -317,4 +317,8 @@ public class TctUtilities implements Utilities {
         return NanamiTct.playerStats.getStat(uuid);
     }
 
+    public void runAfterLoad(Runnable runnable) {
+        if(NanamiTct.isLoaded) runnable.run();
+    }
+
 }

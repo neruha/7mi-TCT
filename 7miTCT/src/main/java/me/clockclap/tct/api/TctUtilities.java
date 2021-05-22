@@ -13,7 +13,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandMap;
+import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -32,12 +35,31 @@ public class TctUtilities implements Utilities {
         this.plugin = plugin;
     }
 
-    public void addCommand(String command, CommandExecutor executor) {
+    public void addCommand(String label, CommandExecutor executor) {
+        addCommand(label, plugin.getName(), "", "", new ArrayList<>(), executor);
+    }
+
+    public void addCommand(String label, String fallbackPrefix, CommandExecutor executor) {
+        addCommand(label, fallbackPrefix, "", "", new ArrayList<>(), executor);
+    }
+
+    public void addCommand(String label, String fallbackPrefix, String usageMessage, String description, List<String> aliases, CommandExecutor executor) {
         try {
-            plugin.getCommand(command).setExecutor(executor);
-            plugin.getLogger().info("Succeeded registering command: /" + command);
+            CommandMap map = Bukkit.getServer().getCommandMap();
+            Command command = new Command(label, description, usageMessage, aliases) {
+                @Override
+                public boolean execute(CommandSender sender, String commandLabel, String[] args) {
+                    return executor.onCommand(sender, this, commandLabel, args);
+                }
+            };
+            map.getKnownCommands().put(label, command);
+            for(String alias : command.getAliases()) {
+                map.getKnownCommands().put(alias, command);
+            }
+            Bukkit.getServer().getCommandMap().register(fallbackPrefix, command);
+            plugin.getLogger().info("Succeeded in registering command: /" + label);
         } catch(Exception e) {
-            plugin.getLogger().warning("Failed to register command: /" + command);
+            plugin.getLogger().warning("Failed to register command: /" + label);
             e.printStackTrace();
         }
     }

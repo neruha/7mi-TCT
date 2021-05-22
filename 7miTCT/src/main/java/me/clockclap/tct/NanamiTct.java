@@ -29,9 +29,12 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.SimplePluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.JavaPluginLoader;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,7 +43,12 @@ import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public final class NanamiTct extends JavaPlugin {
 
@@ -55,12 +63,15 @@ public final class NanamiTct extends JavaPlugin {
     private TctGame game;
     private ITctConfiguration configuration;
     private CustomInventory customInventory;
+    private Plugin[] loadedPlugins;
+    private SimplePluginManager pluginManager;
 
     @Override
     public void onEnable() {
         // Plugin startup logic
         plugin = this;
         NanamiTctApi.plugin = plugin;
+        pluginManager = (SimplePluginManager) Bukkit.getServer().getPluginManager();
         utilities = new TctUtilities(this);
         NanamiTctApi.utilities = utilities;
         teamRegisterer = new CustomTeams();
@@ -104,31 +115,30 @@ public final class NanamiTct extends JavaPlugin {
         NanamiTctApi.playerStats = playerStats;
 
         getLogger().info("Starting up...");
-        PluginManager pm = Bukkit.getServer().getPluginManager();
 
         // Register Events
-        pm.registerEvents(new PlayerConnectionEvent(this), this);
-        pm.registerEvents(new ChatEvent(this), this);
-        //pm.registerEvents(new CancelHunger(this), this);
-        pm.registerEvents(new ItemEvent(this), this);
-        pm.registerEvents(new BlockEvent(this), this);
-        pm.registerEvents(new DamageEvent(this), this);
-        pm.registerEvents(new InventoryEvent(this), this);
-        pm.registerEvents(new ArmorListener(Reference.TCT_BLOCKED), this);
+        pluginManager.registerEvents(new PlayerConnectionEvent(this), this);
+        pluginManager.registerEvents(new ChatEvent(this), this);
+        //pluginManager.registerEvents(new CancelHunger(this), this);
+        pluginManager.registerEvents(new ItemEvent(this), this);
+        pluginManager.registerEvents(new BlockEvent(this), this);
+        pluginManager.registerEvents(new DamageEvent(this), this);
+        pluginManager.registerEvents(new InventoryEvent(this), this);
+        pluginManager.registerEvents(new ArmorListener(Reference.TCT_BLOCKED), this);
 
         // Add Commands
-        utilities.addCommand("abouttct", new CommandAboutTCT(this));
-        utilities.addCommand("gmc", new CommandGameModeCreative());
-        utilities.addCommand("gms", new CommandGameModeSurvival());
-        utilities.addCommand("gmsall", new CommandGameModeSurvivalAll());
-        utilities.addCommand("tctreload", new CommandTctReload(this));
-        utilities.addCommand("barrier", new CommandBarrier(this));
-        utilities.addCommand("start", new CommandStart(this));
-        utilities.addCommand("startloc", new CommandStartLoc(this));
-        utilities.addCommand("stopgame", new CommandStopGame(this));
-        utilities.addCommand("item", new CommandItem(this));
-        utilities.addCommand("shop", new CommandShop(this));
-        utilities.addCommand("stat", new CommandStat(this));
+        utilities.addCommand("abouttct", getName(), "", "7mi-TCTの情報を知ることができます。", new ArrayList<>(), new CommandAboutTCT(this));
+        utilities.addCommand("gmc", getName(), "", "自身のゲームモードをクリエイティブモードに変更します。", new ArrayList<>(), new CommandGameModeCreative());
+        utilities.addCommand("gms", getName(), "", "自身のゲームモードをサバイバルモードに変更します。", new ArrayList<>(), new CommandGameModeSurvival());
+        utilities.addCommand("gmsall", getName(), "", "全員のゲームモードをサバイバルモードに変更します。", new ArrayList<>(), new CommandGameModeSurvivalAll());
+        utilities.addCommand("tctreload", getName(), "", "コンフィグをリロードします。", new ArrayList<>(), new CommandTctReload(this));
+        utilities.addCommand("barrier", getName(), "", "バリアブロックを入手します。", Arrays.asList("b", "gb"), new CommandBarrier(this));
+        utilities.addCommand("start", getName(), "", "ゲームを開始します。", new ArrayList<>(), new CommandStart(this));
+        utilities.addCommand("startloc", getName(), "", "ゲームを指定した場所から開始します。", new ArrayList<>(), new CommandStartLoc(this));
+        utilities.addCommand("stopgame", getName(), "", "ゲームを強制終了させます。", new ArrayList<>(), new CommandStopGame(this));
+        utilities.addCommand("item", getName(), "", "アイテムを入手します。", Arrays.asList("i"), new CommandItem(this));
+        utilities.addCommand("shop", getName(), "", "アイテムを購入できます。", Arrays.asList("s"), new CommandShop(this));
+        utilities.addCommand("stat", getName(), "", "統計を確認できます。", new ArrayList<>(), new CommandStat(this));
 
         // Register items
         CustomItems.register();
@@ -191,9 +201,23 @@ public final class NanamiTct extends JavaPlugin {
         customInventory = new CustomInventory(game);
         customInventory.initialize();
 
-        Plugin[] plugins = Bukkit.getPluginManager().loadPlugins(new File("plugins/" + plugin.getName() + "/plugins"));
-        for(Plugin pl : plugins) {
-            Bukkit.getPluginManager().enablePlugin(pl);
+        if(loadedPlugins != null) for(Plugin pl : loadedPlugins) {
+            try {
+                List<Permission> perms = plugin.getDescription().getPermissions();
+
+                for (Permission perm : perms) {
+                    try {
+                        pluginManager.addPermission(perm, false);
+                    } catch (IllegalArgumentException ex) {
+                        getLogger().log(Level.WARNING, "Plugin " + plugin.getDescription().getFullName() + " tried to register permission '" + perm.getName() + "' but it's already registered", ex);
+                    }
+                }
+                pluginManager.dirtyPermissibles();
+
+                Bukkit.getPluginManager().enablePlugin(plugin);
+            } catch (Throwable ex) {
+                Logger.getLogger(NanamiTct.class.getName()).log(Level.SEVERE, ex.getMessage() + " loading " + plugin.getDescription().getFullName() + " (Is it up to date?)", ex);
+            }
         }
     }
 
@@ -244,6 +268,28 @@ public final class NanamiTct extends JavaPlugin {
             }
         }
         isLoaded = true;
+    }
+
+    public void loadPlugins() {
+        Bukkit.getPluginManager().registerInterface(JavaPluginLoader.class);
+
+        File pluginFolder = new File("plugins/" + getName() + "/plugins");
+
+        if (pluginFolder.exists()) {
+            Plugin[] plugins = Bukkit.getPluginManager().loadPlugins(pluginFolder);
+            loadedPlugins = plugins;
+            for (Plugin plugin : plugins) {
+                try {
+                    String message = String.format("Loading %s", plugin.getDescription().getFullName());
+                    plugin.getLogger().info(message);
+                    plugin.onLoad();
+                } catch (Throwable ex) {
+                    Logger.getLogger(NanamiTct.class.getName()).log(Level.SEVERE, ex.getMessage() + " initializing " + plugin.getDescription().getFullName() + " (Is it up to date?)", ex);
+                }
+            }
+        } else {
+            pluginFolder.mkdir();
+        }
     }
 
     @Override

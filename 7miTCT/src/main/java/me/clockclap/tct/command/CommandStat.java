@@ -38,17 +38,18 @@ public class CommandStat implements CommandExecutor {
                         return true;
                     }
                 }
-                p.sendMessage(ChatColor.YELLOW + "=-=-=- ななみTCTの統計 -=-=-=");
-                p.sendMessage(ChatColor.AQUA + "プレイ回数: " + ChatColor.RED + stat.getTotalPlayingCount() + ChatColor.AQUA + ", " + "死体発見回数: " + ChatColor.RED + stat.getTotalFoundDeadBodies());
-                p.sendMessage(ChatColor.AQUA + "村人になった回数: " + ChatColor.RED + stat.getCountVillager() + ChatColor.AQUA + ", " + "アイテム購入回数: " + ChatColor.RED + stat.getTotalBoughtItems());
-                p.sendMessage(ChatColor.AQUA + "医者になった回数: " + ChatColor.RED + stat.getCountHealer() + ChatColor.AQUA + ", " + "勝利回数: " + ChatColor.RED + stat.getTotalVictories());
-                p.sendMessage(ChatColor.AQUA + "探偵になった回数: " + ChatColor.RED + stat.getCountDetective() + ChatColor.AQUA + ", " + "敗北回数: " + ChatColor.RED + stat.getTotalDefeats());
-                p.sendMessage(ChatColor.AQUA + "人狼になった回数: " + ChatColor.RED + stat.getCountWolf() + ChatColor.AQUA + ", " + "アイテム使用回数: " + ChatColor.RED + stat.getCountUsedItem());
-                p.sendMessage(ChatColor.AQUA + "狂人になった回数: " + ChatColor.RED + stat.getCountFanatic() + ChatColor.AQUA + ", " + "回復使用回数: " + ChatColor.RED + stat.getTotalUseHealStation());
-                p.sendMessage(ChatColor.AQUA + "妖狐になった回数: " + ChatColor.RED + stat.getCountFox() + ChatColor.AQUA + ", " + "回復設置回数: " + ChatColor.RED + stat.getTotalPlaceHealStation());
-                p.sendMessage(ChatColor.AQUA + "背徳者になった回数: " + ChatColor.RED + stat.getCountImmoral() + ChatColor.AQUA + ", " + "殺害回数: " + ChatColor.RED + stat.getCountKill());
-                p.sendMessage(ChatColor.AQUA + "死亡回数: " + ChatColor.RED + stat.getCountDeath());
-                p.sendMessage(ChatColor.YELLOW + "=-=-=-=-=-=-=-=-=-=-=-=-=");
+                String msg = ChatColor.YELLOW + "=-=-=- ななみTCTの統計 -=-=-=" + "\n" +
+                ChatColor.AQUA + "プレイ回数: " + ChatColor.RED + stat.getTotalPlayingCount() + ChatColor.AQUA + ", " + "死体発見回数: " + ChatColor.RED + stat.getTotalFoundDeadBodies() + "\n" +
+                ChatColor.AQUA + "村人になった回数: " + ChatColor.RED + stat.getCountVillager() + ChatColor.AQUA + ", " + "アイテム購入回数: " + ChatColor.RED + stat.getTotalBoughtItems() + "\n" +
+                ChatColor.AQUA + "医者になった回数: " + ChatColor.RED + stat.getCountHealer() + ChatColor.AQUA + ", " + "勝利回数: " + ChatColor.RED + stat.getTotalVictories() + "\n" +
+                ChatColor.AQUA + "探偵になった回数: " + ChatColor.RED + stat.getCountDetective() + ChatColor.AQUA + ", " + "敗北回数: " + ChatColor.RED + stat.getTotalDefeats() + "\n" +
+                ChatColor.AQUA + "人狼になった回数: " + ChatColor.RED + stat.getCountWolf() + ChatColor.AQUA + ", " + "アイテム使用回数: " + ChatColor.RED + stat.getCountUsedItem() + "\n" +
+                ChatColor.AQUA + "狂人になった回数: " + ChatColor.RED + stat.getCountFanatic() + ChatColor.AQUA + ", " + "回復使用回数: " + ChatColor.RED + stat.getTotalUseHealStation() + "\n" +
+                ChatColor.AQUA + "妖狐になった回数: " + ChatColor.RED + stat.getCountFox() + ChatColor.AQUA + ", " + "回復設置回数: " + ChatColor.RED + stat.getTotalPlaceHealStation() + "\n" +
+                ChatColor.AQUA + "背徳者になった回数: " + ChatColor.RED + stat.getCountImmoral() + ChatColor.AQUA + ", " + "殺害回数: " + ChatColor.RED + stat.getCountKill() + "\n" +
+                ChatColor.AQUA + "死亡回数: " + ChatColor.RED + stat.getCountDeath() + "\n" +
+                ChatColor.YELLOW + "=-=-=-=-=-=-=-=-=-=-=-=-=";
+                p.sendMessage(msg);
                 return true;
             }
             p.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "* 統計の記録が無効化されているため表示できません *");

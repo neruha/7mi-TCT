@@ -29,9 +29,11 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -189,6 +191,10 @@ public final class NanamiTct extends JavaPlugin {
         customInventory = new CustomInventory(game);
         customInventory.initialize();
 
+        Plugin[] plugins = Bukkit.getPluginManager().loadPlugins(new File("plugins/" + plugin.getName() + "/plugins"));
+        for(Plugin pl : plugins) {
+            Bukkit.getPluginManager().enablePlugin(pl);
+        }
     }
 
     public TctGame getGame() {

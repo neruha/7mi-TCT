@@ -1,6 +1,6 @@
 package me.clockclap.tct.inventory;
 
-import me.clockclap.tct.NanamiTct;
+import me.clockclap.tct.NanamiTctApi;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.game.TctGame;
 import me.clockclap.tct.game.role.GameRoles;
@@ -121,7 +121,7 @@ public class CustomInventory {
         List<ItemStack> imm = new ArrayList<>();
         List<ItemStack> hea = new ArrayList<>();
 
-        FileConfiguration config = NanamiTct.plugin.getTctConfig().getConfig();
+        FileConfiguration config = NanamiTctApi.config.getConfig();
 
         for(CustomItem i : CustomItems.allItems) {
             if(i != null) {

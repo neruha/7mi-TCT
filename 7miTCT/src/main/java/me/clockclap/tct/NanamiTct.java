@@ -20,6 +20,7 @@ import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomTeams;
 import me.clockclap.tct.inventory.CustomInventory;
 import me.clockclap.tct.item.CustomItems;
+import me.clockclap.tct.plugin.TctPluginLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;
@@ -59,6 +60,7 @@ public final class NanamiTct extends JavaPlugin {
     public static MySQLConnection sqlConnection;
     public static MySQLPlayerStats playerStats;
     public static boolean isLoaded = false;
+    private static TctPluginLoader loader;
 
     private TctGame game;
     private ITctConfiguration configuration;
@@ -66,11 +68,16 @@ public final class NanamiTct extends JavaPlugin {
     public Plugin[] loadedPlugins;
     private SimplePluginManager pluginManager;
 
+    public static TctPluginLoader getTctPluginLoader() {
+        return loader;
+    }
+
     @Override
     public void onEnable() {
         // Plugin startup logic
         plugin = this;
         NanamiTctApi.plugin = plugin;
+        loader = new TctPluginLoader(NanamiTct.class);
         loadedPlugins = new Plugin[0];
         pluginManager = (SimplePluginManager) Bukkit.getServer().getPluginManager();
         utilities = new TctUtilities(this);
@@ -203,24 +210,7 @@ public final class NanamiTct extends JavaPlugin {
         customInventory = new CustomInventory(game);
         customInventory.initialize();
 
-        for(Plugin pl : loadedPlugins) {
-            try {
-                List<Permission> perms = plugin.getDescription().getPermissions();
-
-                for (Permission perm : perms) {
-                    try {
-                        pluginManager.addPermission(perm, false);
-                    } catch (IllegalArgumentException ex) {
-                        getLogger().log(Level.WARNING, "Plugin " + plugin.getDescription().getFullName() + " tried to register permission '" + perm.getName() + "' but it's already registered", ex);
-                    }
-                }
-                pluginManager.dirtyPermissibles();
-
-                pluginManager.enablePlugin(pl);
-            } catch (Throwable ex) {
-                Logger.getLogger(NanamiTct.class.getName()).log(Level.SEVERE, ex.getMessage() + " loading " + plugin.getDescription().getFullName() + " (Is it up to date?)", ex);
-            }
-        }
+        loader.enablePlugins();
     }
 
     public TctGame getGame() {
@@ -270,28 +260,6 @@ public final class NanamiTct extends JavaPlugin {
             }
         }
         isLoaded = true;
-    }
-
-    public void loadPlugins() {
-        Bukkit.getPluginManager().registerInterface(JavaPluginLoader.class);
-
-        File pluginFolder = new File("plugins/" + getName() + "/plugins");
-
-        if (pluginFolder.exists()) {
-            Plugin[] plugins = Bukkit.getPluginManager().loadPlugins(pluginFolder);
-            loadedPlugins = plugins;
-            for (Plugin plugin : plugins) {
-                try {
-                    String message = String.format("Loading %s", plugin.getDescription().getFullName());
-                    plugin.getLogger().info(message);
-                    plugin.onLoad();
-                } catch (Throwable ex) {
-                    Logger.getLogger(NanamiTct.class.getName()).log(Level.SEVERE, ex.getMessage() + " initializing " + plugin.getDescription().getFullName() + " (Is it up to date?)", ex);
-                }
-            }
-        } else {
-            pluginFolder.mkdir();
-        }
     }
 
     @Override

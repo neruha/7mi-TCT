@@ -14,7 +14,7 @@ public class CommandTctPlugin implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(NanamiTct.plugin.loadedPlugins != null) {
+        if(NanamiTct.getTctPluginLoader().getLoadedPlugins() != null) {
             sender.sendMessage("Plugins " + getPluginList());
         } else {
             sender.sendMessage("Plugins (0):");
@@ -30,7 +30,7 @@ public class CommandTctPlugin implements TabExecutor {
     private String getPluginList() {
         TreeMap<String, ChatColor> plugins = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
-        for (Plugin plugin : NanamiTct.plugin.loadedPlugins) {
+        for (Plugin plugin : NanamiTct.getTctPluginLoader().getLoadedPlugins()) {
             plugins.put(plugin.getDescription().getName(), plugin.isEnabled() ? ChatColor.GREEN : ChatColor.RED);
         }
 

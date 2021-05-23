@@ -38,15 +38,10 @@ public class TctPluginLoader {
             List<Plugin> pluginList = new ArrayList<>();
             for (Plugin plugin : plugins) {
                 try {
-                    if(plugin instanceof TctJavaPlugin) {
-                        String message = String.format("Loading %s", plugin.getDescription().getFullName());
-                        plugin.getLogger().info(message);
-                        plugin.onLoad();
-                        pluginList.add(plugin);
-                    } else {
-                        String message = "Cannot loaded " + plugin.getDescription().getFullName() + " because plugin is not tct plugin.";
-                        Logger.getLogger(clazz.getName()).log(Level.SEVERE, message);
-                    }
+                    String message = String.format("Loading %s", plugin.getDescription().getFullName());
+                    plugin.getLogger().info(message);
+                    plugin.onLoad();
+                    pluginList.add(plugin);
                 } catch (Throwable ex) {
                     Logger.getLogger(clazz.getName()).log(Level.SEVERE, ex.getMessage() + " initializing " + plugin.getDescription().getFullName() + " (Is it up to date?)", ex);
                 }
@@ -61,8 +56,6 @@ public class TctPluginLoader {
         SimplePluginManager pluginManager = (SimplePluginManager) Bukkit.getPluginManager();
         for(Plugin pl : loadedPlugins) {
             try {
-                TctJavaPlugin jPlugin = (TctJavaPlugin) pl;
-                jPlugin.setGame(NanamiTctApi.game);
 
                 List<Permission> perms = pl.getDescription().getPermissions();
 

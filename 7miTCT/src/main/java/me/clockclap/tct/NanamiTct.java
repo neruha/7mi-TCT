@@ -147,7 +147,7 @@ public final class NanamiTct extends JavaPlugin {
         utilities.addCommand("item", getName(), "", "アイテムを入手します。", Arrays.asList("i"), new CommandItem(this));
         utilities.addCommand("shop", getName(), "", "アイテムを購入できます。", Arrays.asList("s"), new CommandShop(this));
         utilities.addCommand("stat", getName(), "", "統計を確認できます。", new ArrayList<>(), new CommandStat(this));
-        utilities.addCommand("tctplugins", getName(), "", "ロードされているななみTCTのプラグイン一覧を表示します。", Arrays.asList("tctpl"), new CommandTctPlugin());
+        //utilities.addCommand("tctplugins", getName(), "", "ロードされているななみTCTのプラグイン一覧を表示します。", Arrays.asList("tctpl"), new CommandTctPlugin());
 
         // Register items
         CustomItems.register();
@@ -210,7 +210,7 @@ public final class NanamiTct extends JavaPlugin {
         customInventory = new CustomInventory(game);
         customInventory.initialize();
 
-        loader.enablePlugins();
+        //loader.enablePlugins();
     }
 
     public TctGame getGame() {

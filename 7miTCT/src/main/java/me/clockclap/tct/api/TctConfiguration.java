@@ -27,7 +27,7 @@ public class TctConfiguration implements ITctConfiguration {
             f.mkdir();
         }
 
-        NanamiTct.getTctPluginLoader().loadPlugins(datafolder + "/plugins");
+        //sNanamiTct.getTctPluginLoader().loadPlugins(datafolder + "/plugins");
 
         //Set configurations
         //config.yml

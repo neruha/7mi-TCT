@@ -63,7 +63,7 @@ public final class NanamiTct extends JavaPlugin {
     private TctGame game;
     private ITctConfiguration configuration;
     private CustomInventory customInventory;
-    private Plugin[] loadedPlugins;
+    public Plugin[] loadedPlugins;
     private SimplePluginManager pluginManager;
 
     @Override
@@ -71,6 +71,7 @@ public final class NanamiTct extends JavaPlugin {
         // Plugin startup logic
         plugin = this;
         NanamiTctApi.plugin = plugin;
+        loadedPlugins = new Plugin[0];
         pluginManager = (SimplePluginManager) Bukkit.getServer().getPluginManager();
         utilities = new TctUtilities(this);
         NanamiTctApi.utilities = utilities;
@@ -139,6 +140,7 @@ public final class NanamiTct extends JavaPlugin {
         utilities.addCommand("item", getName(), "", "アイテムを入手します。", Arrays.asList("i"), new CommandItem(this));
         utilities.addCommand("shop", getName(), "", "アイテムを購入できます。", Arrays.asList("s"), new CommandShop(this));
         utilities.addCommand("stat", getName(), "", "統計を確認できます。", new ArrayList<>(), new CommandStat(this));
+        utilities.addCommand("tctplugins", getName(), "", "ロードされているななみTCTのプラグイン一覧を表示します。", Arrays.asList("tctpl"), new CommandTctPlugin());
 
         // Register items
         CustomItems.register();
@@ -201,7 +203,7 @@ public final class NanamiTct extends JavaPlugin {
         customInventory = new CustomInventory(game);
         customInventory.initialize();
 
-        if(loadedPlugins != null) for(Plugin pl : loadedPlugins) {
+        for(Plugin pl : loadedPlugins) {
             try {
                 List<Permission> perms = plugin.getDescription().getPermissions();
 
@@ -214,7 +216,7 @@ public final class NanamiTct extends JavaPlugin {
                 }
                 pluginManager.dirtyPermissibles();
 
-                Bukkit.getPluginManager().enablePlugin(plugin);
+                pluginManager.enablePlugin(pl);
             } catch (Throwable ex) {
                 Logger.getLogger(NanamiTct.class.getName()).log(Level.SEVERE, ex.getMessage() + " loading " + plugin.getDescription().getFullName() + " (Is it up to date?)", ex);
             }

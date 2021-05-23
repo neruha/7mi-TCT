@@ -13,8 +13,11 @@ import me.clockclap.tct.game.data.PlayerStat;
 import me.clockclap.tct.game.death.DeadBody;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.*;
+import net.minecraft.server.v1_12_R1.BlockPosition;
+import net.minecraft.server.v1_12_R1.PacketPlayOutWorldEvent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,6 +28,8 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
 
 public class BlockEvent implements Listener {
 
@@ -140,6 +145,12 @@ public class BlockEvent implements Listener {
 //                                        block.setType(Material.AIR);
 //                                        block.getLocation().getWorld().spawnParticle(Particle.BLOCK_CRACK, block.getLocation().add(0.5,0.5,0.5), 100, new MaterialData(CustomItems.HEAL_STATION.getMaterial()));
                                             block.breakNaturally(new ItemStack(Material.AIR));
+                                            @SuppressWarnings("deprecation")
+                                            PacketPlayOutWorldEvent packet = new PacketPlayOutWorldEvent(2001, new BlockPosition(block.getLocation().getBlockX(), block.getLocation().getBlockY(), block.getLocation().getBlockZ()), Material.REDSTONE_ORE.getId(), false);
+                                            List<Player> players = e.getPlayer().getWorld().getPlayers();
+                                            for(final Player p : players) {
+                                                ((CraftPlayer)p).getHandle().playerConnection.sendPacket(packet);
+                                            }
                                             final Location[] l = {block.getLocation()};
                                             Bukkit.getScheduler().runTaskLater(NanamiTct.plugin, () -> {
                                                 if(NanamiTctApi.game.getReference().getGameState() == GameState.GAMING)

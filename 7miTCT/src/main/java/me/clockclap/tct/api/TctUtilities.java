@@ -35,6 +35,21 @@ public class TctUtilities implements Utilities {
         this.plugin = plugin;
     }
 
+    public void registerCommand(String fallbackPrefix, Command command) {
+        try {
+            CommandMap map = Bukkit.getServer().getCommandMap();
+            map.getKnownCommands().put(command.getName(), command);
+            for(String alias : command.getAliases()) {
+                map.getKnownCommands().put(alias, command);
+            }
+            Bukkit.getServer().getCommandMap().register(fallbackPrefix, command);
+            plugin.getLogger().info("Succeeded in registering command: /" + command.getName());
+        } catch(Exception e) {
+            plugin.getLogger().warning("Failed to register command: /" + command.getName());
+            e.printStackTrace();
+        }
+    }
+
     public void addCommand(String label, CommandExecutor executor) {
         addCommand(label, plugin.getName(), "", "", new ArrayList<>(), executor);
     }

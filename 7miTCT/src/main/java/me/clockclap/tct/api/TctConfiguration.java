@@ -27,10 +27,7 @@ public class TctConfiguration implements ITctConfiguration {
             f.mkdir();
         }
 
-        File f_ = new File(datafolder + "/plugins");
-        if(!f_.exists()) {
-            f_.mkdir();
-        }
+        plugin.loadPlugins();
 
         //Set configurations
         //config.yml

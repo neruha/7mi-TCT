@@ -19,24 +19,28 @@
 
 
 # 取得
-[![Download Latest](https://img.shields.io/badge/Download-v3.5.2-green.svg)](https://github.com/nanami-network/7mi-TCT/releases/download/v3.5.2/nanami-tct-api-3.5.2.jar)
+[![Download Latest](https://img.shields.io/badge/Download-v4.2.0-green.svg)](https://github.com/nanami-network/7mi-TCT/releases/download/v4.2.0/7mi-TCT-API-2.2-MC1.12.2.jar)
 
 プラグインのバージョンは必ず1.12.2にしてください
 
 まずは7mi-TCTをダウンロードして、どこかに保存しておきましょう。
-(今回は例として `C:/Users/tutorial/nanamitct/` にjarファイルを置きます)
 
 ##Maven
 **pom.xmlにこれを追加**
 
 ```xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
 <dependencies>
     <dependency>
-        <groupId>me.clockclap</groupId>
-        <artifactId>nanami-tct-api</artifactId>
+        <groupId>com.github.nanami-network.7mi-TCT</groupId>
+        <artifactId>7mi-TCT-API</artifactId>
         <version>VERSION</version>
-        <scope>system</scope>
-        <systemPath>C:/Users/tutorial/nanamitct/nanami-tct-api-VERSION.jar</systemPath>
+        <scope>provided</scope>
     </dependency>
 </dependencies>
 ```
@@ -45,7 +49,12 @@
 **build.gradleにこれを追加**
 
 ```
+repositories {
+    maven {
+        url='https://jitpack.io'
+    }
+}
 dependencies {
-    compileOnly fileTree(dir: 'C:/Users/tutorial/nanamitct', include: ['nanami-tct-api-VERSION.jar'])
+    compileOnly 'com.github.nanami-network.7mi-TCT:7mi-TCT-API:VERSION'
 }
 ```

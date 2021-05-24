@@ -25,7 +25,7 @@
 
 まずは7mi-TCTをダウンロードして、どこかに保存しておきましょう。
 
-##Maven
+##Maven <br>
 **pom.xmlにこれを追加**
 
 ```xml
@@ -45,7 +45,7 @@
 </dependencies>
 ```
 
-##Gradle
+##Gradle <br>
 **build.gradleにこれを追加**
 
 ```

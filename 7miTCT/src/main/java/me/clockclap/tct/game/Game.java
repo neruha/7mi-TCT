@@ -911,6 +911,9 @@ public class Game implements TctGame {
                     } else if (wol.size() > 0 && vil.size() <= 0) {
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_FOX_VICTORY_B);
                         p.sendTitle(Reference.TCT_TITLE_MAIN_FOX_VICTORY, Reference.TCT_TITLE_SUB_FOX_VICTORY_B, 5, 40, 5);
+                    } else if (vil.size() <= 0 && wol.size() <= 0) {
+                        p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_FOX_VICTORY_C);
+                        p.sendTitle(Reference.TCT_TITLE_MAIN_FOX_VICTORY, Reference.TCT_TITLE_SUB_FOX_VICTORY_C, 5, 40, 5);
                     }
                 }
                 if (winners == GameTeams.WOLVES) {

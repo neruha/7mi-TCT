@@ -1,5 +1,6 @@
 name: 7mi_TCT
 version: ${version}
+load: STARTUP
 main: me.clockclap.tct.NanamiTct
 api-version: 1.12
 prefix: 7mi-TCT

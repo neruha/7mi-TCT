@@ -148,6 +148,7 @@ public final class Reference {
     public static final String TCT_CHAT_WOLVES_VICTORY = ChatColor.RED + "村人陣営は全滅し、妖狐も死亡しました";
     public static final String TCT_CHAT_FOX_VICTORY_A = ChatColor.GOLD + "人狼陣営は全滅し、妖狐が生き残りました";
     public static final String TCT_CHAT_FOX_VICTORY_B = ChatColor.GOLD + "村人陣営は全滅し、妖狐が生き残りました";
+    public static final String TCT_CHAT_FOX_VICTORY_C = ChatColor.GOLD + "全陣営が全滅し、妖狐が生き残りました";
     public static final String TCT_CHAT_NO_VICTORY = ChatColor.GRAY + "運営によって強制終了されたため、引き分けになります";
     public static final String TCT_CHAT_VICTORY = "%COLOR%%TEAM%が勝利しました";
     //ゲーム終了
@@ -203,6 +204,7 @@ public final class Reference {
     public static final String TCT_TITLE_MAIN_FOX_VICTORY = ChatColor.GOLD + "妖狐陣営が勝利しました";
     public static final String TCT_TITLE_SUB_FOX_VICTORY_A = ChatColor.GRAY + "人狼陣営全滅時に生き残っていた妖狐陣営の勝利";
     public static final String TCT_TITLE_SUB_FOX_VICTORY_B = ChatColor.GRAY + "村人陣営全滅時に生き残っていた妖狐陣営の勝利";
+    public static final String TCT_TITLE_SUB_FOX_VICTORY_C = ChatColor.GRAY + "全陣営全滅時に生き残っていた妖狐陣営の勝利";
     public static final String TCT_TITLE_MAIN_NO_VICTORY = ChatColor.DARK_GRAY + "引き分け";
     public static final String TCT_TITLE_SUB_NO_VICTORY = ChatColor.GRAY + "ゲームが強制終了されました";
     public static final String TCT_TITLE_MAIN_VICTORY = "%COLOR%%TEAM%が勝利しました";

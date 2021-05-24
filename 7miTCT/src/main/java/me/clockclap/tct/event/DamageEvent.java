@@ -1,6 +1,7 @@
 package me.clockclap.tct.event;
 
 import me.clockclap.tct.NanamiTct;
+import me.clockclap.tct.NanamiTctApi;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.api.sql.MySQLStatus;
 import me.clockclap.tct.game.GameState;
@@ -22,12 +23,14 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DamageEvent implements Listener {
@@ -80,7 +83,7 @@ public class DamageEvent implements Listener {
                             continue;
                         }
                         if (item.hasItemMeta()) {
-                            if(item.getType() == Material.ARROW) return;
+                            if(item.getType() == Material.ARROW) continue;
                             if (item.getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.SPONGE.getItemStack().getItemMeta().getDisplayName())) {
                                 int amt = item.getAmount() - 1;
                                 if(amt <= 0) {
@@ -103,6 +106,7 @@ public class DamageEvent implements Listener {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @EventHandler
     public void onDeath(EntityDeathEvent e) {
         if(e.getEntity() instanceof Player) {
@@ -155,7 +159,6 @@ public class DamageEvent implements Listener {
                         return;
                     }
                     if (villagers.size() <= 0 && wolves.size() <= 0) {
-                        p.spigot().respawn();
                         plugin.getGame().getTimer().cancel();
                         if (foxes.size() > 0) {
                             plugin.getGame().stop(GameTeams.FOXES);
@@ -180,7 +183,53 @@ public class DamageEvent implements Listener {
                         if(opkiller != null) {
                             PlayerData killer = plugin.getGame().getReference().PLAYERDATA.get(opkiller.getUniqueId());
                             killer.addKilledPlayer(NanamiTct.utilities.resetColor(p.getName()));
-                            data.setKilledBy(new Killer(p.getKiller(), plugin.getGame().getReference().PLAYERDATA.get(p.getKiller().getUniqueId()).getRole()));
+                            data.setKilledBy(new Killer(opkiller, plugin.getGame().getReference().PLAYERDATA.get(p.getKiller().getUniqueId()).getRole()));
+                            FileConfiguration config = NanamiTctApi.config.getConfig();
+                            Firework fw = (Firework) p.getWorld().spawnEntity(p.getLocation(), EntityType.FIREWORK);
+                            FireworkMeta meta = fw.getFireworkMeta();
+                            FireworkEffect.Builder builder = FireworkEffect.builder();
+                            try {
+                                FireworkEffect.Type type = FireworkEffect.Type.valueOf(config.getString("fireworks.type", "BURST"));
+                                builder.with(type);
+                            } catch (Exception ex) {
+                                builder.with(FireworkEffect.Type.BURST);
+                            }
+                            try {
+                                for (String color : (List<String>) config.getList("fireworks.colors", Arrays.asList("0xff0000"))) {
+                                    int c;
+                                    if (color.startsWith("0x")) {
+                                        c = (int) Long.parseLong(color, 16);
+                                    } else {
+                                        c = (int) Long.parseLong(color, 10);
+                                    }
+                                    builder.withColor(Color.fromRGB(c));
+                                }
+                            } catch(Exception ex) {
+                                builder.withColor(Color.RED);
+                            }
+                            try {
+                                for (String color : (List<String>) config.getList("fireworks.fades", Arrays.asList("0xff0000"))) {
+                                    int c;
+                                    if (color.startsWith("0x")) {
+                                        c = (int) Long.parseLong(color, 16);
+                                    } else {
+                                        c = (int) Long.parseLong(color, 10);
+                                    }
+                                    builder.withFade(Color.fromRGB(c));
+                                }
+                            } catch(Exception ex) {
+                                builder.withFade(Color.RED);
+                            }
+                            if(builder != null) {
+                                FireworkEffect effect = builder.build();
+                                meta.addEffect(effect);
+                                meta.setPower(config.getInt("fireworks.power"));
+                            } else {
+                                FireworkEffect effect = FireworkEffect.builder().with(FireworkEffect.Type.BURST).withColor(Color.RED).withFade(Color.RED).build();
+                                meta.addEffect(effect);
+                                meta.setPower(1);
+                            }
+                            fw.setFireworkMeta(meta);
                             if(NanamiTct.playerStats != null) {
                                 PlayerStat killerStat = NanamiTct.playerStats.getStat(opkiller.getUniqueId());
                                 killerStat.setCountKill(killerStat.getCountKill() + 1);
@@ -190,7 +239,6 @@ public class DamageEvent implements Listener {
                                     if(item.hasItemMeta() && item.getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.EMPTY_BOTTLE.getItemStack().getItemMeta().getDisplayName())) {
                                         int tick = 200;
                                         int level;
-                                        FileConfiguration config = NanamiTct.plugin.getTctConfig().getConfig();
                                         try {
                                             if (config.getString("potion-effect.slowness.duration").endsWith("t")) {
                                                 String str = config.getString("potion-effect.slowness.duration");

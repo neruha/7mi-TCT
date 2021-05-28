@@ -49,28 +49,26 @@ public class BlockListener implements Listener {
                 if(item.hasItemMeta()) {
                     for (CustomBlock block : CustomItems.generalBlocks) {
                         if ((item.getItemMeta().getDisplayName().equalsIgnoreCase(block.getItemStack().getItemMeta().getDisplayName())) ||
-                                (offItem != null && offItem.hasItemMeta() &&
-                                        offItem.getItemMeta().getDisplayName().equalsIgnoreCase(block.getItemStack().getItemMeta().getDisplayName()))) {
-                            if(e.getBlockPlaced().getType() == block.getMaterial()) {
-                                if (block.isPlaceable()) {
-                                    TctCustomBlockData data = new TctCustomBlockData(plugin.getGame(), block, e.getBlockPlaced());
-                                    CustomBlockInfo.blockDataList.add(data);
-                                    if (block == CustomItems.HEAL_STATION) {
-                                        if (NanamiTct.playerStats != null) {
-                                            PlayerStat stat = NanamiTct.playerStats.getStat(e.getPlayer().getUniqueId());
-                                            stat.setTotalPlaceHealStation(stat.getTotalPlaceHealStation() + 1);
-                                        }
+                            (offItem != null && offItem.hasItemMeta() &&
+                                    offItem.getItemMeta().getDisplayName().equalsIgnoreCase(block.getItemStack().getItemMeta().getDisplayName()))) {
+                            if (block.isPlaceable()) {
+                                TctCustomBlockData data = new TctCustomBlockData(plugin.getGame(), block, e.getBlockPlaced());
+                                CustomBlockInfo.blockDataList.add(data);
+                                if (block == CustomItems.HEAL_STATION) {
+                                    if (NanamiTct.playerStats != null) {
+                                        PlayerStat stat = NanamiTct.playerStats.getStat(e.getPlayer().getUniqueId());
+                                        stat.setTotalPlaceHealStation(stat.getTotalPlaceHealStation() + 1);
                                     }
-
-                                    if (block.getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.LANDMINE.getItemStack().getItemMeta().getDisplayName())) {
-                                        data.runTimer(CooldownTypes.LANDMINE);
-                                        e.getPlayer().sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_LANDMINE_PLACED.replaceAll("%SECOND%", String.valueOf(NanamiTct.plugin.getTctConfig().getConfig().getInt("landmine-cooldown", 5))));
-                                    }
-                                } else {
-                                    e.setCancelled(true);
                                 }
-                                return;
+
+                                if (block.getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.LANDMINE.getItemStack().getItemMeta().getDisplayName())) {
+                                    data.runTimer(CooldownTypes.LANDMINE);
+                                    e.getPlayer().sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_LANDMINE_PLACED.replaceAll("%SECOND%", String.valueOf(NanamiTct.plugin.getTctConfig().getConfig().getInt("landmine-cooldown", 5))));
+                                }
+                            } else {
+                                e.setCancelled(true);
                             }
+                            return;
                         }
                     }
                     for (CustomSpecialItem item_ : CustomItems.specialItems) {

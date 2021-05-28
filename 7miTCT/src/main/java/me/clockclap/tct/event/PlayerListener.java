@@ -185,6 +185,7 @@ public class PlayerListener implements Listener {
         plugin.getGame().getReference().PLAYERDATA.remove(p.getUniqueId());
     }
 
+    @EventHandler
     public void onMove(PlayerMoveEvent e) {
         Player p = e.getPlayer();
         if(p != null) {

@@ -109,7 +109,10 @@ public class CommandStartLoc implements TabExecutor {
             List<World> worldList = Bukkit.getServer().getWorlds();
             List<String> result = new ArrayList<>();
             for(World world : worldList) {
-                result.add(world.getName());
+                String name = world.getName();
+                if(name.startsWith(args[0])) {
+                    result.add(world.getName());
+                }
             }
             return result;
         }

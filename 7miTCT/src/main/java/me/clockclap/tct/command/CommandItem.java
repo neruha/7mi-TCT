@@ -102,7 +102,10 @@ public class CommandItem implements TabExecutor {
             List<CustomItem> itemList = CustomItems.allItems;
             List<String> result = new ArrayList<>();
             for(CustomItem item : itemList) {
-                result.add(item.getName());
+                String name = item.getName();
+                if(name.startsWith(args[0])) {
+                    result.add(item.getName());
+                }
             }
             return result;
         }

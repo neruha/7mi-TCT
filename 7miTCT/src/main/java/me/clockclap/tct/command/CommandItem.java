@@ -98,6 +98,14 @@ public class CommandItem implements TabExecutor {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if(args.length == 1) {
+            List<CustomItem> itemList = CustomItems.allItems;
+            List<String> result = new ArrayList<>();
+            for(CustomItem item : itemList) {
+                result.add(item.getName());
+            }
+            return result;
+        }
         return null;
     }
 }

@@ -42,6 +42,7 @@ public final class CustomItems {
     public static final CustomSpecialItem COMPASS = new TctItemCompass();
     public static final CustomSpecialItem CLOCK = new TctItemClock();
     public static final CustomSpecialItem SEED = new TctItemSeed();
+    public static final CustomSpecialItem DIAMOND = new TctItemDiamond();
 
     public static final CustomItem SNOWBALL = new TctItemSnowball();
 
@@ -123,6 +124,7 @@ public final class CustomItems {
         registerItem(HEAL_POTION);
         registerItem(CRACKER);
         registerBlock(LANDMINE);
+        registerItem(DIAMOND);
 
         registerItem(CO_VILLAGER);
         registerItem(CO_DETECTIVE);

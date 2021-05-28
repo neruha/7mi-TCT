@@ -1,4 +1,4 @@
-package me.clockclap.tct.item;
+package me.clockclap.tct.game.role;
 
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.game.role.GameTeam;

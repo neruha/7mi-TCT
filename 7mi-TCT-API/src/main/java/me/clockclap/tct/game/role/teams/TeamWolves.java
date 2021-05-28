@@ -10,12 +10,14 @@ public class TeamWolves implements GameTeam {
     private String name;
     private int index;
     private ChatColor color;
+    private GameTeam parent;
 
     public TeamWolves() {
         this.name = "WOLVES";
         this.displayName = Reference.TCT_TEAM_WOLVES;
         this.index = 1;
         this.color = ChatColor.RED;
+        this.parent = this;
     }
 
     @Override
@@ -36,6 +38,11 @@ public class TeamWolves implements GameTeam {
     @Override
     public ChatColor getColor() {
         return this.color;
+    }
+
+    @Override
+    public GameTeam parent() {
+        return this.parent;
     }
 
     @Override

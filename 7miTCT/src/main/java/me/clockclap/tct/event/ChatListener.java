@@ -16,11 +16,11 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.io.UnsupportedEncodingException;
 
-public class ChatEvent implements Listener {
+public class ChatListener implements Listener {
 
     private NanamiTct plugin;
 
-    public ChatEvent(NanamiTct plugin) {
+    public ChatListener(NanamiTct plugin) {
         this.plugin = plugin;
     }
 

@@ -10,12 +10,14 @@ public class TeamSpectator implements GameTeam {
     private String name;
     private int index;
     private ChatColor color;
+    private GameTeam parent;
 
     public TeamSpectator() {
         this.name = "SPEC";
         this.displayName = Reference.TCT_TEAM_SPEC;
         this.index = -1;
         this.color = ChatColor.GREEN;
+        this.parent = this;
     }
 
     @Override
@@ -36,6 +38,11 @@ public class TeamSpectator implements GameTeam {
     @Override
     public ChatColor getColor() {
         return this.color;
+    }
+
+    @Override
+    public GameTeam parent() {
+        return this.parent;
     }
 
     @Override

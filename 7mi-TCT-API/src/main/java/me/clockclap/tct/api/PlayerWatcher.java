@@ -226,12 +226,6 @@ public class PlayerWatcher {
                         NanamiTctApi.utilities.showPlayer(player, p);
                     }
                 }
-//                new BukkitRunnable() {
-//                    @Override
-//                    public void run() {
-//                        NanamiTctApi.utilities.modifyName(player, NanamiTctApi.utilities.resetColor(player.getName()));
-//                    }
-//                }.runTaskLater(NanamiTctApi.plugin, 0);
                 NanamiTctApi.utilities.modifyName(player, NanamiTctApi.utilities.resetColor(player.getName()));
                 if(player.getExp() > 0F) {
                     player.setExp(0F);
@@ -299,7 +293,7 @@ public class PlayerWatcher {
                             if(offlinePlayer != null && game.getReference().PLAYERDATA.containsKey(offlinePlayer.getUniqueId())) {
                                 UUID uuid = offlinePlayer.getUniqueId();
                                 PlayerData data = game.getReference().PLAYERDATA.get(uuid);
-                                if(data.getWatcher() != null) {
+                                if(data != null && data.getWatcher() != null) {
                                     data.getWatcher().setCountFox(-1);
                                 }
                             }

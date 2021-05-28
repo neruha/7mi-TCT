@@ -18,7 +18,7 @@ import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.game.role.GameTeam;
 import me.clockclap.tct.game.role.GameTeams;
-import me.clockclap.tct.item.TctTeam;
+import me.clockclap.tct.game.role.TctTeam;
 import org.bukkit.*;
 import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -868,6 +868,9 @@ public class Game implements TctGame {
                 data.setVillager(0);
                 data.setSuspicious(0);
                 data.setWolf(0);
+                data.setTeleporting(false);
+                data.setAfterSaved(false);
+                data.saveLocation(null);
                 NanamiTct.utilities.modifyName(p, ChatColor.GREEN + NanamiTct.utilities.resetColor(p.getName()));
                 NanamiTct.utilities.reloadPlayer();
                 if(data.getRole() == GameRoles.FOX && !data.isSpectator()) {

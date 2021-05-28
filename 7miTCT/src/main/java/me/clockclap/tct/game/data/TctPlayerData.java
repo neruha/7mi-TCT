@@ -44,6 +44,9 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
     private boolean clickable;
     private boolean clickableB;
     private boolean clickableE;
+    private Location savedLoc;
+    private boolean afterSaved;
+    private boolean teleporting;
 
     public TctPlayerData(NanamiTct plugin, GameRole role, String name) {
         super(plugin, Bukkit.getPlayer(name), role);
@@ -63,6 +66,8 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
         clickable = true;
         clickableB = true;
         clickableE = true;
+        afterSaved = false;
+        teleporting = false;
         Player p = Bukkit.getPlayer(name);
         this.player = p;
         if(p != null) {
@@ -184,6 +189,36 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
     @Override
     public TctPlayerProfile getProfile() {
         return profile;
+    }
+
+    @Override
+    public Location getSavedLocation() {
+        return savedLoc;
+    }
+
+    @Override
+    public void saveLocation(Location location) {
+        this.savedLoc = location;
+    }
+
+    @Override
+    public boolean isAfterSaved() {
+        return afterSaved;
+    }
+
+    @Override
+    public void setAfterSaved(boolean afterSaved) {
+        this.afterSaved = afterSaved;
+    }
+
+    @Override
+    public boolean isTeleporting() {
+        return teleporting;
+    }
+
+    @Override
+    public void setTeleporting(boolean teleporting) {
+        this.teleporting = teleporting;
     }
 
     @Override

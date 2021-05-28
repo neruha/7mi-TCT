@@ -9,12 +9,14 @@ public class TeamNone implements GameTeam {
     private String name;
     private int index;
     private ChatColor color;
+    private GameTeam parent;
 
     public TeamNone() {
         this.name = "NONE";
         this.displayName = "";
         this.index = -2;
         this.color = ChatColor.RESET;
+        this.parent = this;
     }
 
     @Override
@@ -35,6 +37,11 @@ public class TeamNone implements GameTeam {
     @Override
     public ChatColor getColor() {
         return this.color;
+    }
+
+    @Override
+    public GameTeam parent() {
+        return this.parent;
     }
 
     @Override

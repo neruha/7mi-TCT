@@ -1,5 +1,6 @@
 package me.clockclap.tct.event;
 
+import jdk.nashorn.internal.objects.annotations.Getter;
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.NanamiTctApi;
 import me.clockclap.tct.api.CooldownTypes;
@@ -31,11 +32,11 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public class BlockEvent implements Listener {
+public class BlockListener implements Listener {
 
     private NanamiTct plugin;
 
-    public BlockEvent(NanamiTct plugin) {
+    public BlockListener(NanamiTct plugin) {
         this.plugin = plugin;
     }
 
@@ -44,27 +45,32 @@ public class BlockEvent implements Listener {
         if(!plugin.getGame().getReference().PLAYERDATA.get(e.getPlayer().getUniqueId()).isSpectator()) {
             if(CustomItems.generalBlocks.size() != 0) {
                 ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
+                ItemStack offItem = e.getPlayer().getInventory().getItemInOffHand();
                 if(item.hasItemMeta()) {
                     for (CustomBlock block : CustomItems.generalBlocks) {
-                        if (item.getItemMeta().getDisplayName().equalsIgnoreCase(block.getItemStack().getItemMeta().getDisplayName())) {
-                            if (block.isPlaceable()) {
-                                TctCustomBlockData data = new TctCustomBlockData(plugin.getGame(), block, e.getBlockPlaced());
-                                CustomBlockInfo.blockDataList.add(data);
-                                if(block == CustomItems.HEAL_STATION) {
-                                    if(NanamiTct.playerStats != null) {
-                                        PlayerStat stat = NanamiTct.playerStats.getStat(e.getPlayer().getUniqueId());
-                                        stat.setTotalPlaceHealStation(stat.getTotalPlaceHealStation() + 1);
+                        if ((item.getItemMeta().getDisplayName().equalsIgnoreCase(block.getItemStack().getItemMeta().getDisplayName())) ||
+                                (offItem != null && offItem.hasItemMeta() &&
+                                        offItem.getItemMeta().getDisplayName().equalsIgnoreCase(block.getItemStack().getItemMeta().getDisplayName()))) {
+                            if(e.getBlockPlaced().getType() == block.getMaterial()) {
+                                if (block.isPlaceable()) {
+                                    TctCustomBlockData data = new TctCustomBlockData(plugin.getGame(), block, e.getBlockPlaced());
+                                    CustomBlockInfo.blockDataList.add(data);
+                                    if (block == CustomItems.HEAL_STATION) {
+                                        if (NanamiTct.playerStats != null) {
+                                            PlayerStat stat = NanamiTct.playerStats.getStat(e.getPlayer().getUniqueId());
+                                            stat.setTotalPlaceHealStation(stat.getTotalPlaceHealStation() + 1);
+                                        }
                                     }
-                                }
 
-                                if (block.getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.LANDMINE.getItemStack().getItemMeta().getDisplayName())) {
-                                    data.runTimer(CooldownTypes.LANDMINE);
-                                    e.getPlayer().sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_LANDMINE_PLACED.replaceAll("%SECOND%", String.valueOf(NanamiTct.plugin.getTctConfig().getConfig().getInt("landmine-cooldown", 5))));
+                                    if (block.getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.LANDMINE.getItemStack().getItemMeta().getDisplayName())) {
+                                        data.runTimer(CooldownTypes.LANDMINE);
+                                        e.getPlayer().sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_LANDMINE_PLACED.replaceAll("%SECOND%", String.valueOf(NanamiTct.plugin.getTctConfig().getConfig().getInt("landmine-cooldown", 5))));
+                                    }
+                                } else {
+                                    e.setCancelled(true);
                                 }
-                            } else {
-                                e.setCancelled(true);
+                                return;
                             }
-                            return;
                         }
                     }
                     for (CustomSpecialItem item_ : CustomItems.specialItems) {
@@ -113,8 +119,6 @@ public class BlockEvent implements Listener {
             }
         }
     }
-
-    private boolean clickable = true;
 
     @EventHandler
     public void playerInteract(PlayerInteractEvent e) {
@@ -298,5 +302,4 @@ public class BlockEvent implements Listener {
     public void onExplodeBlock(BlockExplodeEvent e) {
         e.setCancelled(true);
     }
-
 }

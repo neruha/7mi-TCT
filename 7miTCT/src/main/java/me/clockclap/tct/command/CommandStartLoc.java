@@ -8,12 +8,17 @@ import me.clockclap.tct.game.role.GameTeams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
-public class CommandStartLoc implements CommandExecutor {
+import java.util.ArrayList;
+import java.util.List;
+
+public class CommandStartLoc implements TabExecutor {
 
     private NanamiTct plugin;
     private String usage = ChatColor.RED + "Usage: /startloc <world> <x> <y> <z>";
@@ -97,4 +102,17 @@ public class CommandStartLoc implements CommandExecutor {
         }
     }
 
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if(args.length == 1) {
+            List<World> worldList = Bukkit.getServer().getWorlds();
+            List<String> result = new ArrayList<>();
+            for(World world : worldList) {
+                result.add(world.getName());
+            }
+            return result;
+        }
+        return null;
+    }
 }

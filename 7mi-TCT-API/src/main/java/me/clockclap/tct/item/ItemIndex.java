@@ -37,6 +37,7 @@ public class ItemIndex {
     public static final int WOLVES_SHOP_ITEM_SLOT_4 = 74;
     public static final int WOLVES_SHOP_ITEM_SLOT_5 = 75;
     public static final int WOLVES_SHOP_ITEM_SLOT_6 = 76;
+    public static final int WOLVES_SHOP_ITEM_SLOT_7 = 77;
 
     public static final int DETECTIVES_SHOP_ITEM_SLOT_0 = 50;
     public static final int DETECTIVES_SHOP_ITEM_SLOT_1 = 51;

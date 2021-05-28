@@ -6,7 +6,7 @@ import me.clockclap.tct.api.sql.MySQLConnection;
 import me.clockclap.tct.api.sql.MySQLPlayerStats;
 import me.clockclap.tct.game.TctGame;
 import me.clockclap.tct.game.role.CustomRoles;
-import me.clockclap.tct.item.CustomTeams;
+import me.clockclap.tct.game.role.CustomTeams;
 import org.bukkit.plugin.Plugin;
 
 public final class NanamiTctApi {

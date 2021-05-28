@@ -25,11 +25,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class InventoryEvent implements Listener {
+public class InventoryListener implements Listener {
 
     private NanamiTct plugin;
 
-    public InventoryEvent(NanamiTct plugin) {
+    public InventoryListener(NanamiTct plugin) {
         this.plugin = plugin;
     }
 

@@ -17,7 +17,7 @@ import me.clockclap.tct.game.data.TctPlayerStat;
 import me.clockclap.tct.game.death.Killer;
 import me.clockclap.tct.game.role.CustomRoles;
 import me.clockclap.tct.game.role.GameRoles;
-import me.clockclap.tct.item.CustomTeams;
+import me.clockclap.tct.game.role.CustomTeams;
 import me.clockclap.tct.inventory.CustomInventory;
 import me.clockclap.tct.item.CustomItems;
 import me.clockclap.tct.plugin.TctPluginLoader;
@@ -30,26 +30,16 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.SimplePluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.java.JavaPluginLoader;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public final class NanamiTct extends JavaPlugin {
 
@@ -125,13 +115,13 @@ public final class NanamiTct extends JavaPlugin {
         getLogger().info("Starting up...");
 
         // Register Events
-        pluginManager.registerEvents(new PlayerConnectionEvent(this), this);
-        pluginManager.registerEvents(new ChatEvent(this), this);
+        pluginManager.registerEvents(new PlayerListener(this), this);
+        pluginManager.registerEvents(new ChatListener(this), this);
         //pluginManager.registerEvents(new CancelHunger(this), this);
-        pluginManager.registerEvents(new ItemEvent(this), this);
-        pluginManager.registerEvents(new BlockEvent(this), this);
-        pluginManager.registerEvents(new DamageEvent(this), this);
-        pluginManager.registerEvents(new InventoryEvent(this), this);
+        pluginManager.registerEvents(new ItemListener(this), this);
+        pluginManager.registerEvents(new BlockListener(this), this);
+        pluginManager.registerEvents(new DamageListener(this), this);
+        pluginManager.registerEvents(new InventoryListener(this), this);
         pluginManager.registerEvents(new ArmorListener(Reference.TCT_BLOCKED), this);
 
         // Add Commands

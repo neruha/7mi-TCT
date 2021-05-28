@@ -30,11 +30,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemEvent implements Listener {
+public class ItemListener implements Listener {
 
     private NanamiTct plugin;
 
-    public ItemEvent(NanamiTct plugin) {
+    public ItemListener(NanamiTct plugin) {
         this.plugin = plugin;
     }
 

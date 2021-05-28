@@ -1,6 +1,7 @@
 package me.clockclap.tct.event;
 
 import me.clockclap.tct.NanamiTct;
+import me.clockclap.tct.NanamiTctApi;
 import me.clockclap.tct.api.PlayerWatcher;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.api.TctUtilities;
@@ -21,6 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -28,11 +30,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerConnectionEvent implements Listener {
+public class PlayerListener implements Listener {
 
     private NanamiTct plugin;
 
-    public PlayerConnectionEvent(NanamiTct plugin) {
+    public PlayerListener(NanamiTct plugin) {
         this.plugin = plugin;
     }
 
@@ -181,6 +183,14 @@ public class PlayerConnectionEvent implements Listener {
             }
         }
         plugin.getGame().getReference().PLAYERDATA.remove(p.getUniqueId());
+    }
+
+    public void onMove(PlayerMoveEvent e) {
+        Player p = e.getPlayer();
+        if(p != null) {
+            PlayerData data = NanamiTctApi.utilities.getPlayerData(p);
+            if(data != null && data.isTeleporting()) e.setCancelled(true);
+        }
     }
 
 }

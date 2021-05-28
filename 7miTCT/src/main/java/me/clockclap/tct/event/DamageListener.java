@@ -33,12 +33,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class DamageEvent implements Listener {
+public class DamageListener implements Listener {
 
     private NanamiTct plugin;
     private Location respawnLoc;
 
-    public DamageEvent(NanamiTct plugin) {
+    public DamageListener(NanamiTct plugin) {
         this.plugin = plugin;
     }
 
@@ -128,11 +128,11 @@ public class DamageEvent implements Listener {
                     List<PlayerData> wolves = new ArrayList<>();
                     List<PlayerData> foxes = new ArrayList<>();
                     for (PlayerData d : plugin.getGame().getRemainingPlayers(true)) {
-                        if (d.getRole().getTeam() == GameTeams.VILLAGERS) {
+                        if (d.getRole().getTeam().parent() == GameTeams.VILLAGERS) {
                             villagers.add(d);
                             continue;
                         }
-                        if (d.getRole().getTeam() == GameTeams.WOLVES) {
+                        if (d.getRole().getTeam().parent() == GameTeams.WOLVES) {
                             wolves.add(d);
                             continue;
                         }
@@ -165,6 +165,15 @@ public class DamageEvent implements Listener {
                             return;
                         }
                         plugin.getGame().stop(GameTeams.VILLAGERS);
+                        return;
+                    }
+                    if(villagers.size() > 0 && wolves.size() > 0 && foxes.size() <= 0) {
+                        for(PlayerData d : plugin.getGame().getRemainingPlayers(true)) {
+                            if(d.getRole() == GameRoles.IMMORAL) {
+                                d.setKilledBy(new Killer("AIR", GameRoles.NONE, Killer.KillerCategory.AIR));
+                                d.kill(TctDeathCause.AIR);
+                            }
+                        }
                         return;
                     }
                     /**/

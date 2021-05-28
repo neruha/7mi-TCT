@@ -5,6 +5,7 @@ import me.clockclap.tct.game.data.profile.TctPlayerProfile;
 import me.clockclap.tct.game.death.Killer;
 import me.clockclap.tct.game.death.TctDeathCause;
 import me.clockclap.tct.game.role.GameRole;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -39,6 +40,18 @@ public interface PlayerData extends EntityData {
     public int getWolf();
 
     public TctPlayerProfile getProfile();
+
+    public Location getSavedLocation();
+
+    public void saveLocation(Location location);
+
+    public boolean isAfterSaved();
+
+    public void setAfterSaved(boolean afterSaved);
+
+    public boolean isTeleporting();
+
+    public void setTeleporting(boolean teleporting);
 
     public List<String> getKilledPlayers();
 

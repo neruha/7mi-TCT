@@ -12,6 +12,8 @@ public interface GameTeam {
 
     public ChatColor getColor();
 
+    public GameTeam parent();
+
     public void setDisplayName(String name);
 
     public void setName(String name);

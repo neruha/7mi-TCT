@@ -11,7 +11,7 @@ public final class Reference {
     //プラグイン設定
     public static final String TCT_CHATPREFIX = ChatColor.DARK_RED + "[7mi TCT]" + ChatColor.RESET;
     public static final String TCT_DEBUG_CHATPREFIX = ChatColor.DARK_RED + "[7mi TCT Debug]" + ChatColor.RESET;
-    public static final String TCT_SIDEBAR_TITLE = ChatColor.DARK_RED + "[Trouble in Crafter Town]";
+    public static final String TCT_SIDEBAR_TITLE = ChatColor.RED + "[Trouble in Crafter Town]";
 
     //イベント
     public static final List<String> TCT_BLOCKED = Arrays.asList("FURNACE", "CHEST", "BEACON", "DISPENSER",
@@ -96,7 +96,7 @@ public final class Reference {
     public static final String TCT_GAMEMODE_SPECTATOR = "スペクテイター";
     //入退室
     public static final String TCT_CHAT_JOIN_MESSAGE_0 = ChatColor.LIGHT_PURPLE + "=-=-7mi TCT v%VERSION%-=-=";
-    public static final String TCT_CHAT_JOIN_MESSAGE_1 = ChatColor.RED + " " + " " + " " + "by ClockClap";
+    public static final String TCT_CHAT_JOIN_MESSAGE_1 = ChatColor.RED + " " + " " + " " + "(ななみ鯖専用)";
     public static final String TCT_CHAT_JOIN_MESSAGE = ChatColor.GREEN + "[+] " + ChatColor.GRAY + "%PLAYER%";
     public static final String TCT_CHAT_QUIT_MESSAGE = ChatColor.RED + "[-] " + ChatColor.GRAY + "%PLAYER%";
     //ゲーム開始

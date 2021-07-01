@@ -177,11 +177,57 @@ public class DamageListener implements Listener {
                         return;
                     }
                     /**/
+                    FileConfiguration config = NanamiTctApi.config.getConfig();
                     EntityDamageEvent event = p.getLastDamageCause();
                     EntityDamageEvent.DamageCause damageCause = event.getCause();
                     TctDeathCause cause = TctDeathCause.AIR;
                     if(data.getWatcher() != null && data.getRole() == GameRoles.FOX) {
                         data.getWatcher().cancelCountFox();
+                        Firework fw = (Firework) p.getWorld().spawnEntity(p.getLocation(), EntityType.FIREWORK);
+                        FireworkMeta meta = fw.getFireworkMeta();
+                        FireworkEffect.Builder builder = FireworkEffect.builder();
+                        try {
+                            FireworkEffect.Type type = FireworkEffect.Type.valueOf(config.getString("fireworks.type", "BURST"));
+                            builder.with(type);
+                        } catch (Exception ex) {
+                            builder.with(FireworkEffect.Type.BURST);
+                        }
+                        try {
+                            for (String color : (List<String>) config.getList("fireworks.colors", Arrays.asList("0xff0000"))) {
+                                int c;
+                                if (color.startsWith("0x")) {
+                                    c = (int) Long.parseLong(color, 16);
+                                } else {
+                                    c = (int) Long.parseLong(color, 10);
+                                }
+                                builder.withColor(Color.fromRGB(c));
+                            }
+                        } catch(Exception ex) {
+                            builder.withColor(Color.RED);
+                        }
+                        try {
+                            for (String color : (List<String>) config.getList("fireworks.fades", Arrays.asList("0xff0000"))) {
+                                int c;
+                                if (color.startsWith("0x")) {
+                                    c = (int) Long.parseLong(color, 16);
+                                } else {
+                                    c = (int) Long.parseLong(color, 10);
+                                }
+                                builder.withFade(Color.fromRGB(c));
+                            }
+                        } catch(Exception ex) {
+                            builder.withFade(Color.RED);
+                        }
+                        if(builder != null) {
+                            FireworkEffect effect = builder.build();
+                            meta.addEffect(effect);
+                            meta.setPower(config.getInt("fireworks.power"));
+                        } else {
+                            FireworkEffect effect = FireworkEffect.builder().with(FireworkEffect.Type.BURST).withColor(Color.RED).withFade(Color.RED).build();
+                            meta.addEffect(effect);
+                            meta.setPower(1);
+                        }
+                        fw.setFireworkMeta(meta);
                     }
                     if(damageCause == EntityDamageEvent.DamageCause.ENTITY_ATTACK || damageCause == EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK || damageCause == EntityDamageEvent.DamageCause.PROJECTILE) {
                         EntityDamageByEntityEvent ev = (EntityDamageByEntityEvent) p.getLastDamageCause();
@@ -193,52 +239,6 @@ public class DamageListener implements Listener {
                             PlayerData killer = plugin.getGame().getReference().PLAYERDATA.get(opkiller.getUniqueId());
                             killer.addKilledPlayer(NanamiTct.utilities.resetColor(p.getName()));
                             data.setKilledBy(new Killer(opkiller, plugin.getGame().getReference().PLAYERDATA.get(p.getKiller().getUniqueId()).getRole()));
-                            FileConfiguration config = NanamiTctApi.config.getConfig();
-                            Firework fw = (Firework) p.getWorld().spawnEntity(p.getLocation(), EntityType.FIREWORK);
-                            FireworkMeta meta = fw.getFireworkMeta();
-                            FireworkEffect.Builder builder = FireworkEffect.builder();
-                            try {
-                                FireworkEffect.Type type = FireworkEffect.Type.valueOf(config.getString("fireworks.type", "BURST"));
-                                builder.with(type);
-                            } catch (Exception ex) {
-                                builder.with(FireworkEffect.Type.BURST);
-                            }
-                            try {
-                                for (String color : (List<String>) config.getList("fireworks.colors", Arrays.asList("0xff0000"))) {
-                                    int c;
-                                    if (color.startsWith("0x")) {
-                                        c = (int) Long.parseLong(color, 16);
-                                    } else {
-                                        c = (int) Long.parseLong(color, 10);
-                                    }
-                                    builder.withColor(Color.fromRGB(c));
-                                }
-                            } catch(Exception ex) {
-                                builder.withColor(Color.RED);
-                            }
-                            try {
-                                for (String color : (List<String>) config.getList("fireworks.fades", Arrays.asList("0xff0000"))) {
-                                    int c;
-                                    if (color.startsWith("0x")) {
-                                        c = (int) Long.parseLong(color, 16);
-                                    } else {
-                                        c = (int) Long.parseLong(color, 10);
-                                    }
-                                    builder.withFade(Color.fromRGB(c));
-                                }
-                            } catch(Exception ex) {
-                                builder.withFade(Color.RED);
-                            }
-                            if(builder != null) {
-                                FireworkEffect effect = builder.build();
-                                meta.addEffect(effect);
-                                meta.setPower(config.getInt("fireworks.power"));
-                            } else {
-                                FireworkEffect effect = FireworkEffect.builder().with(FireworkEffect.Type.BURST).withColor(Color.RED).withFade(Color.RED).build();
-                                meta.addEffect(effect);
-                                meta.setPower(1);
-                            }
-                            fw.setFireworkMeta(meta);
                             if(NanamiTct.playerStats != null) {
                                 PlayerStat killerStat = NanamiTct.playerStats.getStat(opkiller.getUniqueId());
                                 killerStat.setCountKill(killerStat.getCountKill() + 1);

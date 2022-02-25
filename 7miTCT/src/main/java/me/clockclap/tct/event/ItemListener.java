@@ -161,7 +161,7 @@ public class ItemListener implements Listener {
                         for (CustomSpecialItem item : CustomItems.specialItems) {
                             if (i.getItemMeta().getDisplayName().equalsIgnoreCase(item.getItemStack().getItemMeta().getDisplayName())) {
                                 if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                                    item.onRightClick(e.getPlayer());
+                                    item.onRightClick(e.getPlayer(), i);
                                 }
                                 if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK) {
                                     item.onLeftClick(e.getPlayer());

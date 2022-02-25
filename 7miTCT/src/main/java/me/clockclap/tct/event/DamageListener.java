@@ -165,16 +165,6 @@ public class DamageListener implements Listener {
         }
     }
 
-
-    public void forceRespawn(Player player) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                player.spigot().respawn();
-            }
-        }.runTaskLater(plugin, 5);
-    }
-
     @EventHandler
     public void onPlayerDeathEvent(PlayerDeathEvent e) {
         Player p = e.getEntity();
@@ -232,7 +222,7 @@ public class DamageListener implements Listener {
             respawnLoc = e.getEntity().getLocation();
         }
 
-        forceRespawn(p);
+        p.spigot().respawn();
     }
 
     @EventHandler

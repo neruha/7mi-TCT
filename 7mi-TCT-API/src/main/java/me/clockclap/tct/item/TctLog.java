@@ -1,6 +1,6 @@
 package me.clockclap.tct.item;
 
-import me.clockclap.tct.game.TctGame;
+import me.clockclap.tct.game.TCTGame;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -14,16 +14,16 @@ import java.util.List;
 
 public class TctLog {
 
-    private final TctGame game;
+    private final TCTGame game;
     private List<String> log = new ArrayList<>();
     private List<List<String>> bookTexts = new ArrayList<>();
     private ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
 
-    public TctLog(TctGame game) {
+    public TctLog(TCTGame game) {
         this.game = game;
     }
 
-    public TctGame getGame() {
+    public TCTGame getGame() {
         return this.game;
     }
 
@@ -43,14 +43,14 @@ public class TctLog {
         meta.setTitle(CustomItems.logItem.getTitle());
         meta.addPage("");
         this.book.setItemMeta(meta);
-        for(Player p : Bukkit.getOnlinePlayers()) {
-            for(int i = 0; i < p.getInventory().getSize(); i++) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            for (int i = 0; i < p.getInventory().getSize(); i++) {
                 ItemStack i_ = p.getInventory().getItem(i);
-                if(i_ == null) {
+                if (i_ == null) {
                     continue;
                 }
-                if(i_.hasItemMeta()) {
-                    if(i_.getType() == CustomItems.logItem.getItemStack().getType() &&
+                if (i_.hasItemMeta()) {
+                    if (i_.getType() == CustomItems.logItem.getItemStack().getType() &&
                             i_.getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.logItem.getItemStack().getItemMeta().getDisplayName())) {
                         p.getInventory().setItem(i, this.book);
                     }
@@ -70,7 +70,7 @@ public class TctLog {
     public void splitLog() {
         int size = 12;
         List<List<String>> list = new ArrayList<>();
-        if(log.size() > 0) {
+        if (log.size() > 0) {
             for (int i = 0; i < log.size(); i += size) {
                 list.add(new ArrayList<>(log.subList(i, Math.min(i + size, log.size()))));
             }
@@ -86,7 +86,7 @@ public class TctLog {
         lore.add(CustomItems.logItem.getDescription());
         meta.setLore(lore);
         meta.setTitle(ChatColor.WHITE + CustomItems.logItem.getTitle());
-        if(this.bookTexts.size() > 0) {
+        if (this.bookTexts.size() > 0) {
             for (List<String> list : this.bookTexts) {
                 String str = String.join("\n", list);
                 meta.addPage(str);
@@ -98,14 +98,14 @@ public class TctLog {
         this.book = item;
 
         // Replace item
-        for(Player p : Bukkit.getOnlinePlayers()) {
-            for(int i = 0; i < p.getInventory().getSize(); i++) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            for (int i = 0; i < p.getInventory().getSize(); i++) {
                 ItemStack i_ = p.getInventory().getItem(i);
-                if(i_ == null) {
+                if (i_ == null) {
                     continue;
                 }
-                if(i_.hasItemMeta()) {
-                    if(i_.getType() == CustomItems.logItem.getItemStack().getType() &&
+                if (i_.hasItemMeta()) {
+                    if (i_.getType() == CustomItems.logItem.getItemStack().getType() &&
                             i_.getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.logItem.getItemStack().getItemMeta().getDisplayName())) {
                         p.getInventory().setItem(i, item);
                     }

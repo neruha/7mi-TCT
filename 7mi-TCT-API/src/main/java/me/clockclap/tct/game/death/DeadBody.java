@@ -2,7 +2,7 @@ package me.clockclap.tct.game.death;
 
 import me.clockclap.tct.NanamiTctApi;
 import me.clockclap.tct.VersionUtils;
-import me.clockclap.tct.game.TctGame;
+import me.clockclap.tct.game.TCTGame;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.role.GameRole;
 import org.bukkit.Location;
@@ -20,7 +20,7 @@ import java.util.List;
 
 public class DeadBody {
 
-    private final TctGame game;
+    private final TCTGame game;
     private final PlayerData data;
     private final String name;
     private final TctDeathCause cause;
@@ -39,7 +39,7 @@ public class DeadBody {
     private boolean damaged;
     private boolean fake;
 
-    public DeadBody(TctGame game, PlayerData data, TctDeathCause cause, Location loc) {
+    public DeadBody(TCTGame game, PlayerData data, TctDeathCause cause, Location loc) {
         this.game = game;
         this.data = data;
         this.name = data.getPlayer().getDisplayName();
@@ -68,7 +68,7 @@ public class DeadBody {
         this.fake = false;
     }
 
-    public TctGame getGame() {
+    public TCTGame getGame() {
         return this.game;
     }
 
@@ -249,7 +249,7 @@ public class DeadBody {
     }
 
     @Deprecated
-    public static void removeAll(TctGame game) {
+    public static void removeAll(TCTGame game) {
         for(DeadBody deadBody : game.getReference().DEADBODIES) {
             deadBody.remove();
         }

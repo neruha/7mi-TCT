@@ -1,10 +1,10 @@
 package me.clockclap.tct.game.role;
 
-import me.clockclap.tct.game.TctGame;
+import me.clockclap.tct.game.TCTGame;
 
 public class RoleCount {
 
-    private TctGame game;
+    private TCTGame game;
     private CustomRoleCount customRoleCount;
     private int villagersCount;
     private int healersCount;
@@ -14,7 +14,7 @@ public class RoleCount {
     private int foxesCount;
     private int immoralCount;
 
-    public RoleCount(TctGame game) {
+    public RoleCount(TCTGame game) {
         this.game = game;
         customRoleCount = new CustomRoleCount(game);
         villagersCount = 0;

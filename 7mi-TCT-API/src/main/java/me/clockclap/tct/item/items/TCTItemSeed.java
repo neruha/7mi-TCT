@@ -2,10 +2,8 @@ package me.clockclap.tct.item.items;
 
 import me.clockclap.tct.NanamiTctApi;
 import me.clockclap.tct.api.Reference;
-import me.clockclap.tct.api.sql.MySQLStatus;
-import me.clockclap.tct.game.TctGame;
+import me.clockclap.tct.game.TCTGame;
 import me.clockclap.tct.game.data.PlayerData;
-import me.clockclap.tct.game.data.PlayerStat;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomSpecialItem;
@@ -20,7 +18,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TctItemSeed implements CustomSpecialItem {
+public class TCTItemSeed implements CustomSpecialItem {
 
     private ItemStack item;
     private Material material;
@@ -29,13 +27,13 @@ public class TctItemSeed implements CustomSpecialItem {
     private String title;
     private String description;
     private boolean attackable;
-    private boolean quickchat;
+    private final boolean quickchat;
 
     private final GameRole role;
     private final boolean isdefault;
     private final int index;
 
-    public TctItemSeed() {
+    public TCTItemSeed() {
         this.index = ItemIndex.DETECTIVES_SHOP_ITEM_SLOT_5;
         this.isdefault = false;
         this.material = Material.LEGACY_SEEDS;
@@ -57,46 +55,37 @@ public class TctItemSeed implements CustomSpecialItem {
     }
 
     @Override
-    public void onRightClick(Player player) {
-        if(player != null) {
-            TctGame game = NanamiTctApi.game;
+    public void onRightClick(Player player, ItemStack item) {
+        if (player != null) {
+            TCTGame game = NanamiTctApi.game;
+
             PlayerData data = game.getReference().PLAYERDATA.get(player.getUniqueId());
-            boolean foundWolf = false;
-            for(Player pl : Bukkit.getOnlinePlayers()) {
-                if(pl != null) {
-                    PlayerData dat = game.getReference().PLAYERDATA.get(pl.getUniqueId());
-                    if(dat != null) {
-                        if(!dat.isSpectator() && !dat.isInvisible()) {
-                            double maxFar = NanamiTctApi.config.getConfig().getInt("seed-range", 5);
-                            double far = player.getLocation().distance(pl.getLocation());
-                            if(far <= maxFar) {
-                                if(dat.getRole() == GameRoles.WOLF) {
-                                    foundWolf = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
+
+            final double max = NanamiTctApi.config.getConfig().getInt("seed-range", 5);
+
+            boolean found = Bukkit.getOnlinePlayers().stream().anyMatch(target -> {
+                PlayerData targetData = game.getReference().PLAYERDATA.get(target.getUniqueId());
+
+                if (targetData != null && !data.isSpectator() && !data.isInvisible()) {
+
+                    final double range = player.getLocation().distance(target.getLocation());
+
+                    return max >= range && data.getRole() == GameRoles.WOLF;
                 }
-            }
-            if(foundWolf) {
+                return false;
+            });
+
+
+            if (found) {
                 player.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_IS_WOLF.replaceAll("%DISTANCE%", String.valueOf(NanamiTctApi.config.getConfig().getInt("seed-range", 5))));
             } else {
-                player.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_INT_WOLF.replaceAll("%DISTANCE%", String.valueOf(NanamiTctApi.config.getConfig().getInt("seed-range", 5))));
+                player.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ISNT_WOLF.replaceAll("%DISTANCE%", String.valueOf(NanamiTctApi.config.getConfig().getInt("seed-range", 5))));
             }
-            for (int i = 0; i < player.getInventory().getSize(); i++) {
-                ItemStack item = player.getInventory().getItem(i);
-                if (item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().equalsIgnoreCase(player.getInventory().getItemInMainHand().getItemMeta().getDisplayName())) {
-                    int amt = item.getAmount() - 1;
-                    item.setAmount(amt);
-                    player.getInventory().setItem(i, amt > 0 ? item : null);
-                    player.updateInventory();
-                    break;
-                }
-            }
-            if(MySQLStatus.isSqlEnabled() && NanamiTctApi.playerStats != null) {
-                PlayerStat stat = NanamiTctApi.playerStats.getStat(player.getUniqueId());
-                if(stat != null) stat.setCountUsedItem(stat.getCountUsedItem() + 1);
+
+            item.setAmount(item.getAmount() - 1);
+
+            if (NanamiTctApi.isPlayerStatsNotNull()) {
+                NanamiTctApi.playerStats.getStat(player.getUniqueId()).increaseItemUsed();
             }
         }
     }

@@ -56,7 +56,7 @@ public class TctItemDiamond implements CustomSpecialItem {
     }
 
     @Override
-    public void onRightClick(Player player) {
+    public void onRightClick(Player player, ItemStack item) {
         if(player != null) {
             PlayerData data = NanamiTctApi.utilities.getPlayerData(player);
             if(data != null) {
@@ -76,16 +76,9 @@ public class TctItemDiamond implements CustomSpecialItem {
                             player.teleport(data.getSavedLocation());
                         }
                     }.runTaskLater(NanamiTctApi.plugin, 40);
-                    for (int i = 0; i < player.getInventory().getSize(); i++) {
-                        ItemStack item = player.getInventory().getItem(i);
-                        if (item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.DIAMOND.getItemStack().getItemMeta().getDisplayName())) {
-                            int amt = item.getAmount() - 1;
-                            item.setAmount(amt);
-                            player.getInventory().setItem(i, amt > 0 ? item : null);
-                            player.updateInventory();
-                            break;
-                        }
-                    }
+
+                    item.setAmount(item.getAmount() - 1);
+
                 } else {
                     if(data.isTeleporting()) {
                         player.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_TELEPORTING);

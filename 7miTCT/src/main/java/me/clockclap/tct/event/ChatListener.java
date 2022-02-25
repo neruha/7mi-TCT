@@ -30,7 +30,8 @@ public class ChatListener implements Listener {
         e.setCancelled(true);
         final boolean japanize = plugin.getTctConfig().getChat().getBoolean("japanize", true);
         if (japanize) {
-            handle(e.getPlayer(), Japanizer.japanizeColorCode(e.getMessage()));
+            String format = plugin.getTctConfig().getChat().getString("japanize_format", Reference.JAPANIZE_FORMAT);
+            handle(e.getPlayer(), format.replaceAll("%JAPANIZE%", Japanizer.japanizeColorCode(e.getMessage())).replaceAll("%MESSAGE%", e.getMessage()));
         } else {
             handle(e.getPlayer(), e.getMessage());
         }

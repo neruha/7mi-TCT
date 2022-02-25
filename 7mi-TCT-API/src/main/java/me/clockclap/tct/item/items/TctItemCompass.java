@@ -54,7 +54,7 @@ public class TctItemCompass implements CustomSpecialItem {
     }
 
     @Override
-    public void onRightClick(Player player) {
+    public void onRightClick(Player player, ItemStack item) {
         if(player != null) {
             Player p = NanamiTctApi.utilities.getNearestPlayer(player);
             if(p == null) {

@@ -29,7 +29,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 
-public class Game implements TctGame {
+public class Game implements TCTGame {
 
     private final NanamiTct plugin;
     private GameReference reference;

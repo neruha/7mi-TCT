@@ -1,6 +1,6 @@
 package me.clockclap.tct.api.event;
 
-import me.clockclap.tct.game.TctGame;
+import me.clockclap.tct.game.TCTGame;
 import me.clockclap.tct.game.role.GameTeam;
 import org.bukkit.Location;
 import org.bukkit.event.HandlerList;
@@ -11,7 +11,7 @@ public class GameStopEvent extends GameEvent {
     private Location location;
     private GameTeam winners;
 
-    public GameStopEvent(TctGame game, Location location, GameTeam winners) {
+    public GameStopEvent(TCTGame game, Location location, GameTeam winners) {
         super(game);
         this.location = location;
         this.winners = winners;

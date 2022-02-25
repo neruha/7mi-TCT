@@ -2,7 +2,7 @@ package me.clockclap.tct.api;
 
 import me.clockclap.tct.NanamiTctApi;
 import me.clockclap.tct.game.GameState;
-import me.clockclap.tct.game.TctGame;
+import me.clockclap.tct.game.TCTGame;
 import me.clockclap.tct.game.data.CustomBlockData;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.role.GameRoles;
@@ -32,9 +32,9 @@ public class PlayerWatcher {
     private Objective objective;
     private PlayerData data;
 
-    private final TctGame game;
+    private final TCTGame game;
 
-    public PlayerWatcher(TctGame game, Player player) {
+    public PlayerWatcher(TCTGame game, Player player) {
         this.game = game;
         this.player = player;
         this.data = this.game.getReference().PLAYERDATA.get(this.player.getUniqueId());
@@ -57,7 +57,7 @@ public class PlayerWatcher {
         this.data = data;
     }
 
-    public TctGame getGame() {
+    public TCTGame getGame() {
         return this.game;
     }
 
@@ -285,7 +285,7 @@ public class PlayerWatcher {
                         }
                     }
                     if(getCountFox() == 0) {
-                        TctGame game = NanamiTctApi.game;
+                        TCTGame game = NanamiTctApi.game;
                         String str = String.join(", ", game.getFoxesList());
                         Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_FOX_IS.replaceAll("%PLAYER%", str));
                         for(String name : game.getFoxesList()) {

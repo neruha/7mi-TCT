@@ -1,18 +1,17 @@
 package me.clockclap.tct.game.role;
 
 import me.clockclap.tct.NanamiTctApi;
-import me.clockclap.tct.game.TctGame;
-import me.clockclap.tct.game.role.GameRole;
+import me.clockclap.tct.game.TCTGame;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class CustomRoleCount {
 
-    private TctGame game;
+    private TCTGame game;
     private Map<GameRole, Integer> map;
 
-    public CustomRoleCount(TctGame game) {
+    public CustomRoleCount(TCTGame game) {
         this.game = game;
         map = new HashMap<>();
         if(!NanamiTctApi.roleRegistry.isEmpty()) {

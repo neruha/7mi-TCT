@@ -1,7 +1,7 @@
 package me.clockclap.tct.game.data;
 
 import me.clockclap.tct.api.TctCooldownType;
-import me.clockclap.tct.game.TctGame;
+import me.clockclap.tct.game.TCTGame;
 import me.clockclap.tct.item.CustomBlock;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -10,7 +10,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public interface CustomBlockData extends CustomData {
 
-    public TctGame getGame();
+    public TCTGame getGame();
 
     public Block getBlock();
 

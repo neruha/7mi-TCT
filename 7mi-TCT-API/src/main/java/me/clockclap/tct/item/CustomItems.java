@@ -41,7 +41,7 @@ public final class CustomItems {
     public static final CustomItem CRACKER = new TctItemCracker();
     public static final CustomSpecialItem COMPASS = new TctItemCompass();
     public static final CustomSpecialItem CLOCK = new TctItemClock();
-    public static final CustomSpecialItem SEED = new TctItemSeed();
+    public static final CustomSpecialItem SEED = new TCTItemSeed();
     public static final CustomSpecialItem DIAMOND = new TctItemDiamond();
 
     public static final CustomItem SNOWBALL = new TctItemSnowball();

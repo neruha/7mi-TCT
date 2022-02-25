@@ -1,13 +1,13 @@
 package me.clockclap.tct.api.event;
 
-import me.clockclap.tct.game.TctGame;
+import me.clockclap.tct.game.TCTGame;
 import org.bukkit.event.HandlerList;
 
 public class GameItemDistributeEvent extends GameEvent {
 
     private static final HandlerList handlers = new HandlerList();
 
-    public GameItemDistributeEvent(TctGame game) {
+    public GameItemDistributeEvent(TCTGame game) {
         super(game);
     }
 

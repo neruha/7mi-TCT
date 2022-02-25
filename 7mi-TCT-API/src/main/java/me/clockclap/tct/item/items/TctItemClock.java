@@ -2,7 +2,7 @@ package me.clockclap.tct.item.items;
 
 import me.clockclap.tct.NanamiTctApi;
 import me.clockclap.tct.api.sql.MySQLStatus;
-import me.clockclap.tct.game.TctGame;
+import me.clockclap.tct.game.TCTGame;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.data.PlayerStat;
 import me.clockclap.tct.game.death.DeadBody;
@@ -62,9 +62,9 @@ public class TctItemClock implements CustomSpecialItem {
     }
 
     @Override
-    public void onRightClick(Player player) {
+    public void onRightClick(Player player, ItemStack item) {
         if (player != null) {
-            TctGame game = NanamiTctApi.game;
+            TCTGame game = NanamiTctApi.game;
             PlayerData data = game.getReference().PLAYERDATA.get(player.getUniqueId());
             Location loc = player.getLocation();
             Location blockLoc = new Location(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
@@ -104,16 +104,9 @@ public class TctItemClock implements CustomSpecialItem {
                     data.setInvisible(false);
                 }
             }.runTaskLater(NanamiTctApi.plugin, tick);
-            for (int i = 0; i < player.getInventory().getSize(); i++) {
-                ItemStack item = player.getInventory().getItem(i);
-                if (item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().equalsIgnoreCase(player.getInventory().getItemInMainHand().getItemMeta().getDisplayName())) {
-                    int amt = item.getAmount() - 1;
-                    item.setAmount(amt);
-                    player.getInventory().setItem(i, amt > 0 ? item : null);
-                    player.updateInventory();
-                    break;
-                }
-            }
+
+            item.setAmount(item.getAmount() - 1);
+
             if (MySQLStatus.isSqlEnabled() && NanamiTctApi.playerStats != null) {
                 PlayerStat stat = NanamiTctApi.playerStats.getStat(player.getUniqueId());
                 if (stat != null) stat.setCountUsedItem(stat.getCountUsedItem() + 1);

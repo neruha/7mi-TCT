@@ -6,78 +6,79 @@ import java.util.UUID;
 
 public interface PlayerStat {
 
-    public UUID getUUID();
+    UUID getUUID();
 
-    public int getCountVillager();
+    int getCountVillager();
 
-    public int getCountHealer();
+    int getCountHealer();
 
-    public int getCountDetective();
+    int getCountDetective();
 
-    public int getCountWolf();
+    int getCountWolf();
 
-    public int getCountFanatic();
+    int getCountFanatic();
 
-    public int getCountFox();
+    int getCountFox();
 
-    public int getCountImmoral();
+    int getCountImmoral();
 
-    public int getCountCustomRole(GameRole role);
+    int getCountCustomRole(GameRole role);
 
-    public int getCountDeath();
+    int getCountDeath();
 
-    public int getCountKill();
+    int getCountKill();
 
-    public int getTotalFoundDeadBodies();
+    int getTotalFoundDeadBodies();
 
-    public int getCountUsedItem();
+    int getCountUsedItem();
 
-    public int getTotalVictories();
+    int getTotalVictories();
 
-    public int getTotalDefeats();
+    int getTotalDefeats();
 
-    public int getTotalUseHealStation();
+    int getTotalUseHealStation();
 
-    public int getTotalPlaceHealStation();
+    int getTotalPlaceHealStation();
 
-    public int getTotalBoughtItems();
+    int getTotalBoughtItems();
 
-    public int getTotalPlayingCount();
+    int getTotalPlayingCount();
 
-    public void setCountVillager(int count);
+    void setCountVillager(int count);
 
-    public void setCountHealer(int count);
+    void setCountHealer(int count);
 
-    public void setCountDetective(int count);
+    void setCountDetective(int count);
 
-    public void setCountWolf(int count);
+    void setCountWolf(int count);
 
-    public void setCountFanatic(int count);
+    void setCountFanatic(int count);
 
-    public void setCountFox(int count);
+    void setCountFox(int count);
 
-    public void setCountImmoral(int count);
+    void setCountImmoral(int count);
 
-    public void setCountCustomRole(GameRole role, int count);
+    void setCountCustomRole(GameRole role, int count);
 
-    public void setCountDeath(int count);
+    void setCountDeath(int count);
 
-    public void setCountKill(int count);
+    void setCountKill(int count);
 
-    public void setTotalFoundDeadBodies(int count);
+    void setTotalFoundDeadBodies(int count);
 
-    public void setCountUsedItem(int count);
+    void setCountUsedItem(int count);
 
-    public void setTotalVictories(int count);
+    void setTotalVictories(int count);
 
-    public void setTotalDefeats(int count);
+    void setTotalDefeats(int count);
 
-    public void setTotalUseHealStation(int count);
+    void setTotalUseHealStation(int count);
 
-    public void setTotalPlaceHealStation(int count);
+    void setTotalPlaceHealStation(int count);
 
-    public void setTotalBoughtItems(int count);
+    void setTotalBoughtItems(int count);
 
-    public void setTotalPlayingCount(int count);
+    void setTotalPlayingCount(int count);
 
+    void increaseItemUsed();
 }

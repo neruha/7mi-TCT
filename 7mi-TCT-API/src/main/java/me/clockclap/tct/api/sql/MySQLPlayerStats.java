@@ -1,7 +1,7 @@
 package me.clockclap.tct.api.sql;
 
 import me.clockclap.tct.NanamiTctApi;
-import me.clockclap.tct.game.TctGame;
+import me.clockclap.tct.game.TCTGame;
 import me.clockclap.tct.game.data.PlayerStat;
 
 import java.sql.PreparedStatement;
@@ -12,12 +12,12 @@ import java.util.UUID;
 
 public class MySQLPlayerStats {
 
-    private final TctGame game;
+    private final TCTGame game;
     private final MySQLConnection connection;
 
     private final Map<UUID, PlayerStat> playerStatMap;
 
-    public MySQLPlayerStats(MySQLConnection connection, TctGame game) {
+    public MySQLPlayerStats(MySQLConnection connection, TCTGame game) {
         this.game = game;
         this.connection = connection;
         this.playerStatMap = new HashMap<>();
@@ -27,7 +27,7 @@ public class MySQLPlayerStats {
         return connection;
     }
 
-    public TctGame getGame() {
+    public TCTGame getGame() {
         return game;
     }
 

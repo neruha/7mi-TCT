@@ -9,7 +9,7 @@ import me.clockclap.tct.api.sql.MySQLStatus;
 import me.clockclap.tct.command.*;
 import me.clockclap.tct.event.*;
 import me.clockclap.tct.game.Game;
-import me.clockclap.tct.game.TctGame;
+import me.clockclap.tct.game.TCTGame;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.data.PlayerStat;
 import me.clockclap.tct.game.data.TctPlayerData;
@@ -40,7 +40,6 @@ import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 public final class NanamiTct extends JavaPlugin {
 
@@ -53,7 +52,7 @@ public final class NanamiTct extends JavaPlugin {
     public static boolean isLoaded = false;
     private static TctPluginLoader loader;
 
-    private TctGame game;
+    private TCTGame game;
     private ITctConfiguration configuration;
     private CustomInventory customInventory;
     public Plugin[] loadedPlugins;
@@ -203,7 +202,7 @@ public final class NanamiTct extends JavaPlugin {
         //loader.enablePlugins();
     }
 
-    public TctGame getGame() {
+    public TCTGame getGame() {
         return this.game;
     }
 

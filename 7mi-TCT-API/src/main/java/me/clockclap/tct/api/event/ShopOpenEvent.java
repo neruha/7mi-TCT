@@ -1,15 +1,14 @@
 package me.clockclap.tct.api.event;
 
-import me.clockclap.tct.game.TctGame;
+import me.clockclap.tct.game.TCTGame;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
 public class ShopOpenEvent extends GamePlayerEvent {
 
     private static HandlerList handlers;
 
-    public ShopOpenEvent(TctGame game, Player who) {
+    public ShopOpenEvent(TCTGame game, Player who) {
         super(game, who);
     }
 

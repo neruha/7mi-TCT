@@ -51,8 +51,7 @@ public class ItemListener implements Listener {
                 e.setCancelled(true);
             }
             if (data.isInvisible()) {
-                data.setInvisible(false);
-                p.removePotionEffect(PotionEffectType.INVISIBILITY);
+                data.setInvisible(false, true);
             }
         }
         if (e.getEntity() instanceof Player) {

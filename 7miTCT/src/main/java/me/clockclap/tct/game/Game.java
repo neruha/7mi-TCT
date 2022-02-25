@@ -654,13 +654,13 @@ public class Game implements TCTGame {
             }
             for (Player pl : Bukkit.getOnlinePlayers()) {
                 NanamiTct.utilities.hidePlayer(pl, p);
-                data.setInvisible(true);
+                data.setInvisible(true, false);
                 new BukkitRunnable() {
 
                     @Override
                     public void run() {
                         NanamiTct.utilities.showPlayer(pl, p);
-                        data.setInvisible(false);
+                        data.setInvisible(false, false);
                     }
                 }.runTaskLater(getPlugin(), 15);
             }
@@ -928,7 +928,7 @@ public class Game implements TCTGame {
             p.setHealth(20.0D);
             data.setRole(GameRoles.SPEC);
             data.setSpectator(true);
-            data.setInvisible(false);
+            data.setInvisible(false, false);
             data.setCoin(0);
             data.setSponge(false);
             RoleCount count = new RoleCount(this);

@@ -71,7 +71,7 @@ public interface PlayerData extends EntityData {
 
     boolean isInvisible();
 
-    void setInvisible(boolean bool);
+    void setInvisible(boolean bool, boolean clock);
 
     void setSponge(boolean bool);
 

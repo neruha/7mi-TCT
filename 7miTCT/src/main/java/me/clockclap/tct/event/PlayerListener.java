@@ -8,7 +8,7 @@ import me.clockclap.tct.api.sql.MySQLStatus;
 import me.clockclap.tct.game.GameState;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.data.PlayerStat;
-import me.clockclap.tct.game.data.TctPlayerData;
+import me.clockclap.tct.game.data.TCTPlayerData;
 import me.clockclap.tct.game.data.TctPlayerStat;
 import me.clockclap.tct.game.death.Killer;
 import me.clockclap.tct.game.death.TctDeathCause;
@@ -42,7 +42,7 @@ public class PlayerListener implements Listener {
         Player p = e.getPlayer();
         e.setJoinMessage(Reference.TCT_CHAT_JOIN_MESSAGE.replaceAll("%PLAYER%", p.getDisplayName()));
         plugin.getGame().getBar().addPlayer(p);
-        PlayerData data = new TctPlayerData(plugin, GameRoles.SPEC, NanamiTct.utilities.resetColor(p.getName()));
+        PlayerData data = new TCTPlayerData(plugin, GameRoles.SPEC, NanamiTct.utilities.resetColor(p.getName()));
         PlayerWatcher watcher = new PlayerWatcher(plugin.getGame(), p);
         data.setSpectator(true);
         data.setWatcher(watcher);

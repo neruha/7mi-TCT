@@ -12,7 +12,7 @@ import me.clockclap.tct.game.Game;
 import me.clockclap.tct.game.TCTGame;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.data.PlayerStat;
-import me.clockclap.tct.game.data.TctPlayerData;
+import me.clockclap.tct.game.data.TCTPlayerData;
 import me.clockclap.tct.game.data.TctPlayerStat;
 import me.clockclap.tct.game.death.Killer;
 import me.clockclap.tct.game.role.CustomRoles;
@@ -155,7 +155,7 @@ public final class NanamiTct extends JavaPlugin {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (p != null) {
                     String name = utilities.resetColor(p.getName());
-                    PlayerData data = new TctPlayerData(this, GameRoles.SPEC, name);
+                    PlayerData data = new TCTPlayerData(this, GameRoles.SPEC, name);
                     PlayerWatcher watcher = new PlayerWatcher(plugin.getGame(), p);
                     data.setSpectator(true);
                     data.setWatcher(watcher);

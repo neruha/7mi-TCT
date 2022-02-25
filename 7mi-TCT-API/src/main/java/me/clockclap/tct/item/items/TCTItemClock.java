@@ -72,9 +72,9 @@ public class TCTItemClock implements CustomSpecialItem {
         int duration = NanamiTctApi.config.getTime(NanamiTctApi.config.getConfig(), "effect.wolf-invisible.duration", 200);
 
         player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, duration, 1));
-        data.setInvisible(true);
+        data.setInvisible(true, true);
 
-        Bukkit.getScheduler().runTaskLater(NanamiTctApi.plugin, () -> data.setInvisible(false), duration);
+        Bukkit.getScheduler().runTaskLater(NanamiTctApi.plugin, () -> data.setInvisible(false, true), duration);
 
         item.setAmount(item.getAmount() - 1);
 

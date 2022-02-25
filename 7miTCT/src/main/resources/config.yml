@@ -375,6 +375,8 @@ effect:
     level: 3
   #人狼の時計をクリックしたときに付与される透明化エフェクト
   wolf-invisible:
+    #デフォルト: 5
+    playsound-range: 5
     #デフォルト: 10s
     duration: 10s
 

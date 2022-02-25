@@ -1,6 +1,7 @@
 package me.clockclap.tct.game.data;
 
 import me.clockclap.tct.NanamiTct;
+import me.clockclap.tct.VersionUtils;
 import me.clockclap.tct.game.TctGame;
 import me.clockclap.tct.game.role.GameRole;
 import org.bukkit.Bukkit;
@@ -34,7 +35,11 @@ public class TctCustomProjectileData extends TctEntityData implements CustomProj
             @Override
             public void run() {
                 for(Player p : Bukkit.getOnlinePlayers()) {
-                    p.playSound(getLocation(), Sound.ENTITY_FIREWORK_BLAST, 1.0F, 1.0F);
+                    if (VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2)) {
+                        p.playSound(getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1.0F, 1.0F);
+                    } else {
+                        p.playSound(getLocation(), Sound.valueOf("ENTITY_FIREWORK_BLAST"), 1.0F, 1.0F);
+                    }
                 }
             }
         };

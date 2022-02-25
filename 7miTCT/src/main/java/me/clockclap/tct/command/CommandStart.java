@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 
 public class CommandStart implements CommandExecutor {
 
-    private NanamiTct plugin;
+    private final NanamiTct plugin;
 
     public CommandStart(NanamiTct plugin) {
         this.plugin = plugin;
@@ -23,9 +23,8 @@ public class CommandStart implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender instanceof Player) {
             Player p = (Player) sender;
-            if(p != null) {
-                TctPlayerProfile profile = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId()).getProfile();
-                boolean isAdmin = profile.isAdmin();
+            TctPlayerProfile profile = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId()).getProfile();
+            boolean isAdmin = profile.isAdmin();
 //              if(plugin.getTctConfig().getConfig().getStringList("admin").contains("op")) {
 //                  if(p.isOp()) {
 //                      isAdmin = true;
@@ -39,19 +38,18 @@ public class CommandStart implements CommandExecutor {
 //                      }
 //                  }
 //              }
-                if (isAdmin == false) {
-                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_PERMISSION);
-                    return true;
-                }
-                if(plugin.getGame().getReference().getGameState() == GameState.GAMING || plugin.getGame().getReference().getGameState() == GameState.STARTING) {
-                    stopGame();
-                    return true;
-                }
-                boolean success = plugin.getGame().preStart(p.getLocation());
-                if (!success) {
-                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_PLAYERS_NEEDED);
-                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_NEEDED_PLAYERS.replaceAll("%COUNT_A%", String.valueOf(plugin.getGame().getNeededPlayers())).replaceAll("%COUNT_B%", String.valueOf(plugin.getGame().getNeededPlayers() - Bukkit.getOnlinePlayers().size())));
-                }
+            if (!isAdmin) {
+                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_PERMISSION);
+                return true;
+            }
+            if(plugin.getGame().getReference().getGameState() == GameState.GAMING || plugin.getGame().getReference().getGameState() == GameState.STARTING) {
+                stopGame();
+                return true;
+            }
+            boolean success = plugin.getGame().preStart(p.getLocation());
+            if (!success) {
+                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_PLAYERS_NEEDED);
+                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_NEEDED_PLAYERS.replaceAll("%COUNT_A%", String.valueOf(plugin.getGame().getNeededPlayers())).replaceAll("%COUNT_B%", String.valueOf(plugin.getGame().getNeededPlayers() - Bukkit.getOnlinePlayers().size())));
             }
             return true;
         }

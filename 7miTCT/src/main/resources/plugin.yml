@@ -2,7 +2,7 @@ name: 7mi_TCT
 version: ${version}
 load: STARTUP
 main: me.clockclap.tct.NanamiTct
-api-version: 1.12
+api-version: 1.18
 prefix: 7mi-TCT
 authors: [ClockClap, jack_basukeraihu, ShoboSuke]
 

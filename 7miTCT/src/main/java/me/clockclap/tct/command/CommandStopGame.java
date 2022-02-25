@@ -10,45 +10,32 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class CommandStopGame implements CommandExecutor {
 
-    private NanamiTct plugin;
+    private final NanamiTct plugin;
 
     public CommandStopGame(NanamiTct plugin) {
         this.plugin = plugin;
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if(sender instanceof Player) {
             Player p = (Player) sender;
-            if(p != null) {
-                TctPlayerProfile profile = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId()).getProfile();
-                boolean isAdmin = profile.isAdmin();
-//              if(plugin.getTctConfig().getConfig().getStringList("admin").contains("op")) {
-//                  if(p.isOp()) {
-//                      isAdmin = true;
-//                  }
-//              }
-//              if(isAdmin == false) {
-//                 for (String str : plugin.getTctConfig().getConfig().getStringList("admin")) {
-//                      if (NanamiTct.utilities.resetColor(p.getName()).equalsIgnoreCase(str)) {
-//                          isAdmin = true;
-//                          break;
-//                      }
-//                  }
-//              }
-                if (isAdmin == false) {
-                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_PERMISSION);
-                    return true;
-                }
-                if (plugin.getGame().getReference().getGameState() == GameState.GAMING || plugin.getGame().getReference().getGameState() == GameState.STARTING) {
-                    process();
-                    return true;
-                }
-                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_GAME_NOT_STARTED);
+            TctPlayerProfile profile = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId()).getProfile();
+            final boolean isAdmin = profile.isAdmin();
+
+            if (!isAdmin) {
+                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_PERMISSION);
+                return true;
             }
+            if (plugin.getGame().getReference().getGameState() == GameState.GAMING || plugin.getGame().getReference().getGameState() == GameState.STARTING) {
+                process();
+                return true;
+            }
+            p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_GAME_NOT_STARTED);
             return true;
         }
         if(plugin.getGame().getReference().getGameState() == GameState.GAMING || plugin.getGame().getReference().getGameState() == GameState.STARTING) {

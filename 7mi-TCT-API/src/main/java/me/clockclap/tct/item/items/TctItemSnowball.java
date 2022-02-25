@@ -29,7 +29,7 @@ public class TctItemSnowball implements CustomItem {
     public TctItemSnowball() {
         this.index = ItemIndex.WOLVES_SHOP_ITEM_SLOT_2;
         this.isdefault = false;
-        this.material = Material.SNOW_BALL;
+        this.material = Material.LEGACY_SNOW_BALL;
         this.name = "SNOWBALL";
         this.displayName = "Snowball";
         this.title = "Snowball";

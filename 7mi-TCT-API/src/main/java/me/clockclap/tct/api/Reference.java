@@ -1,7 +1,6 @@
 package me.clockclap.tct.api;
 
 import org.bukkit.ChatColor;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.List;
@@ -123,7 +122,7 @@ public final class Reference {
     public static final String TCT_CHAT_DEADBODY_IS_NOT_WOLF = ChatColor.RED + "" + ChatColor.BOLD + "この死体は人狼ではありません";
     //その他
     public static final String TCT_CHAT_LANDMINE_PLACED = ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "地雷を設置しました、%SECOND%秒後から効果が適応されます";
-    public static final String TCT_CHAT_ISNT_WOLF = ChatColor.GREEN + "半径%DISTANCE%ブロック以内に人狼はいません";
+    public static final String TCT_CHAT_INT_WOLF = ChatColor.GREEN + "半径%DISTANCE%ブロック以内に人狼はいません";
     public static final String TCT_CHAT_IS_WOLF = ChatColor.RED + "半径%DISTANCE%ブロック以内に人狼がいます";
     public static final String TCT_CHAT_NEAREST_PLAYER = ChatColor.GREEN + "一番近くにいる村人 %PLAYER% までの距離: %FAR%m";
     public static final String TCT_CHAT_NO_NEAREST_PLAYER = ChatColor.RED + "村人プレイヤーがいません";
@@ -294,4 +293,6 @@ public final class Reference {
     public static final String TCT_CHAT_STATE_WAITING = "Waiting";
     public static final String TCT_CHAT_STATE_PREGAMING = "PreGaming";
 
+    //エラー
+    public static final String SQL_ERROR = "エラーが発生したためMySQL/SQLiteを使用できません";
 }

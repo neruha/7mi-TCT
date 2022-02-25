@@ -38,7 +38,7 @@ public class TctItemSeed implements CustomSpecialItem {
     public TctItemSeed() {
         this.index = ItemIndex.DETECTIVES_SHOP_ITEM_SLOT_5;
         this.isdefault = false;
-        this.material = Material.SEEDS;
+        this.material = Material.LEGACY_SEEDS;
         this.name = "SEED";
         this.displayName = "Seed";
         this.title = "Seed";
@@ -82,7 +82,7 @@ public class TctItemSeed implements CustomSpecialItem {
             if(foundWolf) {
                 player.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_IS_WOLF.replaceAll("%DISTANCE%", String.valueOf(NanamiTctApi.config.getConfig().getInt("seed-range", 5))));
             } else {
-                player.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ISNT_WOLF.replaceAll("%DISTANCE%", String.valueOf(NanamiTctApi.config.getConfig().getInt("seed-range", 5))));
+                player.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_INT_WOLF.replaceAll("%DISTANCE%", String.valueOf(NanamiTctApi.config.getConfig().getInt("seed-range", 5))));
             }
             for (int i = 0; i < player.getInventory().getSize(); i++) {
                 ItemStack item = player.getInventory().getItem(i);

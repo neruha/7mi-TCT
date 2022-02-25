@@ -32,7 +32,7 @@ public class TctItemWoodSword implements CustomWeaponItem {
     public TctItemWoodSword() {
         this.index = ItemIndex.DEFAULT_ITEM_SLOT_0;
         this.isdefault = true;
-        this.material = Material.WOOD_SWORD;
+        this.material = Material.LEGACY_WOOD_SWORD;
         this.name = "WOOD_SWORD";
         this.displayName = "Wood Sword";
         this.title = "Wood Sword";

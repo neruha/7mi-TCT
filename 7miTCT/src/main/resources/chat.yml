@@ -26,8 +26,10 @@ japanize-format: '&r%JAPANIZE%&r &8(&7%MESSAGE%&8)&r'
 
 #デフォルト: true
 #プレイヤー名を日本語化しないようにするかどうか
-disable-playername-japanize: true
+#現在この項目は有効にできません: v5で廃止済み
+disable-playername-japanize: false
 
 #デフォルト: true
 #チャットに色を付けられるようにするかどうか
-coloured-chat: true
+#現在この項目は有効にできません: v5で廃止済み
+coloured-chat: false

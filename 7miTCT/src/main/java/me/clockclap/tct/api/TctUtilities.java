@@ -1,23 +1,28 @@
 package me.clockclap.tct.api;
 
-import com.mojang.authlib.GameProfile;
 import me.clockclap.tct.NanamiTct;
+import me.clockclap.tct.NanamiTctApi;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.data.PlayerStat;
 import me.clockclap.tct.game.data.TctPlayerStat;
+import me.clockclap.tct.game.death.Killer;
+import me.clockclap.tct.game.death.TctDeathCause;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.game.role.GameTeams;
 import me.clockclap.tct.item.CustomItem;
 import me.clockclap.tct.item.CustomItems;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.command.*;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -34,14 +39,18 @@ public class TctUtilities implements Utilities {
 
     public void registerCommand(String fallbackPrefix, Command command) {
         try {
-            CommandMap map = Bukkit.getServer().getCommandMap();
-            map.getKnownCommands().put(command.getName(), command);
-            for(String alias : command.getAliases()) {
-                map.getKnownCommands().put(alias, command);
+            final Field bukkit = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+
+            bukkit.setAccessible(true);
+            CommandMap map = (CommandMap) bukkit.get(Bukkit.getServer());
+
+            map.register(command.getName(), command);
+            for (String alias : command.getAliases()) {
+                map.register(alias, command);
             }
-            Bukkit.getServer().getCommandMap().register(fallbackPrefix, command);
+            map.register(fallbackPrefix, command);
             plugin.getLogger().info("Succeeded in registering command: /" + command.getName());
-        } catch(Exception e) {
+        } catch (Exception e) {
             plugin.getLogger().warning("Failed to register command: /" + command.getName());
             e.printStackTrace();
         }
@@ -57,7 +66,10 @@ public class TctUtilities implements Utilities {
 
     public void addCommand(String label, String fallbackPrefix, String usageMessage, String description, List<String> aliases, CommandExecutor executor) {
         try {
-            CommandMap map = Bukkit.getServer().getCommandMap();
+            final Field bukkit = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+
+            bukkit.setAccessible(true);
+            CommandMap map = (CommandMap) bukkit.get(Bukkit.getServer());
             Command command = executor instanceof TabExecutor ? new Command(label, description, usageMessage, aliases) {
                 @Override
                 public boolean execute(CommandSender sender, String commandLabel, String[] args) {
@@ -66,7 +78,7 @@ public class TctUtilities implements Utilities {
 
                 @Override
                 public List<String> tabComplete(CommandSender sender, String commandLabel, String[] args) {
-                    return ((TabExecutor) executor).onTabComplete(sender,this,commandLabel,args);
+                    return ((TabExecutor) executor).onTabComplete(sender, this, commandLabel, args);
                 }
             } : new Command(label, description, usageMessage, aliases) {
                 @Override
@@ -74,13 +86,15 @@ public class TctUtilities implements Utilities {
                     return executor.onCommand(sender, this, commandLabel, args);
                 }
             };
-            map.getKnownCommands().put(label, command);
-            for(String alias : command.getAliases()) {
-                map.getKnownCommands().put(alias, command);
-            }
-            Bukkit.getServer().getCommandMap().register(fallbackPrefix, command);
+            map.register(label, command);
+            // v5 - fixed error
+            //for (String alias : command.getAliases()) {
+            //    map.register(alias, command);
+            //}
+
+            map.register(fallbackPrefix, command);
             plugin.getLogger().info("Succeeded in registering command: /" + label);
-        } catch(Exception e) {
+        } catch (Exception e) {
             plugin.getLogger().warning("Failed to register command: /" + label);
             e.printStackTrace();
         }
@@ -131,6 +145,7 @@ public class TctUtilities implements Utilities {
         if (player.getWorld() != target.getWorld()) {
             return false;
         }
+
         World world = player.getWorld();
         Location from = player.getEyeLocation();
         Location to = target.getEyeLocation();
@@ -221,27 +236,20 @@ public class TctUtilities implements Utilities {
 
     public String resetColor(String input) {
         String result = input;
-        for(String str : Reference.colorChars()) {
+        for (String str : Reference.colorChars()) {
             result = result.replaceAll(Reference.colorChar() + str, "");
         }
         return result;
     }
 
     public void modifyName(Player player, String name) {
-        GameProfile gameProfile = ((CraftPlayer) player).getHandle().getProfile();
-        try {
-            Field field = gameProfile.getClass().getDeclaredField("name");
-            field.setAccessible(true);
-            field.set(gameProfile, name);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
     }
 
     public void reloadPlayer() {
         for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
-            for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-                if(player != null && pl != null) {
+            for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+                if (player != null && pl != null) {
                     pl.hidePlayer(plugin, player);
                     pl.showPlayer(plugin, player);
                 }
@@ -254,26 +262,26 @@ public class TctUtilities implements Utilities {
     }
 
     public void showPlayer(Player player, Player target) {
-        if(this.plugin instanceof NanamiTct) {
+        if (this.plugin instanceof NanamiTct) {
             NanamiTct tct = ((NanamiTct) this.plugin);
             PlayerData d = tct.getGame().getReference().PLAYERDATA.get(player.getUniqueId());
             PlayerData e = tct.getGame().getReference().PLAYERDATA.get(target.getUniqueId());
             modifyName(target, ChatColor.GREEN + resetColor(target.getName()));
             if (d != null && e != null) {
-                if(!e.isSpectator()) {
+                if (!e.isSpectator()) {
                     modifyName(target, ChatColor.GREEN + resetColor(target.getName()));
-                    if(d.getRole() == GameRoles.WOLF) {
+                    if (d.getRole() == GameRoles.WOLF) {
                         modifyName(target, ChatColor.GREEN + resetColor(target.getName()));
-                        if(e.getRole() == GameRoles.WOLF) {
+                        if (e.getRole() == GameRoles.WOLF) {
                             modifyName(target, ChatColor.RED + resetColor(target.getName()));
-                        } else if(e.getRole() == GameRoles.FANATIC) {
+                        } else if (e.getRole() == GameRoles.FANATIC) {
                             modifyName(target, ChatColor.DARK_PURPLE + resetColor(target.getName()));
                         }
-                    } else if(d.getRole() == GameRoles.FOX || d.getRole() == GameRoles.IMMORAL) {
+                    } else if (d.getRole() == GameRoles.FOX || d.getRole() == GameRoles.IMMORAL) {
                         modifyName(target, ChatColor.GREEN + resetColor(target.getName()));
-                        if(e.getRole() == GameRoles.FOX) {
+                        if (e.getRole() == GameRoles.FOX) {
                             modifyName(target, ChatColor.GOLD + resetColor(target.getName()));
-                        } else if(e.getRole() == GameRoles.IMMORAL) {
+                        } else if (e.getRole() == GameRoles.IMMORAL) {
                             modifyName(target, ChatColor.DARK_GRAY + resetColor(target.getName()));
                         } else {
                             modifyName(target, ChatColor.GREEN + resetColor(target.getName()));
@@ -296,15 +304,15 @@ public class TctUtilities implements Utilities {
     public Player getNearestPlayer(Player player) {
         Player result = null;
         double lastDistance = Double.MAX_VALUE;
-        for(Player p : player.getWorld().getPlayers()) {
-            if(player == p)
+        for (Player p : player.getWorld().getPlayers()) {
+            if (player == p)
                 continue;
 
             double distance = player.getLocation().distance(p.getLocation());
             PlayerData data = NanamiTct.utilities.getPlayerData(p.getUniqueId());
-            if(data != null) {
-                if(!data.isSpectator() && data.getRole().getTeam() != GameTeams.WOLVES) {
-                    if(distance < lastDistance) {
+            if (data != null) {
+                if (!data.isSpectator() && data.getRole().getTeam() != GameTeams.WOLVES) {
+                    if (distance < lastDistance) {
                         lastDistance = distance;
                         result = p;
                     }
@@ -332,8 +340,8 @@ public class TctUtilities implements Utilities {
     public Collection<? extends PlayerData> getOnlinePlayersData() {
         Collection<? extends Player> players = Bukkit.getOnlinePlayers();
         Collection<PlayerData> datas = new ArrayList<>();
-        for(Player p : players) {
-            if(p != null) {
+        for (Player p : players) {
+            if (p != null) {
                 String name = resetColor(p.getName());
                 PlayerData data = getPlayerData(p);
                 if (data != null) {
@@ -346,7 +354,7 @@ public class TctUtilities implements Utilities {
 
     public CustomItem getCustomItemByItemStack(ItemStack item) {
         for (CustomItem item_ : CustomItems.allItems) {
-            if(item.getItemMeta().getDisplayName().equalsIgnoreCase(item_.getItemStack().getItemMeta().getDisplayName())) {
+            if (item.getItemMeta().getDisplayName().equalsIgnoreCase(item_.getItemStack().getItemMeta().getDisplayName())) {
                 return item_;
             }
         }
@@ -362,7 +370,151 @@ public class TctUtilities implements Utilities {
     }
 
     public void runAfterLoad(Runnable runnable) {
-        if(NanamiTct.isLoaded) runnable.run();
+        if (NanamiTct.isLoaded) runnable.run();
     }
 
+    public void summonFoxFirework(Location location) {
+        FileConfiguration config = NanamiTctApi.config.getConfig();
+
+        Firework fw = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK);
+        FireworkMeta meta = fw.getFireworkMeta();
+        FireworkEffect.Builder builder = FireworkEffect.builder();
+        try {
+            FireworkEffect.Type type = FireworkEffect.Type.valueOf(config.getString("fireworks.type", "BURST"));
+            builder.with(type);
+        } catch (Exception ex) {
+            builder.with(FireworkEffect.Type.BURST);
+        }
+        try {
+            for (String color : (List<String>) config.getList("fireworks.colors", Collections.singletonList("0xff0000"))) {
+                int c;
+                if (color.startsWith("0x")) {
+                    c = (int) Long.parseLong(color, 16);
+                } else {
+                    c = (int) Long.parseLong(color, 10);
+                }
+                builder.withColor(Color.fromRGB(c));
+            }
+        } catch (Exception ex) {
+            builder.withColor(Color.RED);
+        }
+        try {
+            for (String color : (List<String>) config.getList("fireworks.fades", Collections.singletonList("0xff0000"))) {
+                int c;
+                if (color.startsWith("0x")) {
+                    c = (int) Long.parseLong(color, 16);
+                } else {
+                    c = (int) Long.parseLong(color, 10);
+                }
+                builder.withFade(Color.fromRGB(c));
+            }
+        } catch (Exception ex) {
+            builder.withFade(Color.RED);
+        }
+        {
+            FireworkEffect effect = builder.build();
+            meta.addEffect(effect);
+            meta.setPower(config.getInt("fireworks.power"));
+        }
+        fw.setFireworkMeta(meta);
+    }
+
+    public boolean hasSlownessGlassBottle(Player player) {
+        for (ItemStack item : player.getInventory().getContents()) {
+            if (item != null && item.hasItemMeta() && item.getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.EMPTY_BOTTLE.getItemStack().getItemMeta().getDisplayName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void addSlownessPotion(Player player) {
+        FileConfiguration config = NanamiTctApi.config.getConfig();
+
+        int tick = 200;
+        int level = 2;
+        try {
+            if (config.getString("potion-effect.slowness.duration").endsWith("t")) {
+                String str = config.getString("potion-effect.slowness.duration");
+                str = str.substring(0, str.length() - 1);
+                try {
+                    tick = Integer.parseInt(str);
+                } catch (NumberFormatException ignored) {
+                }
+            } else if (config.getString("potion-effect.slowness.duration").endsWith("s")) {
+                String str = config.getString("potion-effect.slowness.duration");
+                str = str.substring(0, str.length() - 1);
+                try {
+                    tick = Integer.parseInt(str) * 20;
+                } catch (NumberFormatException ignored) {
+                }
+            }
+        } catch (NullPointerException ignored) {
+        }
+        try {
+            level = config.getInt("potion-effect.slowness.level");
+        } catch (Exception ignored) {
+        }
+
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, tick, level));
+    }
+
+    public boolean isEnded() {
+        List<PlayerData> villagers = new ArrayList<>();
+        List<PlayerData> wolves = new ArrayList<>();
+        List<PlayerData> foxes = new ArrayList<>();
+
+        NanamiTct plugin = NanamiTct.plugin;
+
+        for (PlayerData d : plugin.getGame().getRemainingPlayers(true)) {
+            if (d.getRole().getTeam().parent() == GameTeams.VILLAGERS) {
+                villagers.add(d);
+                continue;
+            }
+            if (d.getRole().getTeam().parent() == GameTeams.WOLVES) {
+                wolves.add(d);
+                continue;
+            }
+            if (d.getRole() == GameRoles.FOX) {
+                foxes.add(d);
+            }
+        }
+        if (wolves.size() > 0 && villagers.size() <= 0) {
+            if (foxes.size() > 0) {
+                plugin.getGame().stop(GameTeams.FOXES);
+                return true;
+            }
+            plugin.getGame().stop(GameTeams.WOLVES);
+            return true;
+        }
+        if (villagers.size() > 0 && wolves.size() <= 0) {
+            if (foxes.size() > 0) {
+                plugin.getGame().stop(GameTeams.FOXES);
+                return true;
+            }
+            plugin.getGame().stop(GameTeams.VILLAGERS);
+            return true;
+        }
+        if (villagers.size() <= 0) {
+            if (foxes.size() > 0) {
+                plugin.getGame().stop(GameTeams.FOXES);
+                return true;
+            }
+            plugin.getGame().stop(GameTeams.VILLAGERS);
+            return true;
+        }
+
+        if (foxes.size() <= 0) {
+            for (PlayerData d : plugin.getGame().getRemainingPlayers(true)) {
+                if (d.getRole() == GameRoles.IMMORAL) {
+                    d.setKilledBy(new Killer("AIR", GameRoles.NONE, Killer.KillerCategory.AIR));
+                    d.kill(TctDeathCause.AIR);
+
+                    return false;
+                }
+            }
+        }
+
+        return false;
+    }
 }

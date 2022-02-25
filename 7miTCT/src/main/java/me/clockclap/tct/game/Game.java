@@ -1,6 +1,7 @@
 package me.clockclap.tct.game;
 
 import me.clockclap.tct.NanamiTct;
+import me.clockclap.tct.VersionUtils;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.api.event.GameItemDistributeEvent;
 import me.clockclap.tct.api.event.GamePreStartEvent;
@@ -30,7 +31,7 @@ import java.util.*;
 
 public class Game implements TctGame {
 
-    private NanamiTct plugin;
+    private final NanamiTct plugin;
     private GameReference reference;
     private BossBar bar;
     private int remainingSeconds;
@@ -68,11 +69,10 @@ public class Game implements TctGame {
     }
 
     public boolean preStart(Location loc) {
-        boolean success = false;
         GamePreStartEvent gamePreStartEvent = new GamePreStartEvent(this, loc, Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_SYSTEM_STOPPED_GAME);
         Bukkit.getServer().getPluginManager().callEvent(gamePreStartEvent);
 
-        if(gamePreStartEvent.isCancelled()) {
+        if (gamePreStartEvent.isCancelled()) {
             Bukkit.broadcastMessage(gamePreStartEvent.getCancelMessage());
             return true;
         }
@@ -84,170 +84,123 @@ public class Game implements TctGame {
         String fanaticsCount = config.getString("roles.count.fanatics", "1");
         String foxesCount = config.getString("roles.count.foxes", "1");
         String immoralCount = config.getString("roles.count.immoral", "1");
-        int villagersMin = 1;
-        int villagersMax = -1;
-        int healersMin = 1;
-        int healersMax = 1;
-        int detectivesMin = 1;
-        int detectivesMax = 1;
-        int wolvesMin = 1;
-        int wolvesMax = 1;
-        int fanaticsMin = 1;
-        int fanaticsMax = 1;
-        int foxesMin = 1;
-        int foxesMax = 1;
-        int immoralMin = 1;
-        int immoralMax = 1;
-        if(villagersCount.contains(":")) {
+        int villagersMin;
+        int healersMin;
+        int detectivesMin;
+        int wolvesMin;
+        int fanaticsMin;
+        int foxesMin;
+        int immoralMin;
+        if (villagersCount.contains(":")) {
             String[] count = villagersCount.split(":", 0);
             String min_ = count[0];
-            String max_ = count[1];
-            int min = Integer.parseInt(min_);
-            int max = Integer.parseInt(max_);
-            villagersMin = min;
-            villagersMax = max;
+            villagersMin = Integer.parseInt(min_);
         } else {
-            int num = Integer.parseInt(villagersCount);
-            villagersMax = num;
-            villagersMin = num;
+            villagersMin = Integer.parseInt(villagersCount);
         }
-        if(healersCount.contains(":")) {
+        if (healersCount.contains(":")) {
             String[] count = healersCount.split(":");
-            int min = Integer.parseInt(count[0]);
-            int max = Integer.parseInt(count[1]);
-            healersMin = min;
-            healersMax = max;
+            healersMin = Integer.parseInt(count[0]);
         } else {
-            int num = Integer.parseInt(healersCount);
-            healersMax = num;
-            healersMin = num;
+            healersMin = Integer.parseInt(healersCount);
         }
-        if(detectivesCount.contains(":")) {
+        if (detectivesCount.contains(":")) {
             String[] count = detectivesCount.split(":");
-            int min = Integer.parseInt(count[0]);
-            int max = Integer.parseInt(count[1]);
-            detectivesMin = min;
-            detectivesMax = max;
+            detectivesMin = Integer.parseInt(count[0]);
         } else {
-            int num = Integer.parseInt(detectivesCount);
-            detectivesMax = num;
-            detectivesMin = num;
+            detectivesMin = Integer.parseInt(detectivesCount);
         }
-        if(wolvesCount.contains(":")) {
+        if (wolvesCount.contains(":")) {
             String[] count = wolvesCount.split(":");
-            int min = Integer.parseInt(count[0]);
-            int max = Integer.parseInt(count[1]);
-            wolvesMin = min;
-            wolvesMax = max;
+            wolvesMin = Integer.parseInt(count[0]);
         } else {
-            int num = Integer.parseInt(wolvesCount);
-            wolvesMax = num;
-            wolvesMin = num;
+            wolvesMin = Integer.parseInt(wolvesCount);
         }
-        if(fanaticsCount.contains(":")) {
+        if (fanaticsCount.contains(":")) {
             String[] count = fanaticsCount.split(":");
-            int min = Integer.parseInt(count[0]);
-            int max = Integer.parseInt(count[1]);
-            fanaticsMin = min;
-            fanaticsMax = max;
+            fanaticsMin = Integer.parseInt(count[0]);
         } else {
-            int num = Integer.parseInt(fanaticsCount);
-            fanaticsMax = num;
-            fanaticsMin = num;
+            fanaticsMin = Integer.parseInt(fanaticsCount);
         }
-        if(foxesCount.contains(":")) {
+        if (foxesCount.contains(":")) {
             String[] count = foxesCount.split(":");
-            int min = Integer.parseInt(count[0]);
-            int max = Integer.parseInt(count[1]);
-            foxesMin = min;
-            foxesMax = max;
+            foxesMin = Integer.parseInt(count[0]);
         } else {
-            int num = Integer.parseInt(foxesCount);
-            foxesMax = num;
-            foxesMin = num;
+            foxesMin = Integer.parseInt(foxesCount);
         }
-        if(immoralCount.contains(":")) {
+        if (immoralCount.contains(":")) {
             String[] count = immoralCount.split(":");
-            int min = Integer.parseInt(count[0]);
-            int max = Integer.parseInt(count[1]);
-            immoralMin = min;
-            immoralMax = max;
+            immoralMin = Integer.parseInt(count[0]);
         } else {
-            int num = Integer.parseInt(immoralCount);
-            immoralMax = num;
-            immoralMin = num;
+            immoralMin = Integer.parseInt(immoralCount);
         }
         int resultCount = villagersMin + healersMin + detectivesMin + wolvesMin + fanaticsMin + foxesMin + immoralMin;
-        if(!NanamiTct.roleRegisterer.isEmpty()) {
-            for(GameRole r : NanamiTct.roleRegisterer.getRegisteredRoles()) {
+        if (!NanamiTct.roleRegisterer.isEmpty()) {
+            for (GameRole r : NanamiTct.roleRegisterer.getRegisteredRoles()) {
                 int count = config.getInt("roles.count.custom." + r.getName().toLowerCase(), 1);
                 resultCount += count;
             }
         }
         neededPlayers = resultCount;
-        if(resultCount > Bukkit.getOnlinePlayers().size()) {
+        if (resultCount > Bukkit.getOnlinePlayers().size()) {
             return false;
         }
-        success = true;
-        if(success) {
-            for(Player p : Bukkit.getOnlinePlayers()) {
-                NanamiTct.utilities.modifyName(p, ChatColor.GREEN + NanamiTct.utilities.resetColor(p.getName()));
-                NanamiTct.utilities.reloadPlayer();
-            }
-            getReference().setGameState(GameState.STARTING);
-            this.loc = loc;
-            for(Player p : Bukkit.getOnlinePlayers()) {
-                PlayerData data = getReference().PLAYERDATA.get(p.getUniqueId());
-                data.resetBoughtItem();
-                data.setTogether(0);
-                data.setVillager(0);
-                data.setSuspicious(0);
-                data.setWolf(0);
-                data.setSponge(false);
-                data.setKilledBy(new Killer("AIR", GameRoles.NONE, Killer.KillerCategory.AIR));
-                p.setGameMode(GameMode.SURVIVAL);
-                p.setMaxHealth(20.0D);
-                p.setHealth(20.0D);
-                p.getInventory().clear();
-                p.teleport(loc);
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            NanamiTct.utilities.modifyName(p, ChatColor.GREEN + NanamiTct.utilities.resetColor(p.getName()));
+            NanamiTct.utilities.reloadPlayer();
+        }
+        getReference().setGameState(GameState.STARTING);
+        this.loc = loc;
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            PlayerData data = getReference().PLAYERDATA.get(p.getUniqueId());
+            data.resetBoughtItem();
+            data.setTogether(0);
+            data.setVillager(0);
+            data.setSuspicious(0);
+            data.setWolf(0);
+            data.setSponge(false);
+            data.setKilledBy(new Killer("AIR", GameRoles.NONE, Killer.KillerCategory.AIR));
+            p.setGameMode(GameMode.SURVIVAL);
+            p.setMaxHealth(20.0D);
+            p.setHealth(20.0D);
+            p.getInventory().clear();
+            p.teleport(loc);
 
-            }
-            final int[] sec = {plugin.getTctConfig().getConfig().getInt("countdown.prestart", 10) + 1};
-            setStartingIn(sec[0]);
-            getBar().setTitle(Reference.TCT_BOSSBAR_FORMAT_STARTING.replaceAll("%SECOND%", String.valueOf(sec[0])));
-            Bukkit.getServer().broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_GAME_STARTED);
-            BukkitTask timer = new BukkitRunnable() {
-                @Override
-                public void run() {
-                    sec[0] = sec[0] - 1;
-                    int j = sec[0];
-                    if(j > 0) {
-                        getBar().setTitle(Reference.TCT_BOSSBAR_FORMAT_STARTING.replaceAll("%SECOND%", String.valueOf(j)));
-                        for (Player p : Bukkit.getOnlinePlayers()) {
-                            p.setLevel(j);
-                        }
-                        getBar().setProgress((1.0 / plugin.getTctConfig().getConfig().getInt("countdown.prestart", 10)) * j);
-                        setStartingIn(j);
+        }
+        final int[] sec = {plugin.getTctConfig().getConfig().getInt("countdown.prestart", 10) + 1};
+        setStartingIn(sec[0]);
+        getBar().setTitle(Reference.TCT_BOSSBAR_FORMAT_STARTING.replaceAll("%SECOND%", String.valueOf(sec[0])));
+        Bukkit.getServer().broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_GAME_STARTED);
+        BukkitTask timer = new BukkitRunnable() {
+            @Override
+            public void run() {
+                sec[0] = sec[0] - 1;
+                int j = sec[0];
+                if (j > 0) {
+                    getBar().setTitle(Reference.TCT_BOSSBAR_FORMAT_STARTING.replaceAll("%SECOND%", String.valueOf(j)));
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        p.setLevel(j);
                     }
-                    if (j <= 5 && j > 0) {
-                        for (Player p : Bukkit.getOnlinePlayers()) {
-                            p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.5F, 1F);
-                        }
-                    }
-                    if (j <= 0) {
-                        this.cancel();
-                        for (Player p : Bukkit.getOnlinePlayers()) {
-                            p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.5F, 1F);
-                        }
-                        getBar().setProgress(1.0);
-                        start(loc);
+                    getBar().setProgress((1.0 / plugin.getTctConfig().getConfig().getInt("countdown.prestart", 10)) * j);
+                    setStartingIn(j);
+                }
+                if (j <= 5 && j > 0) {
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.5F, 1F);
                     }
                 }
-            }.runTaskTimer(plugin, 0L, 20L);
-            setPreTimer(timer);
-            return true;
-        }
-        return false;
+                if (j <= 0) {
+                    this.cancel();
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.5F, 1F);
+                    }
+                    getBar().setProgress(1.0);
+                    start(loc);
+                }
+            }
+        }.runTaskTimer(plugin, 0L, 20L);
+        setPreTimer(timer);
+        return true;
     }
 
     private void giveRole(int playersCount) {
@@ -259,34 +212,27 @@ public class Game implements TctGame {
         String fanaticsCount = config.getString("roles.count.fanatics", "1");
         String foxesCount = config.getString("roles.count.foxes", "1");
         String immoralCount = config.getString("roles.count.immoral", "1");
-        int villagersMin = 1;
-        int villagersMax = -1;
-        int healersMin = 1;
-        int healersMax = 1;
-        int detectivesMin = 1;
-        int detectivesMax = 1;
-        int wolvesMin = 1;
-        int wolvesMax = 1;
-        int fanaticsMin = 1;
-        int fanaticsMax = 1;
-        int foxesMin = 1;
-        int foxesMax = 1;
-        int immoralMin = 1;
-        int immoralMax = 1;
-        if(villagersCount.contains(":")) {
+        int villagersMin;
+        int healersMin;
+        int healersMax;
+        int detectivesMin;
+        int detectivesMax;
+        int wolvesMin;
+        int wolvesMax;
+        int fanaticsMin;
+        int fanaticsMax;
+        int foxesMin;
+        int foxesMax;
+        int immoralMin;
+        int immoralMax;
+        if (villagersCount.contains(":")) {
             String[] count = villagersCount.split(":", 0);
             String min_ = count[0];
-            String max_ = count[1];
-            int min = Integer.parseInt(min_);
-            int max = Integer.parseInt(max_);
-            villagersMin = min;
-            villagersMax = max;
+            villagersMin = Integer.parseInt(min_);
         } else {
-            int num = Integer.parseInt(villagersCount);
-            villagersMax = num;
-            villagersMin = num;
+            villagersMin = Integer.parseInt(villagersCount);
         }
-        if(healersCount.contains(":")) {
+        if (healersCount.contains(":")) {
             String[] count = healersCount.split(":");
             int min = Integer.parseInt(count[0]);
             int max = Integer.parseInt(count[1]);
@@ -297,7 +243,7 @@ public class Game implements TctGame {
             healersMax = num;
             healersMin = num;
         }
-        if(detectivesCount.contains(":")) {
+        if (detectivesCount.contains(":")) {
             String[] count = detectivesCount.split(":");
             int min = Integer.parseInt(count[0]);
             int max = Integer.parseInt(count[1]);
@@ -308,7 +254,7 @@ public class Game implements TctGame {
             detectivesMax = num;
             detectivesMin = num;
         }
-        if(wolvesCount.contains(":")) {
+        if (wolvesCount.contains(":")) {
             String[] count = wolvesCount.split(":");
             int min = Integer.parseInt(count[0]);
             int max = Integer.parseInt(count[1]);
@@ -319,7 +265,7 @@ public class Game implements TctGame {
             wolvesMax = num;
             wolvesMin = num;
         }
-        if(fanaticsCount.contains(":")) {
+        if (fanaticsCount.contains(":")) {
             String[] count = fanaticsCount.split(":");
             int min = Integer.parseInt(count[0]);
             int max = Integer.parseInt(count[1]);
@@ -330,7 +276,7 @@ public class Game implements TctGame {
             fanaticsMax = num;
             fanaticsMin = num;
         }
-        if(foxesCount.contains(":")) {
+        if (foxesCount.contains(":")) {
             String[] count = foxesCount.split(":");
             int min = Integer.parseInt(count[0]);
             int max = Integer.parseInt(count[1]);
@@ -341,7 +287,7 @@ public class Game implements TctGame {
             foxesMax = num;
             foxesMin = num;
         }
-        if(immoralCount.contains(":")) {
+        if (immoralCount.contains(":")) {
             String[] count = immoralCount.split(":");
             int min = Integer.parseInt(count[0]);
             int max = Integer.parseInt(count[1]);
@@ -353,17 +299,15 @@ public class Game implements TctGame {
             immoralMin = num;
         }
         int resultCount = villagersMin + healersMin + detectivesMin + wolvesMin + fanaticsMin + foxesMin + immoralMin;
-        if(playersCount >= resultCount) {
+        if (playersCount >= resultCount) {
             Collection<? extends Player> players = Bukkit.getOnlinePlayers();
-            for(Player p : players) {
+            for (Player p : players) {
                 if (getReference().PLAYERDATA.get(p.getUniqueId()).getRole() != GameRoles.VILLAGER) {
                     players.remove(p);
                 }
             }
-            boolean canStart = false;
-            int i = 0;
-            while(true) {
-                if(getReference().getGameState() != GameState.GAMING) {
+            while (true) {
+                if (getReference().getGameState() != GameState.GAMING) {
                     break;
                 }
                 villagers.clear();
@@ -381,7 +325,6 @@ public class Game implements TctGame {
                 getRoleCount().setFoxesCount(0);
                 getRoleCount().setImmoralCount(0);
                 for (Player p : players) {
-                    int remaining = playersCount;
                     PlayerData data = getReference().PLAYERDATA.get(p.getUniqueId());
                     Random rand = new Random();
                     int role = rand.nextInt(6) + 1;
@@ -447,11 +390,10 @@ public class Game implements TctGame {
                             data.setCoin(coin);
                             getRoleCount().setImmoralCount(getRoleCount().getImmoralCount() + 1);
                             immoral.add(NanamiTct.utilities.resetColor(p.getName()));
-                            continue;
                         }
                     }
                 }
-                if(getRoleCount().getHealersCount() >= healersMin && getRoleCount().getHealersCount() <= healersMax &&
+                if (getRoleCount().getHealersCount() >= healersMin && getRoleCount().getHealersCount() <= healersMax &&
                         getRoleCount().getDetectivesCount() >= detectivesMin && getRoleCount().getDetectivesCount() <= detectivesMax &&
                         getRoleCount().getWolvesCount() >= wolvesMin && getRoleCount().getWolvesCount() <= wolvesMax &&
                         getRoleCount().getFanaticsCount() >= fanaticsMin && getRoleCount().getFanaticsCount() <= fanaticsMax &&
@@ -459,45 +401,39 @@ public class Game implements TctGame {
                         getRoleCount().getImmoralCount() >= immoralMin && getRoleCount().getImmoralCount() <= immoralMax) {
                     break;
                 }
-                i++;
             }
-            boolean canStart_ = false;
-            if(!NanamiTct.roleRegisterer.isEmpty()) {
-                while (true) {
-                    if (getReference().getGameState() != GameState.GAMING) {
-                        break;
-                    }
-                    getRoleCount().getCustomRoleCount().initialize();
-                    customRoles.clear();
-                    for (Player p : players) {
-                        if (p != null) {
-                            PlayerData data = getReference().PLAYERDATA.get(p.getUniqueId());
-                            if (data != null) {
-                                if (data.getRole() == GameRoles.VILLAGER) {
-                                    Random rand = new Random();
-                                    int role = rand.nextInt(NanamiTct.roleRegisterer.size());
-                                    for (GameRole r : NanamiTct.roleRegisterer.getRegisteredRoles()) {
-                                        int count = config.getInt("roles.count.custom." + r.getName().toLowerCase(), 1);
-                                        if (role == NanamiTct.roleRegisterer.indexOf(r)) {
-                                            if(getRoleCount().getCustomRoleCount().get(r) < count) {
-                                                int coin = plugin.getTctConfig().getConfig().getInt("roles.coin.custom." + r.getName().toLowerCase(), 0);
-                                                data.setRole(r);
-                                                data.setCoin(coin);
-                                                getRoleCount().getCustomRoleCount().set(r, getRoleCount().getCustomRoleCount().get(r) + 1);
-                                                if(!customRoles.containsKey(r)) {
-                                                    customRoles.put(r, new ArrayList<>());
-                                                }
-                                                customRoles.get(r).add(NanamiTct.utilities.resetColor(p.getName()));
-                                                break;
+            if (!NanamiTct.roleRegisterer.isEmpty()) {
+                if (getReference().getGameState() != GameState.GAMING) {
+                    return;
+                }
+                getRoleCount().getCustomRoleCount().initialize();
+                customRoles.clear();
+                for (Player p : players) {
+                    if (p != null) {
+                        PlayerData data = getReference().PLAYERDATA.get(p.getUniqueId());
+                        if (data != null) {
+                            if (data.getRole() == GameRoles.VILLAGER) {
+                                Random rand = new Random();
+                                int role = rand.nextInt(NanamiTct.roleRegisterer.size());
+                                for (GameRole r : NanamiTct.roleRegisterer.getRegisteredRoles()) {
+                                    int count = config.getInt("roles.count.custom." + r.getName().toLowerCase(), 1);
+                                    if (role == NanamiTct.roleRegisterer.indexOf(r)) {
+                                        if (getRoleCount().getCustomRoleCount().get(r) < count) {
+                                            int coin = plugin.getTctConfig().getConfig().getInt("roles.coin.custom." + r.getName().toLowerCase(), 0);
+                                            data.setRole(r);
+                                            data.setCoin(coin);
+                                            getRoleCount().getCustomRoleCount().set(r, getRoleCount().getCustomRoleCount().get(r) + 1);
+                                            if (!customRoles.containsKey(r)) {
+                                                customRoles.put(r, new ArrayList<>());
                                             }
-                                            role++;
+                                            customRoles.get(r).add(NanamiTct.utilities.resetColor(p.getName()));
                                         }
+                                        role++;
                                     }
                                 }
                             }
                         }
                     }
-                    break;
                 }
             }
         }
@@ -505,9 +441,9 @@ public class Game implements TctGame {
 
     public void giveItem() {
         Collection<? extends Player> players = Bukkit.getOnlinePlayers();
-        for(Player p : players) {
+        for (Player p : players) {
             PlayerData data = getReference().PLAYERDATA.get(p.getUniqueId());
-            if(!data.isSpectator()) {
+            if (!data.isSpectator()) {
                 p.getInventory().setItem(4, getLog().getItem());
                 p.getInventory().setItem(5, CustomItems.QUICKCHAT_A.getItemStack());
                 p.getInventory().setItem(6, CustomItems.QUICKCHAT_B.getItemStack());
@@ -534,8 +470,8 @@ public class Game implements TctGame {
         setRemainingSeconds(sec);
         setRealRemainingSeconds(sec);
         int playersCount = Bukkit.getOnlinePlayers().size();
-        for(Player p : Bukkit.getOnlinePlayers()) {
-            if(p.getGameMode() == GameMode.CREATIVE || p.getGameMode() == GameMode.SPECTATOR) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (p.getGameMode() == GameMode.CREATIVE || p.getGameMode() == GameMode.SPECTATOR) {
                 playersCount--;
                 getReference().PLAYERDATA.get(p.getUniqueId()).setRole(GameRoles.SPEC);
                 getReference().PLAYERDATA.get(p.getUniqueId()).setSpectator(true);
@@ -546,9 +482,9 @@ public class Game implements TctGame {
                 getReference().PLAYERDATA.get(p.getUniqueId()).setSpectator(false);
             }
         }
-        if(playersCount < neededPlayers) {
+        if (playersCount < neededPlayers) {
             Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_PLAYERS_NEEDED);
-            for(Player p : Bukkit.getOnlinePlayers()) {
+            for (Player p : Bukkit.getOnlinePlayers()) {
                 p.playSound(p.getLocation(), Sound.BLOCK_DISPENSER_FAIL, 1.5F, 1F);
                 getReference().PLAYERDATA.get(p.getUniqueId()).setRole(GameRoles.SPEC);
                 getReference().PLAYERDATA.get(p.getUniqueId()).setSpectator(true);
@@ -570,13 +506,13 @@ public class Game implements TctGame {
         }
         giveRole(playersCount);
         giveItem();
-        for(Player p : Bukkit.getOnlinePlayers()) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
             PlayerData data = getReference().PLAYERDATA.get(p.getUniqueId());
             data.setCO(GameRoles.NONE);
             p.setPlayerListName("");
             NanamiTct.utilities.modifyName(p, ChatColor.GREEN + NanamiTct.utilities.resetColor(p.getName()));
             NanamiTct.utilities.reloadPlayer();
-            if(data.getRole() == GameRoles.VILLAGER) {
+            if (data.getRole() == GameRoles.VILLAGER) {
                 int coin = plugin.getTctConfig().getConfig().getInt("roles.coin.villagers", 0);
                 getRoleCount().setVillagersCount(getRoleCount().getVillagersCount() + 1);
                 data.setCoin(coin);
@@ -587,14 +523,14 @@ public class Game implements TctGame {
                 p.getInventory().setItem(2, CustomItems.ARROW.getItemStack());
                 p.setFoodLevel(1);
                 villagers.add(NanamiTct.utilities.resetColor(p.getName()));
-                if(NanamiTct.playerStats != null) {
+                if (NanamiTct.playerStats != null) {
                     PlayerStat stat = NanamiTct.playerStats.getStat(p.getUniqueId());
                     plugin.getLogger().info("vil");
                     stat.setCountVillager(stat.getCountVillager() + 1);
                     stat.setTotalPlayingCount(stat.getTotalPlayingCount() + 1);
                 }
             }
-            if(data.getRole() == GameRoles.HEALER) {
+            if (data.getRole() == GameRoles.HEALER) {
                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_HEALER);
                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_DESCRIPTION_HEALER);
                 p.getInventory().setItem(0, CustomItems.HEALER_SWORD.getItemStack());
@@ -602,7 +538,7 @@ public class Game implements TctGame {
                 p.getInventory().setItem(2, CustomItems.BOW.getItemStack());
                 p.getInventory().setItem(3, CustomItems.ARROW.getItemStack());
                 p.setFoodLevel(1);
-                if(NanamiTct.playerStats != null) {
+                if (NanamiTct.playerStats != null) {
                     PlayerStat stat = NanamiTct.playerStats.getStat(p.getUniqueId());
                     if (stat != null) {
                         stat.setCountHealer(stat.getCountHealer() + 1);
@@ -610,14 +546,14 @@ public class Game implements TctGame {
                     }
                 }
             }
-            if(data.getRole() == GameRoles.DETECTIVE) {
+            if (data.getRole() == GameRoles.DETECTIVE) {
                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_DETECTIVE);
                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_DESCRIPTION_DETECTIVE);
                 p.getInventory().setItem(0, CustomItems.WOOD_SWORD.getItemStack());
                 p.getInventory().setItem(1, CustomItems.BOW.getItemStack());
                 p.getInventory().setItem(2, CustomItems.ARROW.getItemStack());
                 p.setFoodLevel(1);
-                if(NanamiTct.playerStats != null) {
+                if (NanamiTct.playerStats != null) {
                     PlayerStat stat = NanamiTct.playerStats.getStat(p.getUniqueId());
                     if (stat != null) {
                         stat.setCountDetective(stat.getCountDetective() + 1);
@@ -625,7 +561,7 @@ public class Game implements TctGame {
                     }
                 }
             }
-            if(data.getRole() == GameRoles.WOLF) {
+            if (data.getRole() == GameRoles.WOLF) {
                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_WOLF);
                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_DESCRIPTION_WOLF);
                 p.getInventory().setItem(0, CustomItems.WOOD_SWORD.getItemStack());
@@ -635,10 +571,10 @@ public class Game implements TctGame {
                 String str0 = String.join(", ", wolves);
                 String str1 = String.join(", ", fanatics);
                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_WOLF_LIST + ": [" + str0 + "]");
-                if(getRoleCount().getFanaticsCount() > 0) {
+                if (getRoleCount().getFanaticsCount() > 0) {
                     p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_FANATIC_LIST + ": [" + str1 + "]");
                 }
-                if(NanamiTct.playerStats != null) {
+                if (NanamiTct.playerStats != null) {
                     PlayerStat stat = NanamiTct.playerStats.getStat(p.getUniqueId());
                     if (stat != null) {
                         stat.setCountWolf(stat.getCountWolf() + 1);
@@ -646,14 +582,14 @@ public class Game implements TctGame {
                     }
                 }
             }
-            if(data.getRole() == GameRoles.FANATIC) {
+            if (data.getRole() == GameRoles.FANATIC) {
                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_FANATIC);
                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_DESCRIPTION_FANATIC);
                 p.getInventory().setItem(0, CustomItems.WOOD_SWORD.getItemStack());
                 p.getInventory().setItem(1, CustomItems.BOW.getItemStack());
                 p.getInventory().setItem(2, CustomItems.ARROW.getItemStack());
                 p.setFoodLevel(1);
-                if(NanamiTct.playerStats != null) {
+                if (NanamiTct.playerStats != null) {
                     PlayerStat stat = NanamiTct.playerStats.getStat(p.getUniqueId());
                     if (stat != null) {
                         stat.setCountFanatic(stat.getCountFanatic() + 1);
@@ -661,11 +597,11 @@ public class Game implements TctGame {
                     }
                 }
             }
-            if(data.getRole() == GameRoles.FOX) {
+            if (data.getRole() == GameRoles.FOX) {
                 List<String> foxesTeam = new ArrayList<>();
                 foxesTeam.addAll(foxes);
                 foxesTeam.addAll(immoral);
-                if(data.getWatcher() != null) {
+                if (data.getWatcher() != null) {
                     data.getWatcher().startCountFox();
                 }
                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ROLE_YOU_ARE_FOX);
@@ -677,10 +613,10 @@ public class Game implements TctGame {
                 String str0 = String.join(", ", foxes);
                 String str1 = String.join(", ", immoral);
                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_FOX_LIST + ": [" + str0 + "]");
-                if(getRoleCount().getImmoralCount() > 0) {
+                if (getRoleCount().getImmoralCount() > 0) {
                     p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_IMMORAL_LIST + ": [" + str1 + "]");
                 }
-                if(NanamiTct.playerStats != null) {
+                if (NanamiTct.playerStats != null) {
                     PlayerStat stat = NanamiTct.playerStats.getStat(p.getUniqueId());
                     if (stat != null) {
                         stat.setCountFox(stat.getCountFox() + 1);
@@ -688,7 +624,7 @@ public class Game implements TctGame {
                     }
                 }
             }
-            if(data.getRole() == GameRoles.IMMORAL) {
+            if (data.getRole() == GameRoles.IMMORAL) {
                 List<String> foxesTeam = new ArrayList<>();
                 foxesTeam.addAll(foxes);
                 foxesTeam.addAll(immoral);
@@ -700,11 +636,11 @@ public class Game implements TctGame {
                 p.setFoodLevel(1);
                 String str0 = String.join(", ", foxes);
                 String str1 = String.join(", ", immoral);
-                if(getRoleCount().getFoxesCount() > 0) {
+                if (getRoleCount().getFoxesCount() > 0) {
                     p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_FOX_LIST + ": [" + str0 + "]");
                 }
                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_IMMORAL_LIST + ": [" + str1 + "]");
-                if(NanamiTct.playerStats != null) {
+                if (NanamiTct.playerStats != null) {
                     PlayerStat stat = NanamiTct.playerStats.getStat(p.getUniqueId());
                     if (stat != null) {
                         stat.setCountImmoral(stat.getCountImmoral() + 1);
@@ -712,11 +648,11 @@ public class Game implements TctGame {
                     }
                 }
             }
-            if(!data.isSpectator()) {
+            if (!data.isSpectator()) {
                 remainingPlayers.add(data);
                 realRemainingPlayers.add(data);
             }
-            for(Player pl : Bukkit.getOnlinePlayers()) {
+            for (Player pl : Bukkit.getOnlinePlayers()) {
                 NanamiTct.utilities.hidePlayer(pl, p);
                 data.setInvisible(true);
                 new BukkitRunnable() {
@@ -729,45 +665,45 @@ public class Game implements TctGame {
                 }.runTaskLater(getPlugin(), 15);
             }
         }
-        String str = "";
-        String trvi = "";
-        String trhe = "";
-        String trde = "";
-        String trwo = "";
-        String trfa = "";
-        String trfo = "";
-        String trim = "";
-        if(getRoleCount().getVillagersCount() > 0) {
+        StringBuilder str = new StringBuilder();
+        String trvi;
+        String trhe;
+        String trde;
+        String trwo;
+        String trfa;
+        String trfo;
+        String trim;
+        if (getRoleCount().getVillagersCount() > 0) {
             trvi = Reference.TCT_ROLE_VILLAGER + ": " + getRoleCount().getVillagersCount() + " / ";
-            str += trvi;
+            str.append(trvi);
         }
-        if(getRoleCount().getHealersCount() > 0) {
+        if (getRoleCount().getHealersCount() > 0) {
             trhe = Reference.TCT_ROLE_HEALER + ": " + getRoleCount().getHealersCount() + " / ";
-            str += trhe;
+            str.append(trhe);
         }
-        if(getRoleCount().getDetectivesCount() > 0) {
+        if (getRoleCount().getDetectivesCount() > 0) {
             trde = Reference.TCT_ROLE_DETECTIVE + ": " + getRoleCount().getDetectivesCount() + " / ";
-            str += trde;
+            str.append(trde);
         }
-        if(getRoleCount().getWolvesCount() > 0) {
+        if (getRoleCount().getWolvesCount() > 0) {
             trwo = Reference.TCT_ROLE_WOLF + ": " + getRoleCount().getWolvesCount() + " / ";
-            str += trwo;
+            str.append(trwo);
         }
-        if(getRoleCount().getFanaticsCount() > 0) {
+        if (getRoleCount().getFanaticsCount() > 0) {
             trfa = Reference.TCT_ROLE_FANATIC + ": " + getRoleCount().getFanaticsCount() + " / ";
-            str += trfa;
+            str.append(trfa);
         }
-        if(getRoleCount().getFoxesCount() > 0) {
+        if (getRoleCount().getFoxesCount() > 0) {
             trfo = Reference.TCT_ROLE_FOX + ": " + getRoleCount().getFoxesCount() + " / ";
-            str += trfo;
+            str.append(trfo);
         }
-        if(getRoleCount().getImmoralCount() > 0) {
+        if (getRoleCount().getImmoralCount() > 0) {
             trim = Reference.TCT_ROLE_IMMORAL + ": " + getRoleCount().getImmoralCount() + " / ";
-            str += trim;
+            str.append(trim);
         }
-        if(!NanamiTct.roleRegisterer.isEmpty()) {
-            for(GameRole r : NanamiTct.roleRegisterer.getRegisteredRoles()) {
-                str += r.getDisplayName() + ": " + getRoleCount().getCustomRoleCount().get(r) + " / ";
+        if (!NanamiTct.roleRegisterer.isEmpty()) {
+            for (GameRole r : NanamiTct.roleRegisterer.getRegisteredRoles()) {
+                str.append(r.getDisplayName()).append(": ").append(getRoleCount().getCustomRoleCount().get(r)).append(" / ");
             }
         }
         Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_GAME_PLAYERS.replaceAll("%COUNT%", String.valueOf(playersCount)));
@@ -776,7 +712,7 @@ public class Game implements TctGame {
         // Update Log Book
         getLog().addLine(Reference.TCT_LOGBOOK_GAME_STARTED);
         getLog().addLine(Reference.TCT_LOGBOOK_ROLES);
-        if(!NanamiTct.roleRegisterer.isEmpty()) {
+        if (!NanamiTct.roleRegisterer.isEmpty()) {
             List<GameRole> roleList = new ArrayList<>(NanamiTct.roleRegisterer.getRegisteredRoles());
             Collections.reverse(roleList);
             for (GameRole r : roleList) {
@@ -798,12 +734,12 @@ public class Game implements TctGame {
         BukkitTask timer = new BukkitRunnable() {
             @Override
             public void run() {
-                if(getRealRemainingSeconds() > 0) {
+                if (getRealRemainingSeconds() > 0) {
                     time[0]++;
                     elapsedTime = time[0];
-                    if(time[0] != 0 && time[0] % getPlugin().getTctConfig().getConfig().getInt("first-coin-time", 180) == 0) {
+                    if (time[0] != 0 && time[0] % getPlugin().getTctConfig().getConfig().getInt("first-coin-time", 180) == 0) {
                         time[0] = 0;
-                        for(Player p : Bukkit.getOnlinePlayers()) {
+                        for (Player p : Bukkit.getOnlinePlayers()) {
                             PlayerData data = getReference().PLAYERDATA.get(p.getUniqueId());
                             data.setCoin(data.getCoin() + 1);
                         }
@@ -815,10 +751,10 @@ public class Game implements TctGame {
                     stop(GameTeams.VILLAGERS);
                     this.cancel();
                 }
-                if(getRemainingSeconds() > 0) {
+                if (getRemainingSeconds() > 0) {
                     setRemainingSeconds(getRemainingSeconds() - 1);
                     getBar().setTitle(Reference.TCT_BOSSBAR_FORMAT_GAMING.replaceAll("%SECOND%", String.valueOf(getRemainingSeconds())));
-                    for(Player p : Bukkit.getOnlinePlayers()) {
+                    for (Player p : Bukkit.getOnlinePlayers()) {
                         p.setLevel(getRemainingSeconds());
                     }
                 }
@@ -843,11 +779,8 @@ public class Game implements TctGame {
                 continue;
             }
         }
-        boolean gaming = false;
-        if(getReference().getGameState() == GameState.GAMING) {
-            gaming = true;
-        }
-        if(getReference().DEADBODIES.size() > 0) {
+        boolean gaming = getReference().getGameState() == GameState.GAMING;
+        if (getReference().DEADBODIES.size() > 0) {
             for (DeadBody deadBody : getReference().DEADBODIES) {
                 deadBody.remove();
             }
@@ -859,7 +792,7 @@ public class Game implements TctGame {
         resetRemainingPlayers();
         plugin.getGame().getBar().setProgress(1.0);
         getBar().setTitle(Reference.TCT_BOSSBAR_FORMAT_WAITING);
-        if(gaming) {
+        if (gaming) {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 PlayerData data = getReference().PLAYERDATA.get(p.getUniqueId());
                 p.setPlayerListName(ChatColor.GREEN + NanamiTct.utilities.resetColor(p.getName()));
@@ -873,15 +806,15 @@ public class Game implements TctGame {
                 data.saveLocation(null);
                 NanamiTct.utilities.modifyName(p, ChatColor.GREEN + NanamiTct.utilities.resetColor(p.getName()));
                 NanamiTct.utilities.reloadPlayer();
-                if(data.getRole() == GameRoles.FOX && !data.isSpectator()) {
-                    if(data.getWatcher() != null) {
+                if (data.getRole() == GameRoles.FOX && !data.isSpectator()) {
+                    if (data.getWatcher() != null) {
                         data.getWatcher().cancelCountFox();
                         data.getWatcher().setCountFox(getPlugin().getTctConfig().getConfig().getInt("fox-reveal-time-default", 70));
                     }
                 }
-                if(NanamiTct.playerStats != null && MySQLStatus.isSqlEnabled() && winners != GameTeams.NONE) {
+                if (NanamiTct.playerStats != null && MySQLStatus.isSqlEnabled() && winners != GameTeams.NONE) {
                     PlayerStat stat = NanamiTct.playerStats.getStat(p.getUniqueId());
-                    if(stat != null) {
+                    if (stat != null) {
                         if (data.getRole().getTeam() == winners) {
                             stat.setTotalVictories(stat.getTotalVictories() + 1);
                         } else {
@@ -896,8 +829,9 @@ public class Game implements TctGame {
                     p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_NO_VICTORY);
                 }
                 if (winners == GameTeams.VILLAGERS) {
-                    p.playSound(p.getLocation(), Sound.ENTITY_FIREWORK_LAUNCH, 1.0F, 1.0F);
-                    if(timeOut) {
+                    playWinSound(p); //v5
+
+                    if (timeOut) {
                         timeOut = false;
                         p.sendTitle(Reference.TCT_TITLE_MAIN_VILLAGERS_VICTORY, Reference.TCT_TITLE_SUB_VILLAGERS_VICTORY_FOR_TIMEOUT, 5, 40, 5);
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_VILLAGERS_VICTORY_FOR_TIMEOUT);
@@ -907,14 +841,15 @@ public class Game implements TctGame {
                     }
                 }
                 if (winners == GameTeams.FOXES) {
-                    p.playSound(p.getLocation(), Sound.ENTITY_FIREWORK_LAUNCH, 1.0F, 1.0F);
+                    playWinSound(p); //v5
+
                     if (vil.size() > 0 && wol.size() <= 0) {
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_FOX_VICTORY_A);
                         p.sendTitle(Reference.TCT_TITLE_MAIN_FOX_VICTORY, Reference.TCT_TITLE_SUB_FOX_VICTORY_A, 5, 40, 5);
                     } else if (wol.size() > 0 && vil.size() <= 0) {
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_FOX_VICTORY_B);
                         p.sendTitle(Reference.TCT_TITLE_MAIN_FOX_VICTORY, Reference.TCT_TITLE_SUB_FOX_VICTORY_B, 5, 40, 5);
-                    } else if (vil.size() <= 0 && wol.size() <= 0) {
+                    } else if (vil.size() <= 0) {
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_FOX_VICTORY_C);
                         p.sendTitle(Reference.TCT_TITLE_MAIN_FOX_VICTORY, Reference.TCT_TITLE_SUB_FOX_VICTORY_C, 5, 40, 5);
                     }
@@ -924,14 +859,15 @@ public class Game implements TctGame {
                     p.sendTitle(Reference.TCT_TITLE_MAIN_WOLVES_VICTORY, Reference.TCT_TITLE_SUB_WOLVES_VICTORY, 5, 40, 5);
                     p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_WOLVES_VICTORY);
                 }
-                if(!NanamiTct.teamRegisterer.isEmpty()) {
-                    for(GameTeam t : NanamiTct.teamRegisterer.getRegisteredTeams()) {
-                        if(winners == t) {
-                            if(t instanceof TctTeam) {
+                if (!NanamiTct.teamRegisterer.isEmpty()) {
+                    for (GameTeam t : NanamiTct.teamRegisterer.getRegisteredTeams()) {
+                        if (winners == t) {
+                            if (t instanceof TctTeam) {
                                 TctTeam tt = (TctTeam) t;
                                 tt.onVictory(p);
                             } else {
-                                p.playSound(p.getLocation(), Sound.ENTITY_FIREWORK_SHOOT, 1.0F, 1.0F);
+                                playWinSound(p); //v5
+
                                 p.sendTitle(Reference.TCT_TITLE_MAIN_VICTORY.replaceAll("%COLOR%", ChatColor.RESET.toString()).replaceAll("%TEAM%", t.getDisplayName()), Reference.TCT_TITLE_SUB_VICTORY, 5, 40, 5);
                                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_VICTORY.replaceAll("%COLOR%", t.getColor().toString()).replaceAll("%TEAM%", t.getDisplayName()));
                             }
@@ -940,36 +876,36 @@ public class Game implements TctGame {
                 }
                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_GAMEEND_ROLE_RESULT);
             }
-            if(villagers.size() > 0) {
+            if (villagers.size() > 0) {
                 String str = String.join(", ", villagers);
                 Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.GREEN + Reference.TCT_ROLE_VILLAGER + ": [" + str + "]");
             }
-            if(healers.size() > 0) {
+            if (healers.size() > 0) {
                 String str = String.join(", ", healers);
                 Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.LIGHT_PURPLE + Reference.TCT_ROLE_HEALER + ": [" + str + "]");
             }
-            if(detectives.size() > 0) {
+            if (detectives.size() > 0) {
                 String str = String.join(", ", detectives);
                 Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_ROLE_DETECTIVE + ": [" + str + "]");
             }
-            if(wolves.size() > 0) {
+            if (wolves.size() > 0) {
                 String str = String.join(", ", wolves);
                 Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.RED + Reference.TCT_ROLE_WOLF + ": [" + str + "]");
             }
-            if(fanatics.size() > 0) {
+            if (fanatics.size() > 0) {
                 String str = String.join(", ", fanatics);
                 Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.RED + Reference.TCT_ROLE_FANATIC + ": [" + str + "]");
             }
-            if(foxes.size() > 0) {
+            if (foxes.size() > 0) {
                 String str = String.join(", ", foxes);
                 Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.GOLD + Reference.TCT_ROLE_FOX + ": [" + str + "]");
             }
-            if(immoral.size() > 0) {
+            if (immoral.size() > 0) {
                 String str = String.join(", ", immoral);
                 Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.DARK_GRAY + Reference.TCT_ROLE_IMMORAL + ": [" + str + "]");
             }
-            if(customRoles.size() > 0) {
-                for(Map.Entry<GameRole, List<String>> entry : customRoles.entrySet()) {
+            if (customRoles.size() > 0) {
+                for (Map.Entry<GameRole, List<String>> entry : customRoles.entrySet()) {
                     GameRole r = entry.getKey();
                     String str = String.join(", ", entry.getValue());
                     Bukkit.broadcastMessage(Reference.TCT_CHATPREFIX + " " + r.getColor() + r.getDisplayName() + ": [" + str + "]");
@@ -984,7 +920,7 @@ public class Game implements TctGame {
             immoral.clear();
             customRoles.clear();
         }
-        for(Player p : Bukkit.getOnlinePlayers()) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
             PlayerData data = getReference().PLAYERDATA.get(p.getUniqueId());
             p.spigot().respawn();
             p.setFoodLevel(20);
@@ -1006,7 +942,7 @@ public class Game implements TctGame {
             p.getInventory().clear();
             p.teleport(loc);
             p.setGameMode(GameMode.SURVIVAL);
-            if(data.getKilledBy() != null) {
+            if (data.getKilledBy() != null) {
                 if (data.getKilledBy().getCategory() != Killer.KillerCategory.AIR) {
                     p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_GAMEEND_YOU_ARE_KILLED_BY.replaceAll("%PLAYER%", data.getKilledBy().getName()).replaceAll("%ROLE%", data.getKilledBy().getRole().getDisplayName()));
                 }
@@ -1018,11 +954,21 @@ public class Game implements TctGame {
         Bukkit.getServer().getPluginManager().callEvent(gameStopEvent);
     }
 
+    public void playWinSound(Player player) {
+        if (VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2)) {
+            player.playSound(player, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1f, 1f);
+        } else {
+            player.playSound(player, Sound.valueOf("ENTITY_FIREWORK_LAUNCH"), 1f, 1f);
+        }
+    }
+
     public NanamiTct getPlugin() {
         return this.plugin;
     }
 
-    public BossBar getBar() { return this.bar; }
+    public BossBar getBar() {
+        return this.bar;
+    }
 
     public TctLog getLog() {
         return this.log;
@@ -1065,14 +1011,14 @@ public class Game implements TctGame {
     }
 
     public List<PlayerData> getRemainingPlayers(boolean isReal) {
-        if(isReal) {
+        if (isReal) {
             return this.realRemainingPlayers;
         }
         return this.remainingPlayers;
     }
 
     public void addRemainingPlayers(PlayerData data, boolean isReal) {
-        if(isReal) {
+        if (isReal) {
             this.realRemainingPlayers.add(data);
             return;
         }
@@ -1080,7 +1026,7 @@ public class Game implements TctGame {
     }
 
     public void removeRemainingPlayers(PlayerData data, boolean isReal) {
-        if(isReal) {
+        if (isReal) {
             this.realRemainingPlayers.remove(data);
             return;
         }
@@ -1088,7 +1034,7 @@ public class Game implements TctGame {
     }
 
     public void resetRemainingPlayers(boolean isReal) {
-        if(isReal) {
+        if (isReal) {
             this.realRemainingPlayers = new ArrayList<>();
             return;
         }
@@ -1140,7 +1086,9 @@ public class Game implements TctGame {
         this.reference = reference;
     }
 
-    public void setBar(BossBar bar) { this.bar = bar; }
+    public void setBar(BossBar bar) {
+        this.bar = bar;
+    }
 
     public List<String> getVillagersList() {
         return villagers;

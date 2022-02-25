@@ -21,17 +21,17 @@ public class TctItemLandmine implements CustomBlock {
     private String displayName;
     private String title;
     private String description;
-    private GameRole role;
-    private boolean isdefault;
-    private boolean placeable;
-    private boolean breakable;
+    private final GameRole role;
+    private final boolean isdefault;
+    private final boolean placeable;
+    private final boolean breakable;
     private boolean attackable;
 
     private final int index;
 
     public TctItemLandmine() {
         this.index = ItemIndex.WOLVES_SHOP_ITEM_SLOT_6;
-        this.material = Material.SKULL_ITEM;
+        this.material = Material.LEGACY_SKULL_ITEM;
         this.name = "LANDMINE";
         this.displayName = "Landmine";
         this.title = "Landmine";

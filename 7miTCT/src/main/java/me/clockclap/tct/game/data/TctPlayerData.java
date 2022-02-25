@@ -25,7 +25,7 @@ import java.util.UUID;
 public class TctPlayerData extends TctEntityData implements PlayerData {
 
     private GameRole co;
-    private String name;
+    private final String name;
     private boolean spec;
     private int quickchatcooldown;
     private int coin;
@@ -37,8 +37,8 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
     private int sus;
     private int wolf;
     private List<String> killedPlayers;
-    private TctPlayerProfile profile;
-    private Player player;
+    private final TctPlayerProfile profile;
+    private final Player player;
     private boolean sponge;
     private boolean invisible;
     private boolean clickable;
@@ -70,7 +70,7 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
         teleporting = false;
         Player p = Bukkit.getPlayer(name);
         this.player = p;
-        if(p != null) {
+        if (p != null) {
             boolean isAdmin = false;
             if (plugin.getTctConfig().getConfig().getStringList("admin").contains("op")) {
                 if (p.isOp()) {

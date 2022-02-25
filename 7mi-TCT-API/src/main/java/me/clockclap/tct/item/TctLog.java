@@ -8,14 +8,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
-import java.awt.print.Book;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class TctLog {
 
-    private TctGame game;
+    private final TctGame game;
     private List<String> log = new ArrayList<>();
     private List<List<String>> bookTexts = new ArrayList<>();
     private ItemStack book = new ItemStack(Material.WRITTEN_BOOK);

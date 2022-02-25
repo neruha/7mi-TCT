@@ -43,7 +43,7 @@ public class TctItemClock implements CustomSpecialItem {
     public TctItemClock() {
         this.index = ItemIndex.WOLVES_SHOP_ITEM_SLOT_5;
         this.isdefault = false;
-        this.material = Material.WATCH;
+        this.material = Material.LEGACY_WATCH;
         this.name = "CLOCK";
         this.displayName = "Clock";
         this.title = "Clock";
@@ -63,7 +63,7 @@ public class TctItemClock implements CustomSpecialItem {
 
     @Override
     public void onRightClick(Player player) {
-        if(player != null) {
+        if (player != null) {
             TctGame game = NanamiTctApi.game;
             PlayerData data = game.getReference().PLAYERDATA.get(player.getUniqueId());
             Location loc = player.getLocation();
@@ -93,7 +93,7 @@ public class TctItemClock implements CustomSpecialItem {
                         tick = 200;
                     }
                 }
-            } catch(NullPointerException e) {
+            } catch (NullPointerException e) {
                 tick = 200;
             }
             player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, tick, 1));
@@ -114,9 +114,9 @@ public class TctItemClock implements CustomSpecialItem {
                     break;
                 }
             }
-            if(MySQLStatus.isSqlEnabled() && NanamiTctApi.playerStats != null) {
+            if (MySQLStatus.isSqlEnabled() && NanamiTctApi.playerStats != null) {
                 PlayerStat stat = NanamiTctApi.playerStats.getStat(player.getUniqueId());
-                if(stat != null) stat.setCountUsedItem(stat.getCountUsedItem() + 1);
+                if (stat != null) stat.setCountUsedItem(stat.getCountUsedItem() + 1);
             }
         }
     }

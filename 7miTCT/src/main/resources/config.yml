@@ -36,7 +36,7 @@ roles:
 # 村人の場合は設定した値は最小値になります
 # 0にするとその役職は無効になります。(村人は例外)
   count:
-    villagers: 1
+    villagers: 0
     healers: 1
     detectives: 1
     wolves: 1
@@ -345,7 +345,7 @@ potion-effect:
   #呪い
   slowness:
     #デフォルト: 10s
-    duration: 10s #鈍足が付与される時間 (tickの時は t, 秒の時は s)
+    duration: 20s #鈍足が付与される時間 (tickの時は t, 秒の時は s)
     #デフォルト: 2
     level: 2 #鈍足の強さ
   #スピードポーション

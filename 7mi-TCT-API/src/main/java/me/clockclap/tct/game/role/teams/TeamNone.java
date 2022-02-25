@@ -9,7 +9,7 @@ public class TeamNone implements GameTeam {
     private String name;
     private int index;
     private ChatColor color;
-    private GameTeam parent;
+    private final GameTeam parent;
 
     public TeamNone() {
         this.name = "NONE";

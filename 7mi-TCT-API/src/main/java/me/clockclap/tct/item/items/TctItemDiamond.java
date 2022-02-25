@@ -2,9 +2,7 @@ package me.clockclap.tct.item.items;
 
 import me.clockclap.tct.NanamiTctApi;
 import me.clockclap.tct.api.Reference;
-import me.clockclap.tct.api.sql.MySQLStatus;
 import me.clockclap.tct.game.data.PlayerData;
-import me.clockclap.tct.game.data.PlayerStat;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomItems;
@@ -29,7 +27,7 @@ public class TctItemDiamond implements CustomSpecialItem {
     private String title;
     private String description;
     private boolean attackable;
-    private boolean quickchat;
+    private final boolean quickchat;
 
     private final GameRole role;
     private final boolean isdefault;

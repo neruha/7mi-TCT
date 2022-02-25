@@ -35,7 +35,7 @@ public class TctItemCracker implements CustomItem {
     public TctItemCracker() {
         this.index = ItemIndex.ALL_SHOP_ITEM_SLOT_7;
         this.isdefault = false;
-        this.material = Material.FIREWORK;
+        this.material = Material.LEGACY_FIREWORK;
         this.name = "CRACKER";
         this.displayName = "Cracker";
         this.title = "Cracker";

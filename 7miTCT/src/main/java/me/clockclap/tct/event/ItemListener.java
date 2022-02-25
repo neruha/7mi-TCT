@@ -32,7 +32,7 @@ import java.util.List;
 
 public class ItemListener implements Listener {
 
-    private NanamiTct plugin;
+    private final NanamiTct plugin;
 
     public ItemListener(NanamiTct plugin) {
         this.plugin = plugin;
@@ -40,31 +40,31 @@ public class ItemListener implements Listener {
 
     @EventHandler
     public void playerAttack(EntityDamageByEntityEvent e) {
-        if(e.getDamager() instanceof Firework) {
+        if (e.getDamager() instanceof Firework) {
             e.setCancelled(true);
             return;
         }
-        if(e.getDamager() instanceof Player) {
+        if (e.getDamager() instanceof Player) {
             Player p = (Player) e.getDamager();
             PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId());
-            if(data.isSpectator()) {
+            if (data.isSpectator()) {
                 e.setCancelled(true);
             }
-            if(data.isInvisible()) {
+            if (data.isInvisible()) {
                 data.setInvisible(false);
                 p.removePotionEffect(PotionEffectType.INVISIBILITY);
             }
         }
         if (e.getEntity() instanceof Player) {
-            if(e.getDamager() instanceof Player || e.getDamager() instanceof Projectile) {
+            if (e.getDamager() instanceof Player || e.getDamager() instanceof Projectile) {
                 Player p;
                 Player q;
-                if(e.getDamager() instanceof Player) {
+                if (e.getDamager() instanceof Player) {
                     p = (Player) e.getEntity();
                     q = (Player) e.getDamager();
-                } else if(e.getDamager() instanceof Projectile) {
+                } else if (e.getDamager() instanceof Projectile) {
                     p = (Player) e.getEntity();
-                    if(((Projectile) e.getDamager()).getShooter() instanceof Player) {
+                    if (((Projectile) e.getDamager()).getShooter() instanceof Player) {
                         q = (Player) ((Projectile) e.getDamager()).getShooter();
                     } else {
                         return;
@@ -146,7 +146,7 @@ public class ItemListener implements Listener {
     @EventHandler
     public void playerInteract(PlayerInteractEvent e) {
         PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(e.getPlayer().getUniqueId());
-        if(data != null) {
+        if (data != null) {
             if (data.isClickableItem()) {
                 data.setClickableItem(false);
                 new BukkitRunnable() {
@@ -175,7 +175,7 @@ public class ItemListener implements Listener {
                                 @Override
                                 public void run() {
                                     PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(e.getPlayer().getUniqueId());
-                                    if(data != null) {
+                                    if (data != null) {
                                         data.setSponge(false);
                                     }
                                     Location loc = new Location(e.getPlayer().getLocation().getWorld(), e.getPlayer().getLocation().getX(), e.getPlayer().getLocation().getY() + 1, e.getPlayer().getLocation().getZ());
@@ -194,9 +194,9 @@ public class ItemListener implements Listener {
                                     break;
                                 }
                             }
-                            if(MySQLStatus.isSqlEnabled() && NanamiTct.playerStats != null) {
+                            if (MySQLStatus.isSqlEnabled() && NanamiTct.playerStats != null) {
                                 PlayerStat stat = NanamiTct.playerStats.getStat(e.getPlayer().getUniqueId());
-                                if(stat != null) stat.setCountUsedItem(stat.getCountUsedItem() + 1);
+                                if (stat != null) stat.setCountUsedItem(stat.getCountUsedItem() + 1);
                             }
                         }
                     }
@@ -207,27 +207,23 @@ public class ItemListener implements Listener {
         }
     }
 
-    private boolean clickable_ = true;
-
     @EventHandler
     public void playerInteractAtPlayer(PlayerInteractAtEntityEvent e) {
         PlayerData d = plugin.getGame().getReference().PLAYERDATA.get(e.getPlayer().getUniqueId());
-        if(d != null) {
+        if (d != null) {
             if (d.isClickableEntity()) {
                 d.setClickableEntity(false);
                 Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
                     d.setClickableEntity(true);
                 }, 2);
-                if (e.getRightClicked() == null) {
-                    return;
-                }
                 if (e.getRightClicked() instanceof Player) {
                     Player p = e.getPlayer();
                     Player q = (Player) e.getRightClicked();
                     PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(e.getPlayer().getUniqueId());
                     if (!data.isSpectator() && !data.isInvisible()) {
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_NAME + ": " + NanamiTct.utilities.resetColor(q.getName()));
-                        if(data.getRole() == GameRoles.HEALER) p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_HP + ": " + ChatColor.RED + q.getHealth());
+                        if (data.getRole() == GameRoles.HEALER)
+                            p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_HP + ": " + ChatColor.RED + q.getHealth());
                         p.sendMessage(Reference.TCT_CHATPREFIX + " " + ChatColor.AQUA + Reference.TCT_TOGETHER + ": " + ChatColor.GREEN + data.getTogether()
                                 + ChatColor.AQUA + ", " + Reference.TCT_VILLAGER + ": " + ChatColor.GREEN + data.getVillager()
                                 + ChatColor.AQUA + ", " + Reference.TCT_SUS + ": " + ChatColor.GREEN + data.getSuspicious()
@@ -245,22 +241,22 @@ public class ItemListener implements Listener {
         Projectile projectile = e.getEntity();
         ProjectileSource source = projectile.getShooter();
         GameRole role = GameRoles.NONE;
-        if(source instanceof Player) {
+        if (source instanceof Player) {
             Player p = (Player) source;
             PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId());
-            if(data.isSpectator() || data.isInvisible()) {
+            if (data.isSpectator() || data.isInvisible()) {
                 e.setCancelled(true);
                 return;
             } else {
                 role = data.getRole();
             }
         }
-        if(projectile instanceof Snowball) {
+        if (projectile instanceof Snowball) {
             plugin.getGame().getReference().PROJECTILEDATA.put(projectile, new TctCustomProjectileData(plugin.getGame(), projectile, role));
             plugin.getGame().getReference().PROJECTILEDATA.get(projectile).startTimer();
-            if(MySQLStatus.isSqlEnabled() && NanamiTct.playerStats != null && source instanceof Player) {
-                PlayerStat stat = NanamiTct.playerStats.getStat(((Player)source).getUniqueId());
-                if(stat != null) stat.setCountUsedItem(stat.getCountUsedItem() + 1);
+            if (MySQLStatus.isSqlEnabled() && NanamiTct.playerStats != null && source instanceof Player) {
+                PlayerStat stat = NanamiTct.playerStats.getStat(((Player) source).getUniqueId());
+                if (stat != null) stat.setCountUsedItem(stat.getCountUsedItem() + 1);
             }
         }
     }
@@ -268,38 +264,33 @@ public class ItemListener implements Listener {
     @EventHandler
     public void onProjectileHit(ProjectileHitEvent e) {
         Projectile projectile = e.getEntity();
-        if(projectile instanceof Snowball) {
+        if (projectile instanceof Snowball) {
             Location loc = projectile.getLocation();
-            if(loc != null) {
-                TNTPrimed tnt = loc.getWorld().spawn(loc, TNTPrimed.class);
-                tnt.setYield(10F);
-                tnt.setFuseTicks(0);
+            TNTPrimed tnt = loc.getWorld().spawn(loc, TNTPrimed.class);
+            tnt.setYield(10F);
+            tnt.setFuseTicks(0);
 //                loc.getWorld().createExplosion(loc.getX(), loc.getY(), loc.getZ(), 5.4F, false, false);
-                plugin.getGame().getReference().PROJECTILEDATA.get(projectile).cancelTimer();
-                plugin.getGame().getReference().PROJECTILEDATA.remove(projectile);
-            }
+            plugin.getGame().getReference().PROJECTILEDATA.get(projectile).cancelTimer();
+            plugin.getGame().getReference().PROJECTILEDATA.remove(projectile);
         }
-        if(projectile instanceof Arrow) {
-            if(e.getHitBlock() != null) {
+        if (projectile instanceof Arrow) {
+            if (e.getHitBlock() != null) {
                 Location loc = e.getHitBlock().getLocation();
-                if (loc != null) {
-                    List<CustomBlockData> dataList = new ArrayList<>(CustomBlockInfo.blockDataList);
-                    for (CustomBlockData data : dataList) {
-                        if (data != null) {
-                            if (data.getLocation().getBlockX() == loc.getBlockX() &&
-                                    data.getLocation().getBlockY() == loc.getBlockY() &&
-                                    data.getLocation().getBlockZ() == loc.getBlockZ() &&
-                                    data.getCustomBlock().getItemStack().getItemMeta().getDisplayName().
-                                            equalsIgnoreCase(CustomItems.LANDMINE.getItemStack().getItemMeta().getDisplayName())) {
-                                data.getBlock().setType(Material.AIR);
-                                CustomBlockInfo.blockDataList.remove(dataList.indexOf(data));
-                                return;
-                            }
+                List<CustomBlockData> dataList = new ArrayList<>(CustomBlockInfo.blockDataList);
+                for (CustomBlockData data : dataList) {
+                    if (data != null) {
+                        if (data.getLocation().getBlockX() == loc.getBlockX() &&
+                                data.getLocation().getBlockY() == loc.getBlockY() &&
+                                data.getLocation().getBlockZ() == loc.getBlockZ() &&
+                                data.getCustomBlock().getItemStack().getItemMeta().getDisplayName().
+                                        equalsIgnoreCase(CustomItems.LANDMINE.getItemStack().getItemMeta().getDisplayName())) {
+                            data.getBlock().setType(Material.AIR);
+                            CustomBlockInfo.blockDataList.remove(dataList.indexOf(data));
+                            return;
                         }
                     }
                 }
             }
         }
     }
-
 }

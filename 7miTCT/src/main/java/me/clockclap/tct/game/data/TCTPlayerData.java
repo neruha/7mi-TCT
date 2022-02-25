@@ -280,9 +280,9 @@ public class TCTPlayerData extends TctEntityData implements PlayerData {
 
                 if (max >= distance) {
                     if (VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2)) {
-                        player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, max, 1);
+                        target.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, max, 1);
                     } else {
-                        player.playSound(player.getLocation(), Sound.valueOf("ENTITY_FIREWORK_BLAST"), max, 1);
+                        target.playSound(player.getLocation(), Sound.valueOf("ENTITY_FIREWORK_BLAST"), max, 1);
                     }
                 }
             }

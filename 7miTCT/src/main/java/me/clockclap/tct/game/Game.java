@@ -956,9 +956,9 @@ public class Game implements TCTGame {
 
     public void playWinSound(Player player) {
         if (VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2)) {
-            player.playSound(player, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1f, 1f);
+            player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1f, 1f);
         } else {
-            player.playSound(player, Sound.valueOf("ENTITY_FIREWORK_LAUNCH"), 1f, 1f);
+            player.playSound(player.getLocation(), Sound.valueOf("ENTITY_FIREWORK_LAUNCH"), 1f, 1f);
         }
     }
 

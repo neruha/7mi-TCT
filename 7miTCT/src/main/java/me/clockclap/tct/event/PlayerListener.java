@@ -1,7 +1,6 @@
 package me.clockclap.tct.event;
 
 import me.clockclap.tct.NanamiTct;
-import me.clockclap.tct.NanamiTctApi;
 import me.clockclap.tct.api.PlayerWatcher;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.api.TctUtilities;
@@ -188,7 +187,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerMoveEvent(PlayerMoveEvent e) {
-        PlayerData data = NanamiTctApi.utilities.getPlayerData(e.getPlayer());
+        PlayerData data = NanamiTct.utilities.getPlayerData(e.getPlayer());
         if (data != null && data.isTeleporting()) e.setCancelled(true);
     }
 }

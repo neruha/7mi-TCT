@@ -57,20 +57,16 @@ public class TCTItemSeed implements CustomSpecialItem {
     @Override
     public void onRightClick(Player player, ItemStack item) {
         if (player != null) {
-            TCTGame game = NanamiTctApi.game;
-
-            PlayerData data = game.getReference().PLAYERDATA.get(player.getUniqueId());
-
             final double max = NanamiTctApi.config.getConfig().getInt("seed-range", 5);
 
             boolean found = Bukkit.getOnlinePlayers().stream().anyMatch(target -> {
-                PlayerData targetData = game.getReference().PLAYERDATA.get(target.getUniqueId());
+                PlayerData targetData = NanamiTctApi.game.getReference().PLAYERDATA.get(target.getUniqueId());
 
-                if (targetData != null && !data.isSpectator() && !data.isInvisible()) {
+                if (targetData != null && !targetData.isSpectator() && !targetData.isInvisible()) {
 
                     final double range = player.getLocation().distance(target.getLocation());
 
-                    return max >= range && data.getRole() == GameRoles.WOLF;
+                    return max >= range && targetData.getRole() == GameRoles.WOLF;
                 }
                 return false;
             });

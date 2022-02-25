@@ -1,31 +1,27 @@
 package me.clockclap.tct.item.items;
 
 import me.clockclap.tct.NanamiTctApi;
-import me.clockclap.tct.api.sql.MySQLStatus;
 import me.clockclap.tct.game.TCTGame;
 import me.clockclap.tct.game.data.PlayerData;
-import me.clockclap.tct.game.data.PlayerStat;
 import me.clockclap.tct.game.death.DeadBody;
 import me.clockclap.tct.game.death.TctDeathCause;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomSpecialItem;
 import me.clockclap.tct.item.ItemIndex;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TctItemClock implements CustomSpecialItem {
+public class TCTItemClock implements CustomSpecialItem {
 
     private ItemStack item;
     private Material material;
@@ -40,7 +36,7 @@ public class TctItemClock implements CustomSpecialItem {
     private final boolean isdefault;
     private final int index;
 
-    public TctItemClock() {
+    public TCTItemClock() {
         this.index = ItemIndex.WOLVES_SHOP_ITEM_SLOT_5;
         this.isdefault = false;
         this.material = Material.LEGACY_WATCH;
@@ -63,54 +59,27 @@ public class TctItemClock implements CustomSpecialItem {
 
     @Override
     public void onRightClick(Player player, ItemStack item) {
-        if (player != null) {
-            TCTGame game = NanamiTctApi.game;
-            PlayerData data = game.getReference().PLAYERDATA.get(player.getUniqueId());
-            Location loc = player.getLocation();
-            Location blockLoc = new Location(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-            DeadBody deadBody = new DeadBody(game, data, TctDeathCause.AIR, blockLoc);
-            deadBody.setKilledPlayers(data.getKilledPlayers());
-            deadBody.setFake(true);
-            game.getReference().DEADBODIES.add(deadBody);
-            deadBody.process();
-            int tick = 200;
-            FileConfiguration config = NanamiTctApi.config.getConfig();
-            try {
-                if (config.getString("effect.wolf-invisible.duration", "200t").endsWith("t")) {
-                    String str = config.getString("effect.wolf-invisible.duration", "200t");
-                    str = str.substring(0, str.length() - 1);
-                    try {
-                        tick = Integer.parseInt(str);
-                    } catch (NumberFormatException e) {
-                        tick = 200;
-                    }
-                } else if (config.getString("effect.wolf-invisible.duration", "10s").endsWith("s")) {
-                    String str = config.getString("effect.wolf-invisible.duration", "10s");
-                    str = str.substring(0, str.length() - 1);
-                    try {
-                        tick = Integer.parseInt(str) * 20;
-                    } catch (NumberFormatException e) {
-                        tick = 200;
-                    }
-                }
-            } catch (NullPointerException e) {
-                tick = 200;
-            }
-            player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, tick, 1));
-            data.setInvisible(true);
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    data.setInvisible(false);
-                }
-            }.runTaskLater(NanamiTctApi.plugin, tick);
+        TCTGame game = NanamiTctApi.game;
+        PlayerData data = game.getReference().PLAYERDATA.get(player.getUniqueId());
 
-            item.setAmount(item.getAmount() - 1);
+        DeadBody deadBody = new DeadBody(game, data, TctDeathCause.AIR, player.getLocation().getBlock().getLocation())
+                .setKilledPlayers(data.getKilledPlayers())
+                .setFake(true);
 
-            if (MySQLStatus.isSqlEnabled() && NanamiTctApi.playerStats != null) {
-                PlayerStat stat = NanamiTctApi.playerStats.getStat(player.getUniqueId());
-                if (stat != null) stat.setCountUsedItem(stat.getCountUsedItem() + 1);
-            }
+        game.getReference().DEADBODIES.add(deadBody);
+        deadBody.process();
+
+        int duration = NanamiTctApi.config.getTime(NanamiTctApi.config.getConfig(), "effect.wolf-invisible.duration", 200);
+
+        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, duration, 1));
+        data.setInvisible(true);
+
+        Bukkit.getScheduler().runTaskLater(NanamiTctApi.plugin, () -> data.setInvisible(false), duration);
+
+        item.setAmount(item.getAmount() - 1);
+
+        if (NanamiTctApi.isPlayerStatsNotNull()) {
+            NanamiTctApi.playerStats.getStat(player.getUniqueId()).increaseItemUsed();
         }
     }
 

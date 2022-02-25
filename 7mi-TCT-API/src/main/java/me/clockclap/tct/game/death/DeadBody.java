@@ -92,20 +92,26 @@ public class DeadBody {
         return this.fake;
     }
 
-    public void setDamaged(boolean value) {
+    public DeadBody setDamaged(boolean value) {
         this.damaged = value;
+
+        return this;
     }
 
-    public void setFake(boolean value) {
+    public DeadBody setFake(boolean value) {
         this.fake = value;
+
+        return this;
     }
 
     public List<String> getKilledPlayers() {
         return this.killedPlayers;
     }
 
-    public void setKilledPlayers(List<String> list) {
+    public DeadBody setKilledPlayers(List<String> list) {
         this.killedPlayers = list;
+
+        return this;
     }
 
     public void addKilledPlayer(String name) {
@@ -130,14 +136,14 @@ public class DeadBody {
 
     public void setFound(boolean value) {
         this.isFound = value;
-        if(value) {
+        if (value) {
             Sign sign = (Sign) loc.getWorld().getBlockAt(loc).getState();
             sign.setLine(0, "");
             sign.setLine(1, "[FOUND]");
             sign.setLine(2, "死体");
             sign.setLine(3, "");
             sign.update();
-            if(getCause() == TctDeathCause.KILL) {
+            if (getCause() == TctDeathCause.KILL) {
                 getGame().setRemainingSeconds(getGame().getRemainingSeconds() + NanamiTctApi.config.getConfig().getInt("countdown.addcount.kill", 20));
             }
             try {
@@ -150,7 +156,8 @@ public class DeadBody {
                         }
                     }
                 }
-            } catch(Exception ignored) { }
+            } catch (Exception ignored) {
+            }
         }
     }
 
@@ -250,7 +257,7 @@ public class DeadBody {
 
     @Deprecated
     public static void removeAll(TCTGame game) {
-        for(DeadBody deadBody : game.getReference().DEADBODIES) {
+        for (DeadBody deadBody : game.getReference().DEADBODIES) {
             deadBody.remove();
         }
         game.getReference().DEADBODIES = new ArrayList<>();
@@ -279,5 +286,4 @@ public class DeadBody {
     public BlockData getBeforeBlockDataTop() {
         return beforeBlockData1;
     }
-
 }

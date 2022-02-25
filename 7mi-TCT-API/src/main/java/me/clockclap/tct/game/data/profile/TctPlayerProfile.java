@@ -4,7 +4,6 @@ import me.clockclap.tct.NanamiTctApi;
 import org.bukkit.Bukkit;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class TctPlayerProfile {
 

@@ -159,7 +159,7 @@ public class ItemListener implements Listener {
                     ItemStack i = e.getPlayer().getInventory().getItemInMainHand();
                     if (i.hasItemMeta()) {
                         for (CustomSpecialItem item : CustomItems.specialItems) {
-                            if (i.getItemMeta().getDisplayName().equalsIgnoreCase(item.getItemStack().getItemMeta().getDisplayName())) {
+                            if (i.hasItemMeta() && i.getItemMeta().getDisplayName().equalsIgnoreCase(item.getItemStack().getItemMeta().getDisplayName())) {
                                 if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
                                     item.onRightClick(e.getPlayer(), i);
                                 }
@@ -168,7 +168,7 @@ public class ItemListener implements Listener {
                                 }
                             }
                         }
-                        if (i.getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.TNT.getItemStack().getItemMeta().getDisplayName())) {
+                        if (i.hasItemMeta() && i.getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.TNT.getItemStack().getItemMeta().getDisplayName())) {
                             e.getPlayer().getInventory().setHelmet(i);
                             e.getPlayer().sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_EXPLODE_IN);
                             new BukkitRunnable() {

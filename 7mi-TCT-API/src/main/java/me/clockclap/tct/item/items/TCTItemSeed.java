@@ -1,8 +1,8 @@
 package me.clockclap.tct.item.items;
 
 import me.clockclap.tct.NanamiTctApi;
+import me.clockclap.tct.VersionUtils;
 import me.clockclap.tct.api.Reference;
-import me.clockclap.tct.game.TCTGame;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
@@ -36,7 +36,7 @@ public class TCTItemSeed implements CustomSpecialItem {
     public TCTItemSeed() {
         this.index = ItemIndex.DETECTIVES_SHOP_ITEM_SLOT_5;
         this.isdefault = false;
-        this.material = Material.LEGACY_SEEDS;
+        this.material = VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2) ? Material.WHEAT_SEEDS : Material.getMaterial("SEEDS");
         this.name = "SEED";
         this.displayName = "Seed";
         this.title = "Seed";

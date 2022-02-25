@@ -1,5 +1,6 @@
 package me.clockclap.tct.item.blocks;
 
+import me.clockclap.tct.VersionUtils;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomBlock;
@@ -13,7 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TctItemLandmine implements CustomBlock {
+public class TCTItemLandmine implements CustomBlock {
 
     private ItemStack item;
     private Material material;
@@ -29,9 +30,9 @@ public class TctItemLandmine implements CustomBlock {
 
     private final int index;
 
-    public TctItemLandmine() {
+    public TCTItemLandmine() {
         this.index = ItemIndex.WOLVES_SHOP_ITEM_SLOT_6;
-        this.material = Material.LEGACY_SKULL_ITEM;
+        this.material = VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2) ? Material.CREEPER_HEAD : Material.getMaterial("SKULL_ITEM");
         this.name = "LANDMINE";
         this.displayName = "Landmine";
         this.title = "Landmine";
@@ -41,7 +42,7 @@ public class TctItemLandmine implements CustomBlock {
         this.placeable = true;
         this.breakable = false;
         this.attackable = true;
-        ItemStack item = new ItemStack(material, 1, (short) SkullType.CREEPER.ordinal());
+        ItemStack item = VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2) ? new ItemStack(material, 1) : new ItemStack(material, 1, (short) SkullType.CREEPER.ordinal());
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.WHITE + displayName);
         List<String> lore = new ArrayList<>();

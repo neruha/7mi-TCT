@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class TctPlayerStat implements PlayerStat {
+public class TCTPlayerStat implements PlayerStat {
 
     private final UUID uuid;
 
@@ -34,7 +34,7 @@ public class TctPlayerStat implements PlayerStat {
     private int totalBoughtItems;
     private int totalPlayCount;
 
-    public TctPlayerStat(UUID uuid) {
+    public TCTPlayerStat(UUID uuid) {
         this.uuid = uuid;
         this.villager = 0;
         this.healer = 0;

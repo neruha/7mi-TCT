@@ -9,7 +9,7 @@ import me.clockclap.tct.game.GameState;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.data.PlayerStat;
 import me.clockclap.tct.game.data.TCTPlayerData;
-import me.clockclap.tct.game.data.TctPlayerStat;
+import me.clockclap.tct.game.data.TCTPlayerStat;
 import me.clockclap.tct.game.death.Killer;
 import me.clockclap.tct.game.death.TctDeathCause;
 import me.clockclap.tct.game.role.GameRoles;
@@ -51,7 +51,7 @@ public class PlayerListener implements Listener {
         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_JOIN_MESSAGE_0.replaceAll("%VERSION%", plugin.getDescription().getVersion()));
         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_JOIN_MESSAGE_1);
         if (MySQLStatus.isSqlEnabled() && NanamiTct.sqlConnection != null && NanamiTct.playerStats != null && NanamiTct.sqlConnection.getConnection() != null) {
-            PlayerStat stat = new TctPlayerStat(p.getUniqueId());
+            PlayerStat stat = new TCTPlayerStat(p.getUniqueId());
             try {
                 NanamiTct.playerStats.insert(stat);
             } catch (SQLException ex) {

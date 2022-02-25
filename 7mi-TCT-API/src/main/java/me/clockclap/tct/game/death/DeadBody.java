@@ -30,9 +30,9 @@ public class DeadBody {
     private final Material beforeBlockType0;
     private final Material beforeBlockType1;
     private final byte beforeBlockByteData0;
-    private final BlockData beforeBlockData0;
+    private BlockData beforeBlockData0;
     private final byte beforeBlockByteData1;
-    private final BlockData beforeBlockData1;
+    private BlockData beforeBlockData1;
     private int time;
     private BukkitRunnable runnable;
     private List<String> killedPlayers;
@@ -54,14 +54,14 @@ public class DeadBody {
 
         this.beforeBlockType0 = block0.getType();
         this.beforeBlockByteData0 = block0.getData();
-        this.beforeBlockData0 = block0.getBlockData();
+        if (VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2)) this.beforeBlockData0 = block0.getBlockData();
 
         this.loc.add(0, 1, 0);
         Block block1 = data.getPlayer().getWorld().getBlockAt(this.loc);
 
         this.beforeBlockType1 = block1.getType();
         this.beforeBlockByteData1 = block1.getData();
-        this.beforeBlockData1 = block1.getBlockData();
+        if (VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2)) this.beforeBlockData1 = block1.getBlockData();
 
         this.killedPlayers = new ArrayList<>();
         this.damaged = false;
@@ -173,7 +173,7 @@ public class DeadBody {
         loc.subtract(0, 1, 0);
         loc.getWorld().getBlockAt(loc).setType(Material.BEDROCK);
         loc.add(0, 1, 0);
-        loc.getWorld().getBlockAt(loc).setType(Material.LEGACY_SIGN_POST);
+        loc.getWorld().getBlockAt(loc).setType(VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2) ? Material.OAK_SIGN : Material.getMaterial("SIGN_POST"));
         Sign sign = (Sign) data.getPlayer().getWorld().getBlockAt(loc).getState();
         sign.setLine(0, "");
         sign.setLine(1, "[UNFOUND]");

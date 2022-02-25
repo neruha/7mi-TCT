@@ -13,7 +13,7 @@ import me.clockclap.tct.game.TCTGame;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.data.PlayerStat;
 import me.clockclap.tct.game.data.TCTPlayerData;
-import me.clockclap.tct.game.data.TctPlayerStat;
+import me.clockclap.tct.game.data.TCTPlayerStat;
 import me.clockclap.tct.game.death.Killer;
 import me.clockclap.tct.game.role.CustomRoles;
 import me.clockclap.tct.game.role.GameRoles;
@@ -172,7 +172,7 @@ public final class NanamiTct extends JavaPlugin {
                     p.setFoodLevel(20);
                     p.setPlayerListName(ChatColor.GREEN + name);
                     if (MySQLStatus.isSqlEnabled() && NanamiTct.sqlConnection != null && NanamiTct.playerStats != null && NanamiTct.sqlConnection.getConnection() != null) {
-                        PlayerStat stat = new TctPlayerStat(p.getUniqueId());
+                        PlayerStat stat = new TCTPlayerStat(p.getUniqueId());
                         try {
                             NanamiTct.playerStats.insert(stat);
                         } catch (SQLException ex) {

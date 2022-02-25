@@ -1,6 +1,7 @@
 package me.clockclap.tct.item.items;
 
 import me.clockclap.tct.NanamiTctApi;
+import me.clockclap.tct.VersionUtils;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomItem;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class TctItemCracker implements CustomItem {
+public class TCTItemCracker implements CustomItem {
 
     private ItemStack item;
     private Material material;
@@ -32,10 +33,10 @@ public class TctItemCracker implements CustomItem {
     private final int index;
 
     @SuppressWarnings("unchecked")
-    public TctItemCracker() {
+    public TCTItemCracker() {
         this.index = ItemIndex.ALL_SHOP_ITEM_SLOT_7;
         this.isdefault = false;
-        this.material = Material.LEGACY_FIREWORK;
+        this.material = VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2) ? Material.FIREWORK_ROCKET : Material.getMaterial("FIREWORK");
         this.name = "CRACKER";
         this.displayName = "Cracker";
         this.title = "Cracker";

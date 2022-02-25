@@ -4,7 +4,7 @@ import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.NanamiTctApi;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.data.PlayerStat;
-import me.clockclap.tct.game.data.TctPlayerStat;
+import me.clockclap.tct.game.data.TCTPlayerStat;
 import me.clockclap.tct.game.death.Killer;
 import me.clockclap.tct.game.death.TctDeathCause;
 import me.clockclap.tct.game.role.GameRoles;
@@ -361,7 +361,7 @@ public class TctUtilities implements Utilities {
     }
 
     public PlayerStat createNewStat(UUID uuid) {
-        return new TctPlayerStat(uuid);
+        return new TCTPlayerStat(uuid);
     }
 
     public PlayerStat getPlayerStat(UUID uuid) {

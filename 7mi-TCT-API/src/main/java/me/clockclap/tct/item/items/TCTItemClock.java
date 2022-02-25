@@ -1,6 +1,7 @@
 package me.clockclap.tct.item.items;
 
 import me.clockclap.tct.NanamiTctApi;
+import me.clockclap.tct.VersionUtils;
 import me.clockclap.tct.game.TCTGame;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.death.DeadBody;
@@ -39,7 +40,7 @@ public class TCTItemClock implements CustomSpecialItem {
     public TCTItemClock() {
         this.index = ItemIndex.WOLVES_SHOP_ITEM_SLOT_5;
         this.isdefault = false;
-        this.material = Material.LEGACY_WATCH;
+        this.material = VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2) ? Material.CLOCK : Material.getMaterial("WATCH");
         this.name = "CLOCK";
         this.displayName = "Clock";
         this.title = "Clock";

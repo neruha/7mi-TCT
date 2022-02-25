@@ -138,16 +138,18 @@ public class BlockListener implements Listener {
                                             final int time = NanamiTct.plugin.getTctConfig().getConfig().getInt("heal-station-respawn-time", 5);
 
                                             if (VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2)) {
-                                                block.getWorld().spawnParticle(Particle.BLOCK_CRACK, block.getLocation().add(0.5, 0.5, 0.5), 100, block.getState().getBlockData());
+                                                block.getWorld().spawnParticle(Particle.BLOCK_CRACK, block.getLocation(), 100, block.getState().getBlockData());
 
                                                 for (Entity entity :block.getWorld().getNearbyEntities(block.getLocation(), 6,6,6)) {
                                                     if (entity instanceof Player) {
                                                         ((Player) entity).playSound(block.getLocation(), Sound.BLOCK_STONE_BREAK, 50, 1);
                                                     }
                                                 }
-
                                             } else {
-                                                block.getWorld().spawnParticle(Particle.BLOCK_CRACK, block.getLocation().add(0.5, 0.5, 0.5), 100, CustomItems.HEAL_STATION.getMaterial().getData());
+
+                                                Location clone = block.getLocation().clone().add(0.5, 0.5, 0.5);
+
+                                                block.getWorld().spawnParticle(Particle.BLOCK_CRACK, clone.getX(), clone.getY(), clone.getZ(), 100, CustomItems.HEAL_STATION.getMaterial().getData());
                                             }
                                             block.breakNaturally(new ItemStack(Material.AIR));
 

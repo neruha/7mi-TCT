@@ -1,5 +1,6 @@
 package me.clockclap.tct.item.items;
 
+import me.clockclap.tct.VersionUtils;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomItem;
@@ -12,7 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TctItemSnowball implements CustomItem {
+public class TCTItemSnowball implements CustomItem {
 
     private ItemStack item;
     private Material material;
@@ -26,10 +27,10 @@ public class TctItemSnowball implements CustomItem {
     private final boolean isdefault;
     private final int index;
 
-    public TctItemSnowball() {
+    public TCTItemSnowball() {
         this.index = ItemIndex.WOLVES_SHOP_ITEM_SLOT_2;
         this.isdefault = false;
-        this.material = Material.LEGACY_SNOW_BALL;
+        this.material = VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2) ? Material.SNOWBALL : Material.getMaterial("SNOW_BALL");
         this.name = "SNOWBALL";
         this.displayName = "Snowball";
         this.title = "Snowball";

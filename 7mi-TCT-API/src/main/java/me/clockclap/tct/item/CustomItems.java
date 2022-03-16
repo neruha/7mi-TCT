@@ -2,7 +2,7 @@ package me.clockclap.tct.item;
 
 import me.clockclap.tct.game.data.CustomBlockData;
 import me.clockclap.tct.item.blocks.TctItemHealStation;
-import me.clockclap.tct.item.blocks.TctItemLandmine;
+import me.clockclap.tct.item.blocks.TCTItemLandmine;
 import me.clockclap.tct.item.blocks.TctItemSponge;
 import me.clockclap.tct.item.blocks.TctItemTnt;
 import me.clockclap.tct.item.items.*;
@@ -27,7 +27,7 @@ public final class CustomItems {
 
     public static List<CustomItem> allItems = new ArrayList<>();
 
-    public static final CustomWeaponItem WOOD_SWORD = new TctItemWoodSword();
+    public static final CustomWeaponItem WOOD_SWORD = new TCTItemWoodSword();
     public static final CustomWeaponItem STONE_SWORD = new TctItemStoneSword();
     public static final CustomItem BOW = new TctItemBow();
     public static final CustomItem ARROW = new TctItemArrow();
@@ -38,13 +38,13 @@ public final class CustomItems {
     public static final CustomItem EMPTY_BOTTLE = new TctItemEmptyBottle();
     public static final CustomItem MILK = new TctItemMilk();
     public static final CustomItem HEAL_POTION = new TctItemPotionSplashHeal();
-    public static final CustomItem CRACKER = new TctItemCracker();
+    public static final CustomItem CRACKER = new TCTItemCracker();
     public static final CustomSpecialItem COMPASS = new TctItemCompass();
-    public static final CustomSpecialItem CLOCK = new TctItemClock();
-    public static final CustomSpecialItem SEED = new TctItemSeed();
+    public static final CustomSpecialItem CLOCK = new TCTItemClock();
+    public static final CustomSpecialItem SEED = new TCTItemSeed();
     public static final CustomSpecialItem DIAMOND = new TctItemDiamond();
 
-    public static final CustomItem SNOWBALL = new TctItemSnowball();
+    public static final CustomItem SNOWBALL = new TCTItemSnowball();
 
     public static final CustomItem CO_VILLAGER = new TctItemCoVillager();
     public static final CustomItem CO_DETECTIVE = new TctItemCoDetective();
@@ -70,7 +70,7 @@ public final class CustomItems {
     public static final CustomBlock SPONGE = new TctItemSponge();
     public static final CustomBlock HEAL_STATION = new TctItemHealStation();
     public static final CustomBlock TNT = new TctItemTnt();
-    public static final CustomBlock LANDMINE = new TctItemLandmine();
+    public static final CustomBlock LANDMINE = new TCTItemLandmine();
 
     public static final CustomBlock TORCH = new TctItemTorch();
 

@@ -1,14 +1,9 @@
 package me.clockclap.tct.api.event;
 
-import me.clockclap.tct.game.TctGame;
-import me.clockclap.tct.game.role.RoleCount;
+import me.clockclap.tct.game.TCTGame;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
-
-import java.util.List;
 
 public class GamePreStartEvent extends GameEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
@@ -16,7 +11,7 @@ public class GamePreStartEvent extends GameEvent implements Cancellable {
     private Location location;
     private String cancelMessage;
 
-    public GamePreStartEvent(TctGame game, Location location, String cancelMessage) {
+    public GamePreStartEvent(TCTGame game, Location location, String cancelMessage) {
         super(game);
         this.location = location;
         this.cancelMessage = cancelMessage;

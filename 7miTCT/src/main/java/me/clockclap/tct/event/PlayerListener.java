@@ -1,7 +1,6 @@
 package me.clockclap.tct.event;
 
 import me.clockclap.tct.NanamiTct;
-import me.clockclap.tct.NanamiTctApi;
 import me.clockclap.tct.api.PlayerWatcher;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.api.TctUtilities;
@@ -9,8 +8,8 @@ import me.clockclap.tct.api.sql.MySQLStatus;
 import me.clockclap.tct.game.GameState;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.data.PlayerStat;
-import me.clockclap.tct.game.data.TctPlayerData;
-import me.clockclap.tct.game.data.TctPlayerStat;
+import me.clockclap.tct.game.data.TCTPlayerData;
+import me.clockclap.tct.game.data.TCTPlayerStat;
 import me.clockclap.tct.game.death.Killer;
 import me.clockclap.tct.game.death.TctDeathCause;
 import me.clockclap.tct.game.role.GameRoles;
@@ -32,18 +31,18 @@ import java.util.List;
 
 public class PlayerListener implements Listener {
 
-    private NanamiTct plugin;
+    private final NanamiTct plugin;
 
     public PlayerListener(NanamiTct plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent e) {
+    public void onPlayerJoinEvent(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        e.setJoinMessage(Reference.TCT_CHAT_JOIN_MESSAGE.replaceAll("%PLAYER%",p.getDisplayName()));
+        e.setJoinMessage(Reference.TCT_CHAT_JOIN_MESSAGE.replaceAll("%PLAYER%", p.getDisplayName()));
         plugin.getGame().getBar().addPlayer(p);
-        PlayerData data = new TctPlayerData(plugin, GameRoles.SPEC, NanamiTct.utilities.resetColor(p.getName()));
+        PlayerData data = new TCTPlayerData(plugin, GameRoles.SPEC, NanamiTct.utilities.resetColor(p.getName()));
         PlayerWatcher watcher = new PlayerWatcher(plugin.getGame(), p);
         data.setSpectator(true);
         data.setWatcher(watcher);
@@ -51,8 +50,8 @@ public class PlayerListener implements Listener {
         plugin.getGame().getReference().PLAYERDATA.put(p.getUniqueId(), data);
         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_JOIN_MESSAGE_0.replaceAll("%VERSION%", plugin.getDescription().getVersion()));
         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_JOIN_MESSAGE_1);
-        if(MySQLStatus.isSqlEnabled() && NanamiTct.sqlConnection != null && NanamiTct.playerStats != null && NanamiTct.sqlConnection.getConnection() != null) {
-            PlayerStat stat = new TctPlayerStat(p.getUniqueId());
+        if (MySQLStatus.isSqlEnabled() && NanamiTct.sqlConnection != null && NanamiTct.playerStats != null && NanamiTct.sqlConnection.getConnection() != null) {
+            PlayerStat stat = new TCTPlayerStat(p.getUniqueId());
             try {
                 NanamiTct.playerStats.insert(stat);
             } catch (SQLException ex) {
@@ -60,12 +59,12 @@ public class PlayerListener implements Listener {
                 MySQLStatus.setSqlEnabled(false);
             }
         }
-        String gameState,message = "";
-        boolean isAdmin = data.getProfile().isAdmin();
-        if(plugin.getGame().getReference().getGameState() == GameState.GAMING) {
+        String gameState, message;
+        final boolean isAdmin = data.getProfile().isAdmin();
+        if (plugin.getGame().getReference().getGameState() == GameState.GAMING) {
             gameState = Reference.TCT_CHAT_STATE_PLAYING;
             TctUtilities utilities = NanamiTct.utilities;
-            for(Player pl : Bukkit.getOnlinePlayers()) {
+            for (Player pl : Bukkit.getOnlinePlayers()) {
                 NanamiTct.utilities.hidePlayer(p, pl);
                 NanamiTct.utilities.showPlayer(p, pl);
             }
@@ -74,11 +73,11 @@ public class PlayerListener implements Listener {
             p.setGameMode(GameMode.SPECTATOR);
             p.teleport(plugin.getGame().getLocation());
             message = Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_GAME_ALREADY_STARTED;
-        } else if(plugin.getGame().getReference().getGameState() == GameState.STARTING) {
+        } else if (plugin.getGame().getReference().getGameState() == GameState.STARTING) {
             gameState = Reference.TCT_CHAT_STATE_PREGAMING;
             TctUtilities utilities = NanamiTct.utilities;
             utilities.modifyName(p, ChatColor.GREEN + utilities.resetColor(p.getName()));
-            for(Player pl : Bukkit.getOnlinePlayers()) {
+            for (Player pl : Bukkit.getOnlinePlayers()) {
                 utilities.hidePlayer(p, pl);
                 utilities.showPlayer(p, pl);
             }
@@ -91,7 +90,7 @@ public class PlayerListener implements Listener {
             gameState = Reference.TCT_CHAT_STATE_WAITING;
             TctUtilities utilities = NanamiTct.utilities;
             utilities.modifyName(p, ChatColor.GREEN + utilities.resetColor(p.getName()));
-            for(Player pl : Bukkit.getOnlinePlayers()) {
+            for (Player pl : Bukkit.getOnlinePlayers()) {
                 utilities.hidePlayer(p, pl);
                 utilities.showPlayer(p, pl);
             }
@@ -99,7 +98,7 @@ public class PlayerListener implements Listener {
             utilities.modifyName(p, utilities.resetColor(p.getName()));
             p.setPlayerListName(ChatColor.GREEN + NanamiTct.utilities.resetColor(p.getName()));
             p.setDisplayName(utilities.resetColor(p.getName()));
-            if(isAdmin) {
+            if (isAdmin) {
                 message = Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_PLEASE_START;
             } else {
                 message = Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_PLEASE_WAIT;
@@ -107,8 +106,9 @@ public class PlayerListener implements Listener {
         }
         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_GAME_STATE.replaceAll("%STATE%", gameState));
         p.sendMessage(message);
-        if(!MySQLStatus.isSqlEnabled()) p.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "* データベースに接続できなかったため統計の表示、記録はできません *");
-        for(Player pl : Bukkit.getOnlinePlayers()) {
+        if (!MySQLStatus.isSqlEnabled())
+            p.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "* データベースに接続できなかったため統計の表示、記録はできません *");
+        for (Player pl : Bukkit.getOnlinePlayers()) {
             NanamiTct.utilities.hidePlayer(pl, p);
             new BukkitRunnable() {
                 @Override
@@ -121,15 +121,15 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onQuit(PlayerQuitEvent e) {
+    public void onPlayerQuitEvent(PlayerQuitEvent e) {
         Player p = e.getPlayer();
-        e.setQuitMessage(Reference.TCT_CHAT_QUIT_MESSAGE.replaceAll("%PLAYER%",p.getDisplayName()));
+        e.setQuitMessage(Reference.TCT_CHAT_QUIT_MESSAGE.replaceAll("%PLAYER%", p.getDisplayName()));
         PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId());
-        if(data.getWatcher() != null) {
+        if (data.getWatcher() != null) {
             data.getWatcher().cancelPlayerWatcher();
         }
-        if(plugin.getGame().getReference().getGameState() == GameState.GAMING) {
-            if(!data.isSpectator()) {
+        if (plugin.getGame().getReference().getGameState() == GameState.GAMING) {
+            if (!data.isSpectator()) {
                 plugin.getGame().removeRemainingPlayers(data, true);
                 p.getInventory().clear();
                 List<PlayerData> villagers = new ArrayList<>();
@@ -166,7 +166,7 @@ public class PlayerListener implements Listener {
                     plugin.getGame().stop(GameTeams.WOLVES);
                     return;
                 }
-                if (villagers.size() <= 0 && wolves.size() <= 0) {
+                if (villagers.size() <= 0) {
                     plugin.getGame().getTimer().cancel();
                     if (foxes.size() > 0) {
                         plugin.getGame().stop(GameTeams.FOXES);
@@ -175,7 +175,7 @@ public class PlayerListener implements Listener {
                     plugin.getGame().stop(GameTeams.VILLAGERS);
                     return;
                 }
-                if(data.getRole() == GameRoles.FOX && data.getWatcher() != null) {
+                if (data.getRole() == GameRoles.FOX && data.getWatcher() != null) {
                     data.getWatcher().cancelCountFox();
                 }
                 data.setKilledBy(new Killer("AIR", GameRoles.NONE, Killer.KillerCategory.AIR));
@@ -186,12 +186,8 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onMove(PlayerMoveEvent e) {
-        Player p = e.getPlayer();
-        if(p != null) {
-            PlayerData data = NanamiTctApi.utilities.getPlayerData(p);
-            if(data != null && data.isTeleporting()) e.setCancelled(true);
-        }
+    public void onPlayerMoveEvent(PlayerMoveEvent e) {
+        PlayerData data = NanamiTct.utilities.getPlayerData(e.getPlayer());
+        if (data != null && data.isTeleporting()) e.setCancelled(true);
     }
-
 }

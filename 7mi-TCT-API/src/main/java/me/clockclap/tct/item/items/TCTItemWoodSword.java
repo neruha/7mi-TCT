@@ -1,5 +1,6 @@
 package me.clockclap.tct.item.items;
 
+import me.clockclap.tct.VersionUtils;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomWeaponItem;
@@ -13,7 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TctItemWoodSword implements CustomWeaponItem {
+public class TCTItemWoodSword implements CustomWeaponItem {
 
     private float damage;
     private float speed;
@@ -29,10 +30,10 @@ public class TctItemWoodSword implements CustomWeaponItem {
     private final boolean isdefault;
     private final int index;
 
-    public TctItemWoodSword() {
+    public TCTItemWoodSword() {
         this.index = ItemIndex.DEFAULT_ITEM_SLOT_0;
         this.isdefault = true;
-        this.material = Material.WOOD_SWORD;
+        this.material = VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2) ? Material.WOODEN_SWORD : Material.getMaterial("WOOD_SWORD");
         this.name = "WOOD_SWORD";
         this.displayName = "Wood Sword";
         this.title = "Wood Sword";

@@ -9,11 +9,11 @@ import me.clockclap.tct.api.sql.MySQLStatus;
 import me.clockclap.tct.command.*;
 import me.clockclap.tct.event.*;
 import me.clockclap.tct.game.Game;
-import me.clockclap.tct.game.TctGame;
+import me.clockclap.tct.game.TCTGame;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.data.PlayerStat;
-import me.clockclap.tct.game.data.TctPlayerData;
-import me.clockclap.tct.game.data.TctPlayerStat;
+import me.clockclap.tct.game.data.TCTPlayerData;
+import me.clockclap.tct.game.data.TCTPlayerStat;
 import me.clockclap.tct.game.death.Killer;
 import me.clockclap.tct.game.role.CustomRoles;
 import me.clockclap.tct.game.role.GameRoles;
@@ -52,11 +52,10 @@ public final class NanamiTct extends JavaPlugin {
     public static boolean isLoaded = false;
     private static TctPluginLoader loader;
 
-    private TctGame game;
+    private TCTGame game;
     private ITctConfiguration configuration;
     private CustomInventory customInventory;
     public Plugin[] loadedPlugins;
-    private SimplePluginManager pluginManager;
 
     public static TctPluginLoader getTctPluginLoader() {
         return loader;
@@ -69,7 +68,7 @@ public final class NanamiTct extends JavaPlugin {
         NanamiTctApi.plugin = plugin;
         loader = new TctPluginLoader(NanamiTct.class);
         loadedPlugins = new Plugin[0];
-        pluginManager = (SimplePluginManager) Bukkit.getServer().getPluginManager();
+        SimplePluginManager pluginManager = (SimplePluginManager) Bukkit.getServer().getPluginManager();
         utilities = new TctUtilities(this);
         NanamiTctApi.utilities = utilities;
         teamRegisterer = new CustomTeams();
@@ -101,7 +100,7 @@ public final class NanamiTct extends JavaPlugin {
         }
         NanamiTctApi.connection = sqlConnection;
 
-        if(MySQLStatus.isSqlEnabled()) {
+        if (MySQLStatus.isSqlEnabled()) {
             playerStats = new MySQLPlayerStats(sqlConnection, game);
             try {
                 playerStats.createTable();
@@ -130,13 +129,13 @@ public final class NanamiTct extends JavaPlugin {
         utilities.addCommand("gms", getName(), "", "自身のゲームモードをサバイバルモードに変更します。", new ArrayList<>(), new CommandGameModeSurvival());
         utilities.addCommand("gmsall", getName(), "", "全員のゲームモードをサバイバルモードに変更します。", new ArrayList<>(), new CommandGameModeSurvivalAll());
         utilities.addCommand("tctreload", getName(), "", "コンフィグをリロードします。", new ArrayList<>(), new CommandTctReload(this));
-        utilities.addCommand("barrier", getName(), "", "バリアブロックを入手します。", Arrays.asList("b", "gb"), new CommandBarrier(this));
+        utilities.addCommand("barrier", getName(), "", "バリアブロックを入手します。", Arrays.asList("b", "gb"), new CommandBarrier());
         utilities.addCommand("start", getName(), "", "ゲームを開始します。", new ArrayList<>(), new CommandStart(this));
         utilities.addCommand("startloc", getName(), "", "ゲームを指定した場所から開始します。", new ArrayList<>(), new CommandStartLoc(this));
         utilities.addCommand("stopgame", getName(), "", "ゲームを強制終了させます。", new ArrayList<>(), new CommandStopGame(this));
         utilities.addCommand("item", getName(), "", "アイテムを入手します。", Arrays.asList("i"), new CommandItem(this));
         utilities.addCommand("shop", getName(), "", "アイテムを購入できます。", Arrays.asList("s"), new CommandShop(this));
-        utilities.addCommand("stat", getName(), "", "統計を確認できます。", new ArrayList<>(), new CommandStat(this));
+        utilities.addCommand("stat", getName(), "", "統計を確認できます。", new ArrayList<>(), new CommandStat());
         //utilities.addCommand("tctplugins", getName(), "", "ロードされているななみTCTのプラグイン一覧を表示します。", Arrays.asList("tctpl"), new CommandTctPlugin());
 
         // Register items
@@ -152,11 +151,11 @@ public final class NanamiTct extends JavaPlugin {
         this.game.setBar(bar);
 
         // Initialize player data
-        if(Bukkit.getOnlinePlayers().size() > 0) {
+        if (Bukkit.getOnlinePlayers().size() > 0) {
             for (Player p : Bukkit.getOnlinePlayers()) {
-                if(p != null) {
+                if (p != null) {
                     String name = utilities.resetColor(p.getName());
-                    PlayerData data = new TctPlayerData(this, GameRoles.SPEC, name);
+                    PlayerData data = new TCTPlayerData(this, GameRoles.SPEC, name);
                     PlayerWatcher watcher = new PlayerWatcher(plugin.getGame(), p);
                     data.setSpectator(true);
                     data.setWatcher(watcher);
@@ -172,8 +171,8 @@ public final class NanamiTct extends JavaPlugin {
                     getGame().getReference().PLAYERDATA.put(p.getUniqueId(), data);
                     p.setFoodLevel(20);
                     p.setPlayerListName(ChatColor.GREEN + name);
-                    if(MySQLStatus.isSqlEnabled() && NanamiTct.sqlConnection != null && NanamiTct.playerStats != null && NanamiTct.sqlConnection.getConnection() != null) {
-                        PlayerStat stat = new TctPlayerStat(p.getUniqueId());
+                    if (MySQLStatus.isSqlEnabled() && NanamiTct.sqlConnection != null && NanamiTct.playerStats != null && NanamiTct.sqlConnection.getConnection() != null) {
+                        PlayerStat stat = new TCTPlayerStat(p.getUniqueId());
                         try {
                             NanamiTct.playerStats.insert(stat);
                         } catch (SQLException ex) {
@@ -203,7 +202,7 @@ public final class NanamiTct extends JavaPlugin {
         //loader.enablePlugins();
     }
 
-    public TctGame getGame() {
+    public TCTGame getGame() {
         return this.game;
     }
 
@@ -226,24 +225,22 @@ public final class NanamiTct extends JavaPlugin {
         newConfig.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream, Charsets.UTF_8)));
         try {
             plugin.getTctConfig().getConfig().load(plugin.getTctConfig().getConfigFile());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InvalidConfigurationException e) {
+        } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
         }
 
-        for(Player p : Bukkit.getOnlinePlayers()) {
-            if(p != null) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (p != null) {
                 String name = NanamiTct.utilities.resetColor(p.getName());
                 PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId());
-                if(data == null) {
+                if (data == null) {
                     continue;
                 }
                 boolean isAdmin = false;
                 FileConfiguration config = plugin.getTctConfig().getConfig();
-                if(config.getStringList("admin").contains(name)) {
+                if (config.getStringList("admin").contains(name)) {
                     isAdmin = true;
-                } else if(config.getStringList("admin").contains("op") && p.isOp()) {
+                } else if (config.getStringList("admin").contains("op") && p.isOp()) {
                     isAdmin = true;
                 }
                 data.getProfile().modify().setBoolean("admin", isAdmin).save();

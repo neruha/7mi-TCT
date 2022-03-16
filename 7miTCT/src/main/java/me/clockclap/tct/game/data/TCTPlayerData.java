@@ -1,6 +1,9 @@
 package me.clockclap.tct.game.data;
 
+import com.mysql.cj.ServerVersion;
 import me.clockclap.tct.NanamiTct;
+import me.clockclap.tct.NanamiTctApi;
+import me.clockclap.tct.VersionUtils;
 import me.clockclap.tct.api.PlayerWatcher;
 import me.clockclap.tct.game.data.profile.TctPlayerProfile;
 import me.clockclap.tct.game.death.DeadBody;
@@ -8,13 +11,11 @@ import me.clockclap.tct.game.death.Killer;
 import me.clockclap.tct.game.death.TctDeathCause;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockIterator;
 
@@ -22,10 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class TctPlayerData extends TctEntityData implements PlayerData {
+public class TCTPlayerData extends TctEntityData implements PlayerData {
 
     private GameRole co;
-    private String name;
+    private final String name;
     private boolean spec;
     private int quickchatcooldown;
     private int coin;
@@ -37,8 +38,8 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
     private int sus;
     private int wolf;
     private List<String> killedPlayers;
-    private TctPlayerProfile profile;
-    private Player player;
+    private final TctPlayerProfile profile;
+    private final Player player;
     private boolean sponge;
     private boolean invisible;
     private boolean clickable;
@@ -48,7 +49,7 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
     private boolean afterSaved;
     private boolean teleporting;
 
-    public TctPlayerData(NanamiTct plugin, GameRole role, String name) {
+    public TCTPlayerData(NanamiTct plugin, GameRole role, String name) {
         super(plugin, Bukkit.getPlayer(name), role);
         this.name = name;
         this.spec = true;
@@ -70,7 +71,7 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
         teleporting = false;
         Player p = Bukkit.getPlayer(name);
         this.player = p;
-        if(p != null) {
+        if (p != null) {
             boolean isAdmin = false;
             if (plugin.getTctConfig().getConfig().getStringList("admin").contains("op")) {
                 if (p.isOp()) {
@@ -267,7 +268,26 @@ public class TctPlayerData extends TctEntityData implements PlayerData {
     }
 
     @Override
-    public void setInvisible(boolean bool) {
+    public void setInvisible(boolean bool, boolean clock) {
+        if (this.invisible && clock && !bool && !isSpectator()) {
+            player.removePotionEffect(PotionEffectType.INVISIBILITY);
+
+            final int max = NanamiTctApi.config.getConfig().getInt("effect.wolf-invisible.playsound-range", 5);
+
+            for (Player target : Bukkit.getOnlinePlayers()) {
+
+                final double distance = target.getLocation().distance(player.getLocation());
+
+                if (max >= distance) {
+                    if (VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2)) {
+                        target.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, max, 1);
+                    } else {
+                        target.playSound(player.getLocation(), Sound.valueOf("ENTITY_FIREWORK_LARGE_BLAST"), max, 1);
+                    }
+                }
+            }
+        }
+
         this.invisible = bool;
     }
 

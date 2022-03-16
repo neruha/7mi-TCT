@@ -1,7 +1,8 @@
 package me.clockclap.tct.game.data;
 
 import me.clockclap.tct.NanamiTct;
-import me.clockclap.tct.game.TctGame;
+import me.clockclap.tct.VersionUtils;
+import me.clockclap.tct.game.TCTGame;
 import me.clockclap.tct.game.role.GameRole;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -15,11 +16,11 @@ import java.util.UUID;
 
 public class TctCustomProjectileData extends TctEntityData implements CustomProjectileData {
 
-    private TctGame game;
+    private TCTGame game;
     private Projectile projectile;
     private BukkitRunnable runnable;
 
-    public TctCustomProjectileData(TctGame game, Projectile projectile, GameRole role) {
+    public TctCustomProjectileData(TCTGame game, Projectile projectile, GameRole role) {
         super((NanamiTct) game.getPlugin(), projectile, role);
         this.game = game;
         this.projectile = projectile;
@@ -33,8 +34,12 @@ public class TctCustomProjectileData extends TctEntityData implements CustomProj
         runnable = new BukkitRunnable() {
             @Override
             public void run() {
-                for(Player p : Bukkit.getOnlinePlayers()) {
-                    p.playSound(getLocation(), Sound.ENTITY_FIREWORK_BLAST, 1.0F, 1.0F);
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    if (VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2)) {
+                        p.playSound(getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1.0F, 1.0F);
+                    } else {
+                        p.playSound(getLocation(), Sound.valueOf("ENTITY_FIREWORK_BLAST"), 1.0F, 1.0F);
+                    }
                 }
             }
         };

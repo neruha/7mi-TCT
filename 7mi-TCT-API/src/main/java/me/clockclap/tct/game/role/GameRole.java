@@ -4,26 +4,26 @@ import org.bukkit.ChatColor;
 
 public interface GameRole {
 
-    public String getDisplayName();
+    String getDisplayName();
 
-    public String getName();
+    String getName();
 
-    public int getIndex();
+    int getIndex();
 
-    public String getDescription();
+    String getDescription();
 
-    public ChatColor getColor();
+    ChatColor getColor();
 
-    public GameTeam getTeam();
+    GameTeam getTeam();
 
-    public void setDisplayName(String name);
+    void setDisplayName(String name);
 
-    public void setName(String name);
+    void setName(String name);
 
-    public void setIndex(int index);
+    void setIndex(int index);
 
-    public void setColor(ChatColor color);
+    void setColor(ChatColor color);
 
-    public void setTeam(GameTeam team);
+    void setTeam(GameTeam team);
 
 }

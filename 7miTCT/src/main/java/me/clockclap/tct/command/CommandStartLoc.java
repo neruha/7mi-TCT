@@ -10,56 +10,42 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CommandStartLoc implements TabExecutor {
 
-    private NanamiTct plugin;
-    private String usage = ChatColor.RED + "Usage: /startloc <world> <x> <y> <z>";
+    private final NanamiTct plugin;
+    private final String usage = ChatColor.RED + "Usage: /startloc <world> <x> <y> <z>";
 
     public CommandStartLoc(NanamiTct plugin) {
         this.plugin = plugin;
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if(sender instanceof Player) {
             Player p = (Player) sender;
-            if(p != null) {
-                TctPlayerProfile profile = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId()).getProfile();
-                boolean isAdmin = profile.isAdmin();
-//              if(plugin.getTctConfig().getConfig().getStringList("admin").contains("op")) {
-//                  if(p.isOp()) {
-//                      isAdmin = true;
-//                  }
-//              }
-//              if(isAdmin == false) {
-//                 for (String str : plugin.getTctConfig().getConfig().getStringList("admin")) {
-//                      if (NanamiTct.utilities.resetColor(p.getName()).equalsIgnoreCase(str)) {
-//                          isAdmin = true;
-//                          break;
-//                      }
-//                  }
-//              }
-                if (isAdmin == false) {
-                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_PERMISSION);
-                    return true;
-                }
-                if(plugin.getGame().getReference().getGameState() == GameState.GAMING || plugin.getGame().getReference().getGameState() == GameState.STARTING) {
-                    stopGame();
-                }
-                if (args.length < 4) {
-                    sender.sendMessage(Reference.TCT_CHATPREFIX + " " + usage);
-                    return true;
-                }
-                process(sender, args);
+            TctPlayerProfile profile = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId()).getProfile();
+            final boolean isAdmin = profile.isAdmin();
+
+            if (!isAdmin) {
+                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_PERMISSION);
+                return true;
             }
+            if(plugin.getGame().getReference().getGameState() == GameState.GAMING || plugin.getGame().getReference().getGameState() == GameState.STARTING) {
+                stopGame();
+            }
+            if (args.length < 4) {
+                sender.sendMessage(Reference.TCT_CHATPREFIX + " " + usage);
+                return true;
+            }
+            process(sender, args);
             return true;
         }
         if(args.length < 4) {
@@ -96,7 +82,7 @@ public class CommandStartLoc implements TabExecutor {
             return;
         }
         boolean success = plugin.getGame().preStart(loc);
-        if(success == false) {
+        if(!success) {
             sender.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_PLAYERS_NEEDED);
             sender.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_NEEDED_PLAYERS.replaceAll("%COUNT_A%", String.valueOf(plugin.getGame().getNeededPlayers())).replaceAll("%COUNT_B%", String.valueOf(plugin.getGame().getNeededPlayers() - Bukkit.getOnlinePlayers().size())));
         }
@@ -104,7 +90,7 @@ public class CommandStartLoc implements TabExecutor {
 
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
         if(args.length == 1) {
             List<World> worldList = Bukkit.getServer().getWorlds();
             List<String> result = new ArrayList<>();

@@ -1,19 +1,19 @@
-package me.clockclap.tct.item.blocks;
+package me.clockclap.tct.item.items;
 
+import me.clockclap.tct.VersionUtils;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
-import me.clockclap.tct.item.CustomBlock;
+import me.clockclap.tct.item.CustomItem;
 import me.clockclap.tct.item.ItemIndex;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.SkullType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TctItemLandmine implements CustomBlock {
+public class TCTItemSnowball implements CustomItem {
 
     private ItemStack item;
     private Material material;
@@ -21,27 +21,23 @@ public class TctItemLandmine implements CustomBlock {
     private String displayName;
     private String title;
     private String description;
-    private GameRole role;
-    private boolean isdefault;
-    private boolean placeable;
-    private boolean breakable;
     private boolean attackable;
 
+    private final GameRole role;
+    private final boolean isdefault;
     private final int index;
 
-    public TctItemLandmine() {
-        this.index = ItemIndex.WOLVES_SHOP_ITEM_SLOT_6;
-        this.material = Material.SKULL_ITEM;
-        this.name = "LANDMINE";
-        this.displayName = "Landmine";
-        this.title = "Landmine";
+    public TCTItemSnowball() {
+        this.index = ItemIndex.WOLVES_SHOP_ITEM_SLOT_2;
+        this.isdefault = false;
+        this.material = VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2) ? Material.SNOWBALL : Material.getMaterial("SNOW_BALL");
+        this.name = "SNOWBALL";
+        this.displayName = "Snowball";
+        this.title = "Snowball";
         this.description = ChatColor.RED + "Wolf Item";
         this.role = GameRoles.WOLF;
-        this.isdefault = false;
-        this.placeable = true;
-        this.breakable = false;
         this.attackable = true;
-        ItemStack item = new ItemStack(material, 1, (short) SkullType.CREEPER.ordinal());
+        ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.WHITE + displayName);
         List<String> lore = new ArrayList<>();
@@ -87,6 +83,11 @@ public class TctItemLandmine implements CustomBlock {
     }
 
     @Override
+    public GameRole getRole() {
+        return this.role;
+    }
+
+    @Override
     public boolean isDefault() {
         return this.isdefault;
     }
@@ -99,21 +100,6 @@ public class TctItemLandmine implements CustomBlock {
     @Override
     public void setAttackable(boolean value) {
         this.attackable = value;
-    }
-
-    @Override
-    public boolean isPlaceable() {
-        return this.placeable;
-    }
-
-    @Override
-    public boolean isBreakable() {
-        return this.breakable;
-    }
-
-    @Override
-    public GameRole getRole() {
-        return this.role;
     }
 
     @Override

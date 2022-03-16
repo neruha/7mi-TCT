@@ -1,5 +1,6 @@
 package me.clockclap.tct.game.role;
 
+import me.clockclap.tct.VersionUtils;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.game.role.GameTeam;
 import org.bukkit.ChatColor;
@@ -66,7 +67,13 @@ public abstract class TctTeam implements GameTeam {
     }
 
     public void onVictory(Player p) {
-        p.playSound(p.getLocation(), Sound.ENTITY_FIREWORK_SHOOT, 1.0F, 1.0F);
+
+        // v5
+        if (VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2)) {
+            p.playSound(p.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_SHOOT, 1.0F, 1.0F);
+        } else {
+            p.playSound(p.getLocation(), Sound.valueOf("ENTITY_FIREWORK_SHOOT"), 1.0F, 1.0F);
+        }
         p.sendTitle(getWinTitle(), getWinSubtitle(), 5, 40, 5);
         p.sendMessage(getWinMessage());
     }

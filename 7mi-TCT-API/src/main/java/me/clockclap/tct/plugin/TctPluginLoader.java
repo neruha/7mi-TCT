@@ -1,7 +1,5 @@
 package me.clockclap.tct.plugin;
 
-import me.clockclap.tct.NanamiTctApi;
-import me.clockclap.tct.game.TctGame;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.Plugin;
@@ -9,7 +7,6 @@ import org.bukkit.plugin.SimplePluginManager;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -54,7 +51,7 @@ public class TctPluginLoader {
 
     public final void enablePlugins() {
         SimplePluginManager pluginManager = (SimplePluginManager) Bukkit.getPluginManager();
-        for(Plugin pl : loadedPlugins) {
+        for (Plugin pl : loadedPlugins) {
             try {
 
                 List<Permission> perms = pl.getDescription().getPermissions();
@@ -74,5 +71,4 @@ public class TctPluginLoader {
             }
         }
     }
-
 }

@@ -1,23 +1,20 @@
-package me.clockclap.tct.item.items;
+package me.clockclap.tct.item.blocks;
 
-import me.clockclap.tct.NanamiTctApi;
-import me.clockclap.tct.api.Reference;
-import me.clockclap.tct.api.sql.MySQLStatus;
-import me.clockclap.tct.game.data.PlayerStat;
+import me.clockclap.tct.VersionUtils;
 import me.clockclap.tct.game.role.GameRole;
 import me.clockclap.tct.game.role.GameRoles;
-import me.clockclap.tct.item.CustomSpecialItem;
+import me.clockclap.tct.item.CustomBlock;
 import me.clockclap.tct.item.ItemIndex;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
+import org.bukkit.SkullType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TctItemCompass implements CustomSpecialItem {
+public class TCTItemLandmine implements CustomBlock {
 
     private ItemStack item;
     private Material material;
@@ -25,25 +22,27 @@ public class TctItemCompass implements CustomSpecialItem {
     private String displayName;
     private String title;
     private String description;
-    private boolean attackable;
-    private boolean quickchat;
-
     private final GameRole role;
     private final boolean isdefault;
+    private final boolean placeable;
+    private final boolean breakable;
+    private boolean attackable;
+
     private final int index;
 
-    public TctItemCompass() {
-        this.index = ItemIndex.WOLVES_SHOP_ITEM_SLOT_4;
-        this.isdefault = false;
-        this.material = Material.COMPASS;
-        this.name = "COMPASS";
-        this.displayName = "Compass";
-        this.title = "Compass";
+    public TCTItemLandmine() {
+        this.index = ItemIndex.WOLVES_SHOP_ITEM_SLOT_6;
+        this.material = VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2) ? Material.CREEPER_HEAD : Material.getMaterial("SKULL_ITEM");
+        this.name = "LANDMINE";
+        this.displayName = "Landmine";
+        this.title = "Landmine";
         this.description = ChatColor.RED + "Wolf Item";
         this.role = GameRoles.WOLF;
+        this.isdefault = false;
+        this.placeable = true;
+        this.breakable = false;
         this.attackable = true;
-        this.quickchat = false;
-        ItemStack item = new ItemStack(material);
+        ItemStack item = VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2) ? new ItemStack(material, 1) : new ItemStack(material, 1, (short) SkullType.CREEPER.ordinal());
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.WHITE + displayName);
         List<String> lore = new ArrayList<>();
@@ -51,23 +50,6 @@ public class TctItemCompass implements CustomSpecialItem {
         meta.setLore(lore);
         item.setItemMeta(meta);
         this.item = item;
-    }
-
-    @Override
-    public void onRightClick(Player player, ItemStack item) {
-        if(player != null) {
-            Player p = NanamiTctApi.utilities.getNearestPlayer(player);
-            if(p == null) {
-                player.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_NO_NEAREST_PLAYER);
-            } else {
-                double far = player.getLocation().distance(p.getLocation());
-                player.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_NEAREST_PLAYER.replaceAll("%PLAYER%", NanamiTctApi.utilities.resetColor(p.getName())).replaceAll("%FAR%", String.valueOf(far)));
-            }
-            if(MySQLStatus.isSqlEnabled() && NanamiTctApi.playerStats != null) {
-                PlayerStat stat = NanamiTctApi.playerStats.getStat(player.getUniqueId());
-                if(stat != null) stat.setCountUsedItem(stat.getCountUsedItem() + 1);
-            }
-        }
     }
 
     @Override
@@ -106,11 +88,6 @@ public class TctItemCompass implements CustomSpecialItem {
     }
 
     @Override
-    public GameRole getRole() {
-        return this.role;
-    }
-
-    @Override
     public boolean isDefault() {
         return this.isdefault;
     }
@@ -122,7 +99,22 @@ public class TctItemCompass implements CustomSpecialItem {
 
     @Override
     public void setAttackable(boolean value) {
-        this.attackable = true;
+        this.attackable = value;
+    }
+
+    @Override
+    public boolean isPlaceable() {
+        return this.placeable;
+    }
+
+    @Override
+    public boolean isBreakable() {
+        return this.breakable;
+    }
+
+    @Override
+    public GameRole getRole() {
+        return this.role;
     }
 
     @Override
@@ -155,8 +147,4 @@ public class TctItemCompass implements CustomSpecialItem {
         this.description = description;
     }
 
-    @Override
-    public boolean isQuickChatItem() {
-        return quickchat;
-    }
 }

@@ -3,17 +3,13 @@ package me.clockclap.tct.api;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.data.PlayerStat;
 import me.clockclap.tct.item.CustomItem;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandMap;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -34,7 +30,7 @@ public interface Utilities {
      * @param fallbackPrefix command prefix
      * @param command the command
      */
-    public void registerCommand(String fallbackPrefix, Command command);
+    void registerCommand(String fallbackPrefix, Command command);
 
     /**
      * Registers new command
@@ -42,7 +38,7 @@ public interface Utilities {
      * @param label command name
      * @param executor the command executor
      */
-    public void addCommand(String label, CommandExecutor executor);
+    void addCommand(String label, CommandExecutor executor);
 
     /**
      * Registers new command
@@ -51,7 +47,7 @@ public interface Utilities {
      * @param fallbackPrefix command prefix
      * @param executor the command executor
      */
-    public void addCommand(String label, String fallbackPrefix, CommandExecutor executor);
+    void addCommand(String label, String fallbackPrefix, CommandExecutor executor);
 
     /**
      * Registers new command
@@ -63,7 +59,7 @@ public interface Utilities {
      * @param aliases command aliases
      * @param executor the command executor
      */
-    public void addCommand(String label, String fallbackPrefix, String usageMessage, String description, List<String> aliases, CommandExecutor executor);
+    void addCommand(String label, String fallbackPrefix, String usageMessage, String description, List<String> aliases, CommandExecutor executor);
 
     /**
      * Returns yaw range as {@link Range} by double
@@ -73,7 +69,7 @@ public interface Utilities {
      * @return entity yaw range as {@link Range}
      */
     @Deprecated
-    public Range getYawRange(double range, double center);
+    Range getYawRange(double range, double center);
 
     /**
      * Returns {@link Vector} {@code a} to {@code b}
@@ -83,7 +79,7 @@ public interface Utilities {
      * @return {@link Vector} location A to location B
      */
     @Deprecated
-    public Vector generateVector(Location a, Location b);
+    Vector generateVector(Location a, Location b);
 
     /**
      * Returns yaw as {@link Float} by vector
@@ -92,7 +88,7 @@ public interface Utilities {
      * @return yaw as {@link Float}
      */
     @Deprecated
-    public float getYaw(Vector vector);
+    float getYaw(Vector vector);
 
     /**
      * Returns {@link Boolean} player A can see player B
@@ -101,7 +97,7 @@ public interface Utilities {
      * @param target player B
      * @return if player A can see player B, returns {@code true}
      */
-    public boolean canSee(Player player, Player target);
+    boolean canSee(Player player, Player target);
 
     /**
      * Returns {@link String} removed all containing colour codes
@@ -109,7 +105,7 @@ public interface Utilities {
      * @param input coloured {@link String}
      * @return if inputted {@link String} contains any colour codes, removes them.
      */
-    public String resetColor(String input);
+    String resetColor(String input);
 
     /**
      * Changes player's tag name
@@ -117,12 +113,12 @@ public interface Utilities {
      * @param player target {@link Player}
      * @param name new name as {@link String}
      */
-    public void modifyName(Player player, String name);
+    void modifyName(Player player, String name);
 
     /**
      * Reloads player names.
      */
-    public void reloadPlayer();
+    void reloadPlayer();
 
     /**
      * Hides player
@@ -130,7 +126,7 @@ public interface Utilities {
      * @param player seeing {@link Player}
      * @param target target {@link Player}
      */
-    public void hidePlayer(Player player, Player target);
+    void hidePlayer(Player player, Player target);
 
     /**
      * Shows player
@@ -138,7 +134,7 @@ public interface Utilities {
      * @param player seeing {@link Player}
      * @param target target {@link Player}
      */
-    public void showPlayer(Player player, Player target);
+    void showPlayer(Player player, Player target);
 
     /**
      * Returns {@link Player} nearest by player
@@ -146,7 +142,7 @@ public interface Utilities {
      * @param player player
      * @return Nearest player by specific player as {@link Player}
      */
-    public Player getNearestPlayer(Player player);
+    Player getNearestPlayer(Player player);
 
     /**
      * Gets {@link PlayerData} by coloured name.
@@ -155,7 +151,7 @@ public interface Utilities {
      * @return {@link PlayerData} by specific player name.
      */
     @Deprecated
-    public PlayerData getPlayerData(String colouredName);
+    PlayerData getPlayerData(String colouredName);
 
     /**
      * Gets {@link PlayerData} by specific player
@@ -163,7 +159,7 @@ public interface Utilities {
      * @param player target player with {@link Player}
      * @return {@link PlayerData} by specific player
      */
-    public PlayerData getPlayerData(Player player);
+    PlayerData getPlayerData(Player player);
 
     /**
      * Gets {@link PlayerData} by specific player's {@link UUID}
@@ -171,14 +167,14 @@ public interface Utilities {
      * @param uuid uuid of specific player with {@link UUID}
      * @return {@link PlayerData} by specific player's {@link UUID}
      */
-    public PlayerData getPlayerData(UUID uuid);
+    PlayerData getPlayerData(UUID uuid);
 
     /**
      * Gets all online {@link Player}'s data as {@link PlayerData}
      *
      * @return all {@link PlayerData} online
      */
-    public Collection<? extends PlayerData> getOnlinePlayersData();
+    Collection<? extends PlayerData> getOnlinePlayersData();
 
     /**
      * Gets registered {@link CustomItem} by bukkit {@link ItemStack}
@@ -186,7 +182,7 @@ public interface Utilities {
      * @param item bukkit {@link ItemStack}
      * @return {@link CustomItem} by specific {@link ItemStack}
      */
-    public CustomItem getCustomItemByItemStack(ItemStack item);
+    CustomItem getCustomItemByItemStack(ItemStack item);
 
     /**
      * Creates new specific player's stats as {@link PlayerStat} if the stat is not exists
@@ -196,7 +192,7 @@ public interface Utilities {
      * @param uuid uuid of target player as {@link UUID}
      * @return new {@link PlayerStat} of specific player
      */
-    public PlayerStat createNewStat(UUID uuid);
+    PlayerStat createNewStat(UUID uuid);
 
     /**
      * Gets specific player's stats as {@link PlayerStat} if the stat is exists
@@ -208,13 +204,13 @@ public interface Utilities {
      * @param uuid uuid of target player as {@link UUID}
      * @return {@link PlayerStat} of specific player
      */
-    public PlayerStat getPlayerStat(UUID uuid);
+    PlayerStat getPlayerStat(UUID uuid);
 
     /**
      * This method does nothing
      *
      * @param runnable {@link Runnable}
      */
-    public void runAfterLoad(Runnable runnable);
+    void runAfterLoad(Runnable runnable);
 
 }

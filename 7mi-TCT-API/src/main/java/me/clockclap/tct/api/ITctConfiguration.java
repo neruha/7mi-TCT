@@ -8,14 +8,16 @@ import java.io.*;
 
 public interface ITctConfiguration {
 
-    public void init() throws IOException;
+    void init() throws IOException;
 
-    public FileConfiguration getConfig();
+    FileConfiguration getConfig();
 
-    public FileConfiguration getChat();
+    FileConfiguration getChat();
 
-    public File getConfigFile();
+    int getTime(FileConfiguration config, String value, int defaultValue);
 
-    public File getChatFile();
+    File getConfigFile();
+
+    File getChatFile();
 
 }

@@ -1,7 +1,6 @@
 package me.clockclap.tct.api;
 
 import org.bukkit.ChatColor;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.List;
@@ -294,4 +293,6 @@ public final class Reference {
     public static final String TCT_CHAT_STATE_WAITING = "Waiting";
     public static final String TCT_CHAT_STATE_PREGAMING = "PreGaming";
 
+    //エラー
+    public static final String SQL_ERROR = "エラーが発生したためMySQL/SQLiteを使用できません";
 }

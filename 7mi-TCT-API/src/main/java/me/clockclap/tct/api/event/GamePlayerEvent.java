@@ -1,6 +1,6 @@
 package me.clockclap.tct.api.event;
 
-import me.clockclap.tct.game.TctGame;
+import me.clockclap.tct.game.TCTGame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
@@ -8,14 +8,14 @@ import org.bukkit.event.player.PlayerEvent;
 public abstract class GamePlayerEvent extends PlayerEvent {
     private static HandlerList handlers;
 
-    private TctGame game;
+    private TCTGame game;
 
-    public GamePlayerEvent(TctGame game, Player who) {
+    public GamePlayerEvent(TCTGame game, Player who) {
         super(who);
         this.game = game;
     }
 
-    public TctGame getGame() {
+    public TCTGame getGame() {
         return game;
     }
 

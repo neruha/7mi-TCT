@@ -1,38 +1,45 @@
 package me.clockclap.tct.game.death;
 
 import me.clockclap.tct.NanamiTctApi;
-import me.clockclap.tct.game.TctGame;
+import me.clockclap.tct.VersionUtils;
+import me.clockclap.tct.game.TCTGame;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.role.GameRole;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DeadBody {
 
-    private TctGame game;
-    private PlayerData data;
-    private String name;
-    private TctDeathCause cause;
-    private GameRole role;
+    private final TCTGame game;
+    private final PlayerData data;
+    private final String name;
+    private final TctDeathCause cause;
+    private final GameRole role;
     private boolean isFound;
     private Location loc;
-    private Material beforeBlockType0;
-    private Material beforeBlockType1;
-    private byte beforeBlockData0;
-    private byte beforeBlockData1;
+    private final Material beforeBlockType0;
+    private final Material beforeBlockType1;
+    private final byte beforeBlockByteData0;
+    private BlockData beforeBlockData0;
+    private final byte beforeBlockByteData1;
+    private BlockData beforeBlockData1;
     private int time;
     private BukkitRunnable runnable;
     private List<String> killedPlayers;
     private boolean damaged;
     private boolean fake;
 
-    public DeadBody(TctGame game, PlayerData data, TctDeathCause cause, Location loc) {
+    public DeadBody(TCTGame game, PlayerData data, TctDeathCause cause, Location loc) {
         this.game = game;
         this.data = data;
         this.name = data.getPlayer().getDisplayName();
@@ -42,17 +49,26 @@ public class DeadBody {
         this.loc = new Location(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
         this.time = 0;
         this.loc.subtract(0, 1, 0);
-        this.beforeBlockType0 = data.getPlayer().getWorld().getBlockAt(this.loc).getType();
-        this.beforeBlockData0 = data.getPlayer().getWorld().getBlockAt(this.loc).getData();
+
+        Block block0 = data.getPlayer().getWorld().getBlockAt(this.loc);
+
+        this.beforeBlockType0 = block0.getType();
+        this.beforeBlockByteData0 = block0.getData();
+        if (VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2)) this.beforeBlockData0 = block0.getBlockData();
+
         this.loc.add(0, 1, 0);
-        this.beforeBlockType1 = data.getPlayer().getWorld().getBlockAt(this.loc).getType();
-        this.beforeBlockData1 = data.getPlayer().getWorld().getBlockAt(this.loc).getData();
+        Block block1 = data.getPlayer().getWorld().getBlockAt(this.loc);
+
+        this.beforeBlockType1 = block1.getType();
+        this.beforeBlockByteData1 = block1.getData();
+        if (VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2)) this.beforeBlockData1 = block1.getBlockData();
+
         this.killedPlayers = new ArrayList<>();
         this.damaged = false;
         this.fake = false;
     }
 
-    public TctGame getGame() {
+    public TCTGame getGame() {
         return this.game;
     }
 
@@ -76,20 +92,26 @@ public class DeadBody {
         return this.fake;
     }
 
-    public void setDamaged(boolean value) {
+    public DeadBody setDamaged(boolean value) {
         this.damaged = value;
+
+        return this;
     }
 
-    public void setFake(boolean value) {
+    public DeadBody setFake(boolean value) {
         this.fake = value;
+
+        return this;
     }
 
     public List<String> getKilledPlayers() {
         return this.killedPlayers;
     }
 
-    public void setKilledPlayers(List<String> list) {
+    public DeadBody setKilledPlayers(List<String> list) {
         this.killedPlayers = list;
+
+        return this;
     }
 
     public void addKilledPlayer(String name) {
@@ -114,14 +136,14 @@ public class DeadBody {
 
     public void setFound(boolean value) {
         this.isFound = value;
-        if(value) {
+        if (value) {
             Sign sign = (Sign) loc.getWorld().getBlockAt(loc).getState();
             sign.setLine(0, "");
             sign.setLine(1, "[FOUND]");
             sign.setLine(2, "死体");
             sign.setLine(3, "");
             sign.update();
-            if(getCause() == TctDeathCause.KILL) {
+            if (getCause() == TctDeathCause.KILL) {
                 getGame().setRemainingSeconds(getGame().getRemainingSeconds() + NanamiTctApi.config.getConfig().getInt("countdown.addcount.kill", 20));
             }
             try {
@@ -134,7 +156,8 @@ public class DeadBody {
                         }
                     }
                 }
-            } catch(Exception ignored) { }
+            } catch (Exception ignored) {
+            }
         }
     }
 
@@ -150,7 +173,7 @@ public class DeadBody {
         loc.subtract(0, 1, 0);
         loc.getWorld().getBlockAt(loc).setType(Material.BEDROCK);
         loc.add(0, 1, 0);
-        loc.getWorld().getBlockAt(loc).setType(Material.SIGN_POST);
+        loc.getWorld().getBlockAt(loc).setType(VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2) ? Material.OAK_SIGN : Material.getMaterial("SIGN_POST"));
         Sign sign = (Sign) data.getPlayer().getWorld().getBlockAt(loc).getState();
         sign.setLine(0, "");
         sign.setLine(1, "[UNFOUND]");
@@ -163,11 +186,40 @@ public class DeadBody {
 
     public void remove() {
         loc.subtract(0, 1, 0);
-        loc.getWorld().getBlockAt(loc).setType(getBeforeBlockTypeBottom());
-        loc.getWorld().getBlockAt(loc).setData(getBeforeBlockDataBottom());
-        loc.add(0, 1, 0);
-        loc.getWorld().getBlockAt(loc).setType(getBeforeBlockTypeTop());
-        loc.getWorld().getBlockAt(loc).setData(getBeforeBlockDataTop());
+
+        Block block0 = loc.getWorld().getBlockAt(loc);
+
+        block0.setType(getBeforeBlockTypeBottom());
+
+        if (VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2)) {
+            block0.setBlockData(getBeforeBlockDataBottom());
+        } else {
+            try {
+                Method method = Block.class.getMethod("setData", byte.class);
+                method.invoke(block0, getBeforeBlockByteDataBottom());
+
+            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+
+        loc.clone().add(0, 1, 0);
+
+        Block block1 = loc.getWorld().getBlockAt(loc);
+        block1.setType(getBeforeBlockTypeTop());
+
+        if (VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2)) {
+            block1.setBlockData(getBeforeBlockDataTop());
+        } else {
+            try {
+                Method method = Block.class.getMethod("setData", byte.class);
+                method.invoke(block1, getBeforeBlockByteDataTop());
+
+            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+
         cancelCount();
         resetTimeAfterDeath();
     }
@@ -204,8 +256,8 @@ public class DeadBody {
     }
 
     @Deprecated
-    public static void removeAll(TctGame game) {
-        for(DeadBody deadBody : game.getReference().DEADBODIES) {
+    public static void removeAll(TCTGame game) {
+        for (DeadBody deadBody : game.getReference().DEADBODIES) {
             deadBody.remove();
         }
         game.getReference().DEADBODIES = new ArrayList<>();
@@ -219,12 +271,19 @@ public class DeadBody {
         return beforeBlockType1;
     }
 
-    public byte getBeforeBlockDataBottom() {
+    public byte getBeforeBlockByteDataBottom() {
+        return beforeBlockByteData0;
+    }
+
+    public byte getBeforeBlockByteDataTop() {
+        return beforeBlockByteData1;
+    }
+
+    public BlockData getBeforeBlockDataBottom() {
         return beforeBlockData0;
     }
 
-    public byte getBeforeBlockDataTop() {
+    public BlockData getBeforeBlockDataTop() {
         return beforeBlockData1;
     }
-
 }

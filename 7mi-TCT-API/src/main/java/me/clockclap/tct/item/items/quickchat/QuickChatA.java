@@ -1,6 +1,7 @@
 package me.clockclap.tct.item.items.quickchat;
 
 import me.clockclap.tct.NanamiTctApi;
+import me.clockclap.tct.VersionUtils;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.game.data.PlayerData;
 import me.clockclap.tct.game.role.GameRole;
@@ -34,7 +35,7 @@ public class QuickChatA implements CustomSpecialItem {
     public QuickChatA() {
         this.index = ItemIndex.DEFAULT_ITEM_SLOT_5;
         this.isdefault = true;
-        this.material = Material.WOOD_HOE;
+        this.material = VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2) ? Material.WOODEN_HOE : Material.getMaterial("WOOD_SWORD");
         this.name = "QUICKCHAT_A";
         this.displayName = Reference.TCT_QUICK_CHAT_TITLE_0;
         this.title = Reference.TCT_QUICK_CHAT_TITLE_0;

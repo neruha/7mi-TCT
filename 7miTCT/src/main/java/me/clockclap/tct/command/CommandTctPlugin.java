@@ -1,14 +1,16 @@
 package me.clockclap.tct.command;
 
 import me.clockclap.tct.NanamiTct;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.*;
-import org.bukkit.command.defaults.BukkitCommand;
-import org.bukkit.command.defaults.PluginsCommand;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.plugin.Plugin;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class CommandTctPlugin implements TabExecutor {
 
@@ -44,6 +46,6 @@ public class CommandTctPlugin implements TabExecutor {
             pluginList.append(entry.getKey());
         }
 
-        return "(" + plugins.size() + "): " + pluginList.toString();
+        return "(" + plugins.size() + "): " + pluginList;
     }
 }

@@ -2,9 +2,7 @@ package me.clockclap.tct.japanize;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedMap;
-import org.apache.commons.lang3.StringUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.Map;
 
@@ -373,7 +371,7 @@ public class KanaConverter {
      * @since 2.8.10
      */
     private static boolean canStartFromSokuon(String romaji) {
-        return !StringUtils.startsWithAny(romaji, "a", "i", "u", "e", "o", "n");
+        return !StringUtils.startsWithAny(romaji, new String[]{"a", "i", "u", "e", "o", "n"});
     }
 
     /**

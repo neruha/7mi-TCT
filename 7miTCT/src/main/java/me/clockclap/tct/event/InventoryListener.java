@@ -1,6 +1,7 @@
 package me.clockclap.tct.event;
 
 import me.clockclap.tct.NanamiTct;
+import me.clockclap.tct.VersionUtils;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.api.event.ArmorEquipEvent;
 import me.clockclap.tct.api.sql.MySQLStatus;
@@ -11,6 +12,7 @@ import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.item.CustomItem;
 import me.clockclap.tct.item.CustomItems;
 import org.bukkit.*;
+import org.bukkit.block.Container;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,13 +23,17 @@ import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupArrowEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.lang.reflect.InvocationTargetException;
+
 public class InventoryListener implements Listener {
 
-    private NanamiTct plugin;
+    private final NanamiTct plugin;
 
     public InventoryListener(NanamiTct plugin) {
         this.plugin = plugin;
@@ -35,60 +41,52 @@ public class InventoryListener implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent e) {
-        if(e.getClickedInventory() == null) {
+        if (e.getClickedInventory() == null || e.getCurrentItem() == null) {
             return;
         }
-        if(e.getClickedInventory().getTitle().equalsIgnoreCase(plugin.getCustomInventory().getGeneralShop().getTitle()) ||
-                e.getClickedInventory().getTitle().equalsIgnoreCase(plugin.getCustomInventory().getDetectiveShop().getTitle()) ||
-                e.getClickedInventory().getTitle().equalsIgnoreCase(plugin.getCustomInventory().getWolfShop().getTitle()) ||
-                e.getClickedInventory().getTitle().equalsIgnoreCase(plugin.getCustomInventory().getFanaticShop().getTitle()) ||
-                e.getClickedInventory().getTitle().equalsIgnoreCase(plugin.getCustomInventory().getFoxShop().getTitle()) ||
-                e.getClickedInventory().getTitle().equalsIgnoreCase(plugin.getCustomInventory().getImmoralShop().getTitle()) ||
-                e.getClickedInventory().getTitle().equalsIgnoreCase(plugin.getCustomInventory().getHealerShop().getTitle()) ||
-                e.getClickedInventory().getTitle().equalsIgnoreCase(Reference.TCT_GUI_TITLE_SHOP)) {
-            if(e.getCurrentItem().getType() != Material.AIR) {
-                e.setCancelled(true);
-                if(e.getWhoClicked() instanceof Player) {
-                    Player p = (Player) e.getWhoClicked();
-                    if(e.getCurrentItem() != null) {
-                        if (e.getCurrentItem().hasItemMeta()) {
-                            ItemMeta meta = e.getCurrentItem().getItemMeta();
-                            PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId());
-                            if (data.getCoin() <= 0) {
-                                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_NOT_ENOUGH_COINS);
-                                return;
-                            }
-                            for (CustomItem i : CustomItems.allItems) {
-                                if (meta.getDisplayName().equalsIgnoreCase(i.getItemStack().getItemMeta().getDisplayName())) {
-                                    if (data.getBoughtItem().contains(i.getName())) {
-                                        p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ALREADY_BOUGHT);
-                                        return;
-                                    }
-                                    if (meta.getDisplayName().equalsIgnoreCase(CustomItems.SPONGE.getItemStack().getItemMeta().getDisplayName())) {
-                                        data.setSponge(true);
-                                    }
-                                    if (i.getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.DIAMOND_HELMET.getItemStack().getItemMeta().getDisplayName())) {
-                                        FileConfiguration config = plugin.getTctConfig().getConfig();
-                                        int sec = config.getInt("detective-confirm-time", 180);
-                                        if(plugin.getGame().getElapsedTime() < sec) {
-                                            p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_DIAMOND_HELMET.replaceAll("%SECOND%", String.valueOf(sec)));
-                                            return;
-                                        }
-                                    }
-                                    data.addBoughtItem(i.getName());
-                                    data.setCoin(data.getCoin() - 1);
-                                    if(NanamiTct.playerStats != null && MySQLStatus.isSqlEnabled()) {
-                                        PlayerStat stat = NanamiTct.playerStats.getStat(p.getUniqueId());
-                                        if(stat != null) {
-                                            stat.setTotalBoughtItems(stat.getTotalBoughtItems() + 1);
-                                        }
-                                    }
-                                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_BOUGHT_ITEM.replaceAll("%ITEM%", i.getName()));
-                                    p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP,  1F, 1F);
-                                    p.getInventory().addItem(e.getCurrentItem());
-                                    p.closeInventory();
+
+        if (isGUI(e) && e.getCurrentItem().getType() != Material.AIR) {
+            e.setCancelled(true);
+            if (e.getWhoClicked() instanceof Player) {
+                Player p = (Player) e.getWhoClicked();
+                if (e.getCurrentItem() != null) {
+                    if (e.getCurrentItem().hasItemMeta()) {
+                        ItemMeta meta = e.getCurrentItem().getItemMeta();
+                        PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId());
+                        if (data.getCoin() <= 0) {
+                            p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_NOT_ENOUGH_COINS);
+                            return;
+                        }
+                        for (CustomItem i : CustomItems.allItems) {
+                            if (meta.getDisplayName().equalsIgnoreCase(i.getItemStack().getItemMeta().getDisplayName())) {
+                                if (data.getBoughtItem().contains(i.getName())) {
+                                    p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ALREADY_BOUGHT);
                                     return;
                                 }
+                                if (meta.getDisplayName().equalsIgnoreCase(CustomItems.SPONGE.getItemStack().getItemMeta().getDisplayName())) {
+                                    data.setSponge(true);
+                                }
+                                if (i.getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase(CustomItems.DIAMOND_HELMET.getItemStack().getItemMeta().getDisplayName())) {
+                                    FileConfiguration config = plugin.getTctConfig().getConfig();
+                                    int sec = config.getInt("detective-confirm-time", 180);
+                                    if (plugin.getGame().getElapsedTime() < sec) {
+                                        p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_DIAMOND_HELMET.replaceAll("%SECOND%", String.valueOf(sec)));
+                                        return;
+                                    }
+                                }
+                                data.addBoughtItem(i.getName());
+                                data.setCoin(data.getCoin() - 1);
+                                if (NanamiTct.playerStats != null && MySQLStatus.isSqlEnabled()) {
+                                    PlayerStat stat = NanamiTct.playerStats.getStat(p.getUniqueId());
+                                    if (stat != null) {
+                                        stat.setTotalBoughtItems(stat.getTotalBoughtItems() + 1);
+                                    }
+                                }
+                                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_BOUGHT_ITEM.replaceAll("%ITEM%", i.getName()));
+                                p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 1F);
+                                p.getInventory().addItem(e.getCurrentItem());
+                                p.closeInventory();
+                                return;
                             }
                         }
                     }
@@ -97,26 +95,74 @@ public class InventoryListener implements Listener {
         }
     }
 
-    @EventHandler
-    public void onInventoryPickUp(InventoryPickupItemEvent e) {
-        if(e.getInventory() != null) {
-            if (e.getInventory().getTitle().equalsIgnoreCase(plugin.getCustomInventory().getGeneralShop().getTitle()) ||
-                    e.getInventory().getTitle().equalsIgnoreCase(plugin.getCustomInventory().getDetectiveShop().getTitle()) ||
-                    e.getInventory().getTitle().equalsIgnoreCase(plugin.getCustomInventory().getWolfShop().getTitle())) {
-                e.setCancelled(true);
+    public boolean isGUI(InventoryClickEvent e) {
+        try {
+            Inventory inventory = e.getClickedInventory();
+
+            String title = (String) Inventory.class.getMethod("getTitle").invoke(inventory);
+
+            return title.equalsIgnoreCase(Reference.TCT_GUI_TITLE_GENERAL_SHOP) ||
+                    title.equalsIgnoreCase(Reference.TCT_GUI_TITLE_DETECTIVE_SHOP) ||
+                    title.equalsIgnoreCase(Reference.TCT_GUI_TITLE_WOLF_SHOP) ||
+                    title.equalsIgnoreCase(Reference.TCT_GUI_TITLE_FANATIC_SHOP) ||
+                    title.equalsIgnoreCase(Reference.TCT_GUI_TITLE_FOX_SHOP) ||
+                    title.equalsIgnoreCase(Reference.TCT_GUI_TITLE_IMMORAL_SHOP) ||
+                    title.equalsIgnoreCase(Reference.TCT_GUI_TITLE_HEALER_SHOP) ||
+                    title.equalsIgnoreCase(Reference.TCT_GUI_TITLE_SHOP);
+        } catch (NoSuchMethodError | NoSuchMethodException | InvocationTargetException | IllegalAccessException ex) {
+            try {
+                InventoryView inventory = e.getView();
+
+                return inventory.getTitle().equalsIgnoreCase(Reference.TCT_GUI_TITLE_GENERAL_SHOP) ||
+                        inventory.getTitle().equalsIgnoreCase(Reference.TCT_GUI_TITLE_DETECTIVE_SHOP) ||
+                        inventory.getTitle().equalsIgnoreCase(Reference.TCT_GUI_TITLE_WOLF_SHOP) ||
+                        inventory.getTitle().equalsIgnoreCase(Reference.TCT_GUI_TITLE_FANATIC_SHOP) ||
+                        inventory.getTitle().equalsIgnoreCase(Reference.TCT_GUI_TITLE_FOX_SHOP) ||
+                        inventory.getTitle().equalsIgnoreCase(Reference.TCT_GUI_TITLE_IMMORAL_SHOP) ||
+                        inventory.getTitle().equalsIgnoreCase(Reference.TCT_GUI_TITLE_HEALER_SHOP) ||
+                        inventory.getTitle().equalsIgnoreCase(Reference.TCT_GUI_TITLE_SHOP);
+            } catch (Exception exception) {
+                throw new UnsupportedClassVersionError();
             }
         }
     }
 
     @EventHandler
+    public void onInventoryPickUp(InventoryPickupItemEvent e) {
+        if (equalsInventory(e.getInventory(), Reference.TCT_GUI_TITLE_GENERAL_SHOP) ||
+                equalsInventory(e.getInventory(), Reference.TCT_GUI_TITLE_DETECTIVE_SHOP) ||
+                equalsInventory(e.getInventory(), Reference.TCT_GUI_TITLE_WOLF_SHOP)) {
+            e.setCancelled(true);
+        }
+    }
+
+    @EventHandler
     public void onInventoryMove(InventoryMoveItemEvent e) {
-        if(e.getDestination() != null) {
-            if (e.getDestination().getTitle().equalsIgnoreCase(plugin.getCustomInventory().getGeneralShop().getTitle()) ||
-                    e.getDestination().getTitle().equalsIgnoreCase(plugin.getCustomInventory().getDetectiveShop().getTitle()) ||
-                    e.getDestination().getTitle().equalsIgnoreCase(plugin.getCustomInventory().getWolfShop().getTitle())) {
-                e.setCancelled(true);
+        if (equalsInventory(e.getDestination(), Reference.TCT_GUI_TITLE_GENERAL_SHOP) ||
+                equalsInventory(e.getDestination(), Reference.TCT_GUI_TITLE_DETECTIVE_SHOP) ||
+                equalsInventory(e.getDestination(), Reference.TCT_GUI_TITLE_WOLF_SHOP)) {
+            e.setCancelled(true);
+        }
+    }
+
+    public boolean equalsInventory(Inventory inventory, String equals) {
+        if (VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2)) {
+            Container container = (Container) inventory.getHolder();
+
+            if (container == null || container.getCustomName() == null) return false;
+
+            return equals.equalsIgnoreCase(container.getCustomName());
+        } else {
+            try {
+                String title = (String) Inventory.class.getMethod("getTitle").invoke(inventory);
+
+                return equals.equalsIgnoreCase(title);
+            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                e.printStackTrace();
             }
         }
+
+        throw new UnsupportedClassVersionError();
     }
 
     @EventHandler

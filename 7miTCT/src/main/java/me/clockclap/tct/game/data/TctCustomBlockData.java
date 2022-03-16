@@ -3,8 +3,7 @@ package me.clockclap.tct.game.data;
 import me.clockclap.tct.NanamiTctApi;
 import me.clockclap.tct.api.CooldownTypes;
 import me.clockclap.tct.api.TctCooldownType;
-import me.clockclap.tct.game.Game;
-import me.clockclap.tct.game.TctGame;
+import me.clockclap.tct.game.TCTGame;
 import me.clockclap.tct.item.CustomBlock;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -20,10 +19,10 @@ public class TctCustomBlockData implements CustomBlockData {
     private Material type;
     private boolean enabled;
 
-    private final TctGame game;
+    private final TCTGame game;
     private final CustomBlock customBlock;
 
-    public TctCustomBlockData(TctGame game, CustomBlock customBlock, Block block) {
+    public TctCustomBlockData(TCTGame game, CustomBlock customBlock, Block block) {
         this.game = game;
         this.customBlock = customBlock;
         this.block = block;
@@ -33,7 +32,7 @@ public class TctCustomBlockData implements CustomBlockData {
         this.enabled = false;
     }
 
-    public TctGame getGame() {
+    public TCTGame getGame() {
         return this.game;
     }
 

@@ -1,8 +1,7 @@
 package me.clockclap.tct.api.event;
 
-import me.clockclap.tct.game.TctGame;
+import me.clockclap.tct.game.TCTGame;
 import org.bukkit.Location;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
 public class GameStartEvent extends GameEvent {
@@ -10,7 +9,7 @@ public class GameStartEvent extends GameEvent {
     private static final HandlerList handlers = new HandlerList();
     private Location location;
 
-    public GameStartEvent(TctGame game, Location location) {
+    public GameStartEvent(TCTGame game, Location location) {
         super(game);
         this.location = location;
     }

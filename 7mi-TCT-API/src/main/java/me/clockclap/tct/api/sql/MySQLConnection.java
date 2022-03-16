@@ -1,10 +1,11 @@
 package me.clockclap.tct.api.sql;
 
+import me.clockclap.tct.NanamiTctApi;
+import me.clockclap.tct.api.Reference;
+
 import java.sql.Connection;
-import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Enumeration;
 
 public class MySQLConnection {
 
@@ -42,6 +43,8 @@ public class MySQLConnection {
             return;
         }
         synchronized (this) {
+            /**
+             * v5 - [Patched] don't need this
             boolean found = false;
             Enumeration<Driver> drivers = DriverManager.getDrivers();
 
@@ -54,8 +57,17 @@ public class MySQLConnection {
             }
 
             if (!found) DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
+             */
 
-            connection = DriverManager.getConnection("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.database + this.option, this.username, this.password);
+            try {
+                connection = DriverManager.getConnection("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.database + this.option, this.username, this.password);
+            } catch (Exception e) {
+                NanamiTctApi.plugin.getLogger().warning(Reference.SQL_ERROR);
+
+                MySQLStatus.setSqlEnabled(false);
+
+                connection = null;
+            }
         }
     }
 

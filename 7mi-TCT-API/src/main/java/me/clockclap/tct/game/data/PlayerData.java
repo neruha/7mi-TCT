@@ -13,108 +13,108 @@ import java.util.List;
 
 public interface PlayerData extends EntityData {
 
-    public GameRole getCO();
+    GameRole getCO();
 
-    public boolean isSpectator();
+    boolean isSpectator();
 
-    public int getQuickChatCooldown();
+    int getQuickChatCooldown();
 
-    public int getCoin();
+    int getCoin();
 
-    public PlayerWatcher getWatcher();
+    PlayerWatcher getWatcher();
 
-    public Killer getKilledBy();
+    Killer getKilledBy();
 
-    public Player getPlayer();
+    Player getPlayer();
 
-    public Block getTargetBlock(int range);
+    Block getTargetBlock(int range);
 
-    public List<String> getBoughtItem();
+    List<String> getBoughtItem();
 
-    public int getTogether();
+    int getTogether();
 
-    public int getVillager();
+    int getVillager();
 
-    public int getSuspicious();
+    int getSuspicious();
 
-    public int getWolf();
+    int getWolf();
 
-    public TctPlayerProfile getProfile();
+    TctPlayerProfile getProfile();
 
-    public Location getSavedLocation();
+    Location getSavedLocation();
 
-    public void saveLocation(Location location);
+    void saveLocation(Location location);
 
-    public boolean isAfterSaved();
+    boolean isAfterSaved();
 
-    public void setAfterSaved(boolean afterSaved);
+    void setAfterSaved(boolean afterSaved);
 
-    public boolean isTeleporting();
+    boolean isTeleporting();
 
-    public void setTeleporting(boolean teleporting);
+    void setTeleporting(boolean teleporting);
 
-    public List<String> getKilledPlayers();
+    List<String> getKilledPlayers();
 
-    public boolean isClickableItem();
+    boolean isClickableItem();
 
-    public boolean isClickableBlock();
+    boolean isClickableBlock();
 
-    public boolean isClickableEntity();
+    boolean isClickableEntity();
 
-    public void setClickableItem(boolean value);
+    void setClickableItem(boolean value);
 
-    public void setClickableBlock(boolean value);
+    void setClickableBlock(boolean value);
 
-    public void setClickableEntity(boolean value);
+    void setClickableEntity(boolean value);
 
-    public boolean hasSponge();
+    boolean hasSponge();
 
-    public boolean isInvisible();
+    boolean isInvisible();
 
-    public void setInvisible(boolean bool);
+    void setInvisible(boolean bool, boolean clock);
 
-    public void setSponge(boolean bool);
+    void setSponge(boolean bool);
 
-    public void addKilledPlayer(String name);
+    void addKilledPlayer(String name);
 
-    public void removeKilledPlayer(String name);
+    void removeKilledPlayer(String name);
 
-    public void removeKilledPlayer(int index);
+    void removeKilledPlayer(int index);
 
-    public void resetKilledPlayers();
+    void resetKilledPlayers();
 
-    public void setKilledPlayers(List<String> list);
+    void setKilledPlayers(List<String> list);
 
-    public void setTogether(int value);
+    void setTogether(int value);
 
-    public void setVillager(int value);
+    void setVillager(int value);
 
-    public void setSuspicious(int value);
+    void setSuspicious(int value);
 
-    public void setWolf(int value);
+    void setWolf(int value);
 
-    public void setBoughtItem(List<String> list);
+    void setBoughtItem(List<String> list);
 
-    public void resetBoughtItem();
+    void resetBoughtItem();
 
-    public void addBoughtItem(String item);
+    void addBoughtItem(String item);
 
-    public void removeBoughtItem(String item);
+    void removeBoughtItem(String item);
 
-    public void startQCCCountdown();
+    void startQCCCountdown();
 
-    public void setCoin(int coin);
+    void setCoin(int coin);
 
-    public void setCO(GameRole role);
+    void setCO(GameRole role);
 
-    public void setSpectator(boolean bool);
+    void setSpectator(boolean bool);
 
-    public void setQuickChatCooldown(int second);
+    void setQuickChatCooldown(int second);
 
-    public void setWatcher(PlayerWatcher watcher);
+    void setWatcher(PlayerWatcher watcher);
 
-    public void setKilledBy(Killer killer);
+    void setKilledBy(Killer killer);
 
-    public void kill(TctDeathCause cause);
+    void kill(TctDeathCause cause);
 
 }

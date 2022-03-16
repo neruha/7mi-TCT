@@ -3,31 +3,26 @@ package me.clockclap.tct.command;
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.sql.MySQLStatus;
 import me.clockclap.tct.game.data.PlayerStat;
-import me.clockclap.tct.game.data.TctPlayerStat;
+import me.clockclap.tct.game.data.TCTPlayerStat;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 
 public class CommandStat implements CommandExecutor {
 
-    private NanamiTct plugin;
-
-    public CommandStat(NanamiTct plugin) {
-        this.plugin = plugin;
-    }
-
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if(sender instanceof Player) {
             Player p = (Player) sender;
             if (MySQLStatus.isSqlEnabled()) {
                 PlayerStat stat = NanamiTct.playerStats.getStat(p.getUniqueId());
                 if(stat == null) {
-                    PlayerStat newStat = new TctPlayerStat(p.getUniqueId());
+                    PlayerStat newStat = new TCTPlayerStat(p.getUniqueId());
                     try {
                         NanamiTct.playerStats.insert(newStat);
                         stat = newStat;

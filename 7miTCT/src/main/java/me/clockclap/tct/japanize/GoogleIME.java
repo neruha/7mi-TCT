@@ -21,7 +21,7 @@ public class GoogleIME {
 
     // 変換の実行
     private static String conv(String org) {
-        if ( org.length() == 0 ) {
+        if (org.length() == 0) {
             return "";
         }
 
@@ -30,11 +30,11 @@ public class GoogleIME {
         try {
             String baseurl;
             String encode = "UTF-8";
-            baseurl = GOOGLE_IME_URL + URLEncoder.encode(org , "UTF-8");
+            baseurl = GOOGLE_IME_URL + URLEncoder.encode(org, "UTF-8");
 
             URL url = new URL(baseurl);
 
-            urlconn = (HttpURLConnection)url.openConnection();
+            urlconn = (HttpURLConnection) url.openConnection();
             urlconn.setRequestMethod("GET");
             urlconn.setInstanceFollowRedirects(false);
             urlconn.connect();
@@ -43,21 +43,16 @@ public class GoogleIME {
                     new InputStreamReader(urlconn.getInputStream(), encode));
 
             String json = CharStreams.toString(reader);
-            String parsed = GoogleIME.parseJson(json);
 
-            return parsed;
+            return GoogleIME.parseJson(json);
 
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (ProtocolException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if ( urlconn != null ) {
+            if (urlconn != null) {
                 urlconn.disconnect();
             }
-            if ( reader != null ) {
+            if (reader != null) {
                 try {
                     reader.close();
                 } catch (IOException e) { // do nothing.

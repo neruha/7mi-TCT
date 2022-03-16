@@ -160,8 +160,7 @@
             <groupId>com.destroystokyo.paper</groupId>
             <artifactId>paper-server</artifactId>
             <version>1.12.2-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${user.home}/Paper/patched_paper_1.12.2.jar</systemPath>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>

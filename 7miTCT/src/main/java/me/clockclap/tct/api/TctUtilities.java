@@ -9,15 +9,19 @@ import me.clockclap.tct.game.role.GameRoles;
 import me.clockclap.tct.game.role.GameTeams;
 import me.clockclap.tct.item.CustomItem;
 import me.clockclap.tct.item.CustomItems;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.command.*;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -128,95 +132,47 @@ public class TctUtilities implements Utilities {
     }
 
     public boolean canSee(Player player, Player target) {
-        if (player.getWorld() != target.getWorld()) {
-            return false;
+        Validate.notNull(player);
+        if(!player.canSee(target)) return false;
+        if(player.getWorld().getUID().equals(target.getWorld().getUID())) {
+            Collection<PotionEffect> c = target.getActivePotionEffects();
+            for(PotionEffect e : c) if (e.getType() == PotionEffectType.INVISIBILITY) return false;
+
+            Location f = player.getEyeLocation();
+            Location t = target.getEyeLocation();
+            World w = target.getWorld();
+            double xf = f.getX();
+            double yf = f.getY();
+            double zf = f.getZ();
+            double xt = t.getX();
+            double yt = t.getY();
+            double zt = t.getZ();
+
+            double dx = xt - xf;
+            double dy = yt - yf;
+            double dz = zt - zf;
+
+            Vector v = new Vector(dx, dy, dz);
+            double d = v.length();
+            if(d > 200) return false;
+            double nx = dx / d;
+            double ny = dy / d;
+            double nz = dz / d;
+
+            for(double cx = xf, cy = yf, cz = zf;
+                cx <= xt && cy <= yt && cz <= zt;
+                cx += nx,cy += ny,cz += nz) {
+
+                int xi = (int)Math.round(cx);
+                int yi = (int)Math.round(cy);
+                int zi = (int)Math.round(cz);
+
+                Block b = w.getBlockAt(xi, yi, zi);
+                if(!BlockShape.isTransparentBlock(b.getType()) && BlockShape.isInBlock(b, cx, cy, cz)) return false;
+            }
+            return true;
         }
-        World world = player.getWorld();
-        Location from = player.getEyeLocation();
-        Location to = target.getEyeLocation();
-        int x = to.getBlockX();
-        int y = to.getBlockY();
-        int z = to.getBlockZ();
-        int x_ = from.getBlockX();
-        int y_ = from.getBlockY();
-        int z_ = from.getBlockZ();
-        for (int traceDistance = 100; traceDistance >= 0; traceDistance--) {
-            byte b0;
-            if (x_ == x && y_ == y && z_ == z) {
-                return true;
-            }
-            double x0 = 999.0D;
-            double y0 = 999.0D;
-            double z0 = 999.0D;
-            double x1 = 999.0D;
-            double y1 = 999.0D;
-            double z1 = 999.0D;
-            double dx = to.getX() - from.getX();
-            double dy = to.getY() - from.getY();
-            double dz = to.getZ() - from.getZ();
-            if (x > x_) {
-                x0 = x_ + 1.0D;
-                x1 = (x0 - from.getX()) / dx;
-            } else if (x < x_) {
-                x0 = x_ + 0.0D;
-                x1 = (x0 - from.getX()) / dx;
-            }
-            if (y > y_) {
-                y0 = y_ + 1.0D;
-                y1 = (y0 - from.getY()) / dy;
-            } else if (y < y_) {
-                y0 = y_ + 0.0D;
-                y1 = (y0 - from.getY()) / dy;
-            }
-            if (z > z_) {
-                z0 = z_ + 1.0D;
-                z1 = (z0 - from.getZ()) / dz;
-            } else if (z < z_) {
-                z0 = z_ + 0.0D;
-                z1 = (z0 - from.getZ()) / dz;
-            }
-            if (x1 < y1 && x1 < z1) {
-                if (x > x_) {
-                    b0 = 4;
-                } else {
-                    b0 = 5;
-                }
-                from.setX(x0);
-                from.add(0.0D, dy * x1, dz * x1);
-            } else if (y1 < z1) {
-                if (y > y_) {
-                    b0 = 0;
-                } else {
-                    b0 = 1;
-                }
-                from.add(dx * y1, 0.0D, dz * y1);
-                from.setY(y0);
-            } else {
-                if (z > z_) {
-                    b0 = 2;
-                } else {
-                    b0 = 3;
-                }
-                from.add(dx * z1, dy * z1, 0.0D);
-                from.setZ(z0);
-            }
-            x_ = from.getBlockX();
-            y_ = from.getBlockY();
-            z_ = from.getBlockZ();
-            if (b0 == 5) {
-                x_--;
-            }
-            if (b0 == 1) {
-                y_--;
-            }
-            if (b0 == 3) {
-                z_--;
-            }
-            if (world.getBlockAt(x_, y_, z_).getType().isOccluding()) {
-                return false;
-            }
-        }
-        return true;
+        return false;
     }
 
     public String resetColor(String input) {

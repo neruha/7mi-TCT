@@ -1,7 +1,7 @@
 package me.clockclap.tct.game.data;
 
 import me.clockclap.tct.api.PlayerWatcher;
-import me.clockclap.tct.game.data.profile.TctPlayerProfile;
+import me.clockclap.tct.game.data.profile.TCTPlayerProfile;
 import me.clockclap.tct.game.death.Killer;
 import me.clockclap.tct.game.death.TctDeathCause;
 import me.clockclap.tct.game.role.GameRole;
@@ -39,7 +39,7 @@ public interface PlayerData extends EntityData {
 
     int getWolf();
 
-    TctPlayerProfile getProfile();
+    TCTPlayerProfile getProfile();
 
     Location getSavedLocation();
 

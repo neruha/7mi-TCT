@@ -12,9 +12,9 @@ public class CommandGameModeSurvival implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
             Player p = (Player) sender;
-            if(!p.isOp()) {
+            if (!p.isOp()) {
                 p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_PERMISSION);
                 return true;
             }
@@ -29,5 +29,4 @@ public class CommandGameModeSurvival implements CommandExecutor {
         p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_PROCESS_CHANGE_GAMEMODE.replaceAll("%PLAYER%", Reference.TCT_CHAT_SYSTEM_YOU).replaceAll("%GAMEMODE%", Reference.TCT_GAMEMODE_SURVIVAL));
         p.setGameMode(GameMode.SURVIVAL);
     }
-
 }

@@ -40,7 +40,5 @@ public class VersionUtils {
         } else {
             VersionUtils.server_version = Integer.parseInt(server_version.replaceAll("[^0-9]", "") + "0");
         }
-
-        Bukkit.broadcastMessage(String.valueOf(VersionUtils.server_version));
     }
 }

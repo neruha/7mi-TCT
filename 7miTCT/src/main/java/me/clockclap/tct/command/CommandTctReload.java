@@ -4,7 +4,7 @@ import com.google.common.base.Charsets;
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.game.data.PlayerData;
-import me.clockclap.tct.game.data.profile.TctPlayerProfile;
+import me.clockclap.tct.game.data.profile.TCTPlayerProfile;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -29,21 +29,20 @@ public class CommandTctReload implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        if(sender instanceof Player) {
-            Player p = (Player) sender;
-            TctPlayerProfile profile = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId()).getProfile();
+        if (sender instanceof Player) {
+            TCTPlayerProfile profile = plugin.getGame().getReference().PLAYERDATA.get(((Player) sender).getUniqueId()).getProfile();
             final boolean isAdmin = profile.isAdmin();
 
             if (!isAdmin) {
-                p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_PERMISSION);
-                return true;
+                sender.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_ERROR_PERMISSION);
+            } else {
+                reload();
+                sender.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_SYSTEM_RELOAD_COMPLETE);
             }
+        } else {
             reload();
-            p.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_SYSTEM_RELOAD_COMPLETE);
-            return true;
+            sender.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_SYSTEM_RELOAD_COMPLETE);
         }
-        reload();
-        sender.sendMessage(Reference.TCT_CHATPREFIX + " " + Reference.TCT_CHAT_SYSTEM_RELOAD_COMPLETE);
         return true;
     }
 
@@ -62,23 +61,22 @@ public class CommandTctReload implements CommandExecutor {
             e.printStackTrace();
         }
 
-        for(Player p : Bukkit.getOnlinePlayers()) {
-            if(p != null) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (p != null) {
                 String name = NanamiTct.utilities.resetColor(p.getName());
                 PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId());
-                if(data == null) {
+                if (data == null) {
                     continue;
                 }
                 boolean isAdmin = false;
                 FileConfiguration config = plugin.getTctConfig().getConfig();
-                if(config.getStringList("admin").contains(name)) {
+                if (config.getStringList("admin").contains(name)) {
                     isAdmin = true;
-                } else if(config.getStringList("admin").contains("op") && p.isOp()) {
+                } else if (config.getStringList("admin").contains("op") && p.isOp()) {
                     isAdmin = true;
                 }
                 data.getProfile().modify().setBoolean("admin", isAdmin).save();
             }
         }
     }
-
 }

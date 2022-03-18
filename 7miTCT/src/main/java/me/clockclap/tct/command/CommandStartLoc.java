@@ -3,7 +3,7 @@ package me.clockclap.tct.command;
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.game.GameState;
-import me.clockclap.tct.game.data.profile.TctPlayerProfile;
+import me.clockclap.tct.game.data.profile.TCTPlayerProfile;
 import me.clockclap.tct.game.role.GameTeams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -31,7 +31,7 @@ public class CommandStartLoc implements TabExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if(sender instanceof Player) {
             Player p = (Player) sender;
-            TctPlayerProfile profile = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId()).getProfile();
+            TCTPlayerProfile profile = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId()).getProfile();
             final boolean isAdmin = profile.isAdmin();
 
             if (!isAdmin) {

@@ -3,7 +3,7 @@ package me.clockclap.tct.command;
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.game.GameState;
-import me.clockclap.tct.game.data.profile.TctPlayerProfile;
+import me.clockclap.tct.game.data.profile.TCTPlayerProfile;
 import me.clockclap.tct.game.role.GameTeams;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -23,7 +23,7 @@ public class CommandStart implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender instanceof Player) {
             Player p = (Player) sender;
-            TctPlayerProfile profile = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId()).getProfile();
+            TCTPlayerProfile profile = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId()).getProfile();
             boolean isAdmin = profile.isAdmin();
 //              if(plugin.getTctConfig().getConfig().getStringList("admin").contains("op")) {
 //                  if(p.isOp()) {

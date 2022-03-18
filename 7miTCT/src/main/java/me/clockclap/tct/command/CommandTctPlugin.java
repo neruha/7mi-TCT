@@ -16,7 +16,7 @@ public class CommandTctPlugin implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(NanamiTct.getTctPluginLoader().getLoadedPlugins() != null) {
+        if (NanamiTct.getTctPluginLoader().getLoadedPlugins() != null) {
             sender.sendMessage("Plugins " + getPluginList());
         } else {
             sender.sendMessage("Plugins (0):");

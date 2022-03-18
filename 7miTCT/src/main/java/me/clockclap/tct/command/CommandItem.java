@@ -3,7 +3,7 @@ package me.clockclap.tct.command;
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.api.Reference;
 import me.clockclap.tct.game.data.PlayerData;
-import me.clockclap.tct.game.data.profile.TctPlayerProfile;
+import me.clockclap.tct.game.data.profile.TCTPlayerProfile;
 import me.clockclap.tct.item.CustomItem;
 import me.clockclap.tct.item.CustomItems;
 import org.bukkit.ChatColor;
@@ -33,7 +33,7 @@ public class CommandItem implements TabExecutor {
         if (config.getBoolean("debug", false)) {
             if (sender instanceof Player) {
                 Player p = (Player) sender;
-                TctPlayerProfile profile = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId()).getProfile();
+                TCTPlayerProfile profile = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId()).getProfile();
                 final boolean isAdmin = profile.isAdmin();
 
                 if (!isAdmin) {

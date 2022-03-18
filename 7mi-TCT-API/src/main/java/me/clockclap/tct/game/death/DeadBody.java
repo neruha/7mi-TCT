@@ -188,7 +188,6 @@ public class DeadBody {
         loc.subtract(0, 1, 0);
 
         Block block0 = loc.getWorld().getBlockAt(loc);
-
         block0.setType(getBeforeBlockTypeBottom());
 
         if (VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2)) {

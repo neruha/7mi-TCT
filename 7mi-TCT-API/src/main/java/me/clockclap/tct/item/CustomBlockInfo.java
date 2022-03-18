@@ -8,7 +8,4 @@ import java.util.List;
 public class CustomBlockInfo {
 
     public static List<CustomBlockData> blockDataList = new ArrayList<>();
-
-
-
 }

@@ -661,6 +661,18 @@ public class TCTPlayerStat implements PlayerStat {
         }
     }
 
+    @Override
+    public void increaseTotalFoundDeadBodies() {
+        if (checkSQLConnection()) {
+            this.totalFoundDeadBodies++;
+            try {
+                NanamiTct.playerStats.update(uuid, "found_deadbody", this.totalFoundDeadBodies);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
     private boolean checkSQLConnection() {
         return MySQLStatus.isSqlEnabled() && NanamiTct.sqlConnection.getConnection() != null;
     }

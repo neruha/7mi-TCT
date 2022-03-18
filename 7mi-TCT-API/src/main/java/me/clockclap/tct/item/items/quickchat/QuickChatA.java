@@ -35,7 +35,7 @@ public class QuickChatA implements CustomSpecialItem {
     public QuickChatA() {
         this.index = ItemIndex.DEFAULT_ITEM_SLOT_5;
         this.isdefault = true;
-        this.material = VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2) ? Material.WOODEN_HOE : Material.getMaterial("WOOD_SWORD");
+        this.material = VersionUtils.isHigherThanVersion(VersionUtils.V1_12_2) ? Material.WOODEN_HOE : Material.getMaterial("WOOD_HOE");
         this.name = "QUICKCHAT_A";
         this.displayName = Reference.TCT_QUICK_CHAT_TITLE_0;
         this.title = Reference.TCT_QUICK_CHAT_TITLE_0;

@@ -5,25 +5,25 @@ import org.bukkit.Bukkit;
 
 import java.util.Arrays;
 
-public class TctPlayerProfile {
+public class TCTPlayerProfile {
 
     String name;
     boolean admin;
 
-    public class TctPlayerProfileModifier extends TctProfileModifier {
+    public class TctPlayerProfileModifier extends TCTProfileModifier {
 
-        public TctPlayerProfileModifier(TctProperty<String, Object> defaults) {
+        public TctPlayerProfileModifier(TCTProperty<String, Object> defaults) {
             super(defaults);
         }
 
         @Override
         public void save() {
-            if(super.property.get("name") instanceof String) {
+            if (super.property.get("name") instanceof String) {
                 name = (String) super.property.get("name");
             } else {
                 name = super.property.get("name").toString();
             }
-            if(super.property.get("admin") instanceof Boolean) {
+            if (super.property.get("admin") instanceof Boolean) {
                 admin = (Boolean) super.property.get("admin");
             } else {
                 admin = false;
@@ -31,7 +31,7 @@ public class TctPlayerProfile {
         }
     }
 
-    public TctPlayerProfile(String name) {
+    public TCTPlayerProfile(String name) {
         this.name = NanamiTctApi.utilities.resetColor(name);
         this.admin = false;
     }
@@ -41,18 +41,17 @@ public class TctPlayerProfile {
     }
 
     public boolean isAdmin() {
-        if(NanamiTctApi.config.getConfig().getList("admin", Arrays.asList("op")).contains("op")) {
+        if (NanamiTctApi.config.getConfig().getList("admin", Arrays.asList("op")).contains("op")) {
             return Bukkit.getPlayer(name).isOp() || NanamiTctApi.config.getConfig().getStringList("admin").contains(name);
         }
         return NanamiTctApi.config.getConfig().getList("admin", Arrays.asList("op")).contains(name);
     }
 
-    public TctProfileModifier modify() {
-        TctProperty<String, Object> p = new TctProperty<>();
+    public TCTProfileModifier modify() {
+        TCTProperty<String, Object> p = new TCTProperty<>();
         p.add("name", name);
         p.add("admin", admin);
         TctPlayerProfileModifier modifier = new TctPlayerProfileModifier(p);
         return modifier;
     }
-
 }

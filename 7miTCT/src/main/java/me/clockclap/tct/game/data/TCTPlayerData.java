@@ -1,11 +1,10 @@
 package me.clockclap.tct.game.data;
 
-import com.mysql.cj.ServerVersion;
 import me.clockclap.tct.NanamiTct;
 import me.clockclap.tct.NanamiTctApi;
 import me.clockclap.tct.VersionUtils;
 import me.clockclap.tct.api.PlayerWatcher;
-import me.clockclap.tct.game.data.profile.TctPlayerProfile;
+import me.clockclap.tct.game.data.profile.TCTPlayerProfile;
 import me.clockclap.tct.game.death.DeadBody;
 import me.clockclap.tct.game.death.Killer;
 import me.clockclap.tct.game.death.TctDeathCause;
@@ -38,7 +37,7 @@ public class TCTPlayerData extends TctEntityData implements PlayerData {
     private int sus;
     private int wolf;
     private List<String> killedPlayers;
-    private final TctPlayerProfile profile;
+    private final TCTPlayerProfile profile;
     private final Player player;
     private boolean sponge;
     private boolean invisible;
@@ -63,7 +62,7 @@ public class TCTPlayerData extends TctEntityData implements PlayerData {
         killedPlayers = new ArrayList<>();
         sponge = false;
         invisible = false;
-        profile = new TctPlayerProfile(name);
+        profile = new TCTPlayerProfile(name);
         clickable = true;
         clickableB = true;
         clickableE = true;
@@ -188,7 +187,7 @@ public class TCTPlayerData extends TctEntityData implements PlayerData {
     }
 
     @Override
-    public TctPlayerProfile getProfile() {
+    public TCTPlayerProfile getProfile() {
         return profile;
     }
 

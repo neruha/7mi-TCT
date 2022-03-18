@@ -81,4 +81,6 @@ public interface PlayerStat {
     void setTotalPlayingCount(int count);
 
     void increaseItemUsed();
+
+    void increaseTotalFoundDeadBodies();
 }

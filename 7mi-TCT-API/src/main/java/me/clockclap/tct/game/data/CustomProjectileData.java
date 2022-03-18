@@ -4,10 +4,10 @@ import org.bukkit.Location;
 
 public interface CustomProjectileData extends EntityData {
 
-    public Location getLocation();
+    Location getLocation();
 
-    public void startTimer();
+    void startTimer();
 
-    public void cancelTimer();
+    void cancelTimer();
 
 }

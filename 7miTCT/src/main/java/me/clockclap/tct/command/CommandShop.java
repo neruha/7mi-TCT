@@ -22,24 +22,24 @@ public class CommandShop implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
             Player p = (Player) sender;
             PlayerData data = plugin.getGame().getReference().PLAYERDATA.get(p.getUniqueId());
-            if(!data.isSpectator()) {
+            if (!data.isSpectator()) {
                 plugin.getCustomInventory().initialize();
-                if(data.getRole() == GameRoles.VILLAGER) {
+                if (data.getRole() == GameRoles.VILLAGER) {
                     p.openInventory(plugin.getCustomInventory().getGeneralShop());
-                } else if(data.getRole() == GameRoles.HEALER) {
+                } else if (data.getRole() == GameRoles.HEALER) {
                     p.openInventory(plugin.getCustomInventory().getHealerShop());
-                } else if(data.getRole() == GameRoles.DETECTIVE) {
+                } else if (data.getRole() == GameRoles.DETECTIVE) {
                     p.openInventory(plugin.getCustomInventory().getDetectiveShop());
-                } else if(data.getRole() == GameRoles.WOLF) {
+                } else if (data.getRole() == GameRoles.WOLF) {
                     p.openInventory(plugin.getCustomInventory().getWolfShop());
-                } else if(data.getRole() == GameRoles.FANATIC) {
+                } else if (data.getRole() == GameRoles.FANATIC) {
                     p.openInventory(plugin.getCustomInventory().getFanaticShop());
-                } else if(data.getRole() == GameRoles.FOX) {
+                } else if (data.getRole() == GameRoles.FOX) {
                     p.openInventory(plugin.getCustomInventory().getFoxShop());
-                } else if(data.getRole() == GameRoles.IMMORAL) {
+                } else if (data.getRole() == GameRoles.IMMORAL) {
                     p.openInventory(plugin.getCustomInventory().getImmoralShop());
                 } else {
                     ShopOpenEvent shopOpenEvent = new ShopOpenEvent(plugin.getGame(), p);
